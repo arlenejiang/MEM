@@ -49,7 +49,11 @@ public class mem {
                 staffList.add(new Staff(element[1], element[2], element[3]));//(name, email, password) for Staff Members
             }
         } 
-
+        //////////////////////////
+        System.out.println("Welcome to Recreational Club!!!");
+        System.out.println("1. Register (Type 1 or R or Register)");
+        System.out.println("2. Log In (Type 2 or L or Log In)");
+        System.out.println("3. Quit (Type 3 or Q or Quit)");
         //////////////////////////
         Scanner scanner = new Scanner(System.in);
 		System.out.print(">");
@@ -83,7 +87,7 @@ public class mem {
 
             else if (action.equalsIgnoreCase("LOG IN") || action.equalsIgnoreCase("L") || action.equals("2"))
 			{
-				//register code
+				//log in code
 			}
             System.out.print("\n>");
 			commandLine.close();
