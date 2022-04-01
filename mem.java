@@ -51,9 +51,10 @@ public class mem {
         } 
         //////////////////////////
         System.out.println("Welcome to Recreational Club!!!");
-        System.out.println("1. Register (Type 1 or R or Register)");
-        System.out.println("2. Log In (Type 2 or L or Log In)");
-        System.out.println("3. Quit (Type 3 or Q or Quit)");
+        System.out.println("1. Register (Type 1 or R)");
+        System.out.println("2. {Player Log In (Type 2 or P)");
+        System.out.println("3. Staff Log In (Type 3 or S)");
+        System.out.println("4. Quit (Type 4 or Q)");
         //////////////////////////
         Scanner scanner = new Scanner(System.in);
 		System.out.print(">");
@@ -76,7 +77,7 @@ public class mem {
 				continue;
 			}
 
-			else if (action.equalsIgnoreCase("Q") || action.equalsIgnoreCase("QUIT") || action.equals("3")){
+			else if (action.equalsIgnoreCase("QUIT") || action.equalsIgnoreCase("Q") || action.equals("3")){
 				commandLine.close();//quits the program
 				return;
 			}
@@ -85,13 +86,26 @@ public class mem {
 				//register code
 			}
 
-            else if (action.equalsIgnoreCase("LOG IN") || action.equalsIgnoreCase("L") || action.equals("2"))
+            else if (action.equalsIgnoreCase("PLAYER LOG IN") || action.equalsIgnoreCase("P") || action.equals("2"))
 			{
-				//log in code
+                log_in();//log in
 			}
+
+            else if (action.equalsIgnoreCase("STAFF LOG IN") || action.equalsIgnoreCase("S") || action.equals("2"))
+			{
+                log_in();//log in
+			}
+
             System.out.print("\n>");
 			commandLine.close();
 		}
 		scanner.close();
+    }
+
+    public static void log_in(){
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.next();
+
+
     }
 }
