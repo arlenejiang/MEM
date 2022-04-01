@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class mem {
@@ -32,14 +33,16 @@ public class mem {
         catch (FileNotFoundException e) {
             System.out.println("File Not Found.");
           }
-          // Add the accounts from txt file to arraylist of Players and Staff
-          for(int i=0; ){
-              if(){
-                studentList.add(new Player(email, password));
+        
+        //Add the accounts from txt file to arraylist of Players and Staff
+        for (String[] element : fileParts) {
+            System.out.println(Arrays.toString(element));
+            if(element[0].equals("P")){
+                studentList.add(new Player(element[1], element[2], element[3]));//(name, email, password) for Players
               }
-              else if(){
-                  staffList.add(new Staff(email, password));
+            else if(element[0].equals("S")){
+                staffList.add(new Staff(element[1], element[2], element[3]));//(name, email, password) for Staff Members
               }
-          }
+          }  
     }
 }
