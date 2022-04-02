@@ -266,20 +266,20 @@ public class RecreationClubMembershipApp {
             clearConsole();
             System.out.println("Annoucement Succesfully Sent\n");
 
-            // Allows the user to choose if they want to login or exit after registering
-            // Enter 1 to login, enter 2 to exit.
+            // Allows the user to choose if they want to return to the main screen or exit after senting a annoucement
+            // Enter 1 to main screen, enter 2 to exit.
             System.out.print("Return to Main Screen(1)\t");
             System.out.print("Exit(2)\n");
             System.out.print("\n> ");
 
             int input = convertInputToInteger(2, 1);
 
-            // If the input is a 1, allow the user to register
+            // If the input is a 1, return to the main screen
             if (input == 1) {
                 clearConsole();
                 AfterLogIn(member);
             }
-            // For logging in.
+            // For exiting the annoucement feature.
             else if (input == 2) {
             System.out.println("\nHave a nice day\n");
             System.exit(0);
