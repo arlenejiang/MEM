@@ -240,8 +240,8 @@ public class RecreationClubMembershipApp {
             System.out.println(e.getMessage());
         }
 
-        // Gives the user the option of registering or logging in
-        // Enter 1 to register, enter 2 to log in
+        // Gives the user the option of entering S to send announcement, F for finance feature, 
+        // P for practice schedule/scheduling, and E to exit
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         if (member.getRole().equals("Coach")) {
             System.out.print("Send Annoucement (S)\t");
