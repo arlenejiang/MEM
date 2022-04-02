@@ -292,6 +292,7 @@ public class RecreationClubMembershipApp {
             System.out.println("\nHave a nice day\n");
             System.exit(0);
         }
+        scanner.close();
     }
 
     // Clears the console
