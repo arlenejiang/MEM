@@ -5,6 +5,7 @@ public class RecreationClubMembershipApp {
     public static void main(String args[])
     {
         // Creates a manager object and catched IOException
+        clearConsole();
         ClubManager manager = null;
         try
         {
@@ -17,52 +18,28 @@ public class RecreationClubMembershipApp {
 
         // Gives the user the option of registering or logging in
         // Enter 1 to register, enter 2 to log in
-        System.out.println("\n***Welcome to the Recreation Club Membership App***\n");
+        System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         System.out.print("Register(1)\t");
         System.out.print("Login(2)\n");
-
-        Scanner scanner = new Scanner(System.in);
         System.out.print("\n> ");
 
-        Boolean checkValidInput = false; // Checks to make sure input is a number
-        int input = 0; // User chooses what they want to do in the app 
-        while (checkValidInput == false || (input != 1 && input != 2)) // 
-        {
-            // Convert the input to an integer.
-            // If the input is not an integer, or is not equal to 1 or 2, show error messages
-            // Keep getting the input until a valid number is entered
-            try
-            {
-                input = Integer.parseInt(scanner.nextLine());
-                checkValidInput = true;
-                if (input != 1 && input != 2)
-                {
-                    System.out.println("\nPlease enter a valid number (1 or 2)");
-                    System.out.print("> ");
-                    checkValidInput = false;
-                }
-            }
-            catch (NumberFormatException e)
-            {
-                System.out.println("\nPlease enter 1 or 2");
-                System.out.print("> ");
-            }
-        }
+        int input = convertInputToInteger(2, 1);
 
         // If the input is a 1, allow the user to register
         if (input == 1)
         {
             try 
             {
-                System.out.println();
+                clearConsole();
+                System.out.println("*** Registration ***\n");
                 RegisterationQuestions(manager); // Shows the registration questions
             }
             catch(IOException e)
             {
                 System.out.println(e.getMessage());
             }
-
-            System.out.println("\nRegistration Complete\n");
+            clearConsole();
+            System.out.println("Registration Complete\n");
 
             // Allows the user to choose if they want to login or exit after registering
             // Enter 1 to login, enter 2 to exit.
@@ -70,29 +47,7 @@ public class RecreationClubMembershipApp {
             System.out.print("Exit(2)\n");
             System.out.print("\n> ");
 
-            checkValidInput = false;
-            while (checkValidInput == false || (input != 1 && input != 2))
-            {
-                // Convert the input to an integer.
-                // If the input is not an integer, or is not equal to 1 or 2, show error messages
-                // Keep getting the input until a valid number is entered
-                try
-                {
-                    input = Integer.parseInt(scanner.nextLine());
-                    checkValidInput = true;
-                    if (input != 1 && input != 2)
-                    {
-                        System.out.println("\nPlease enter a valid number (1 or 2)");
-                        System.out.print("> ");
-                        checkValidInput = false;
-                    }
-                }
-                catch (NumberFormatException e)
-                {
-                    System.out.println("\nPlease enter 1 or 2");
-                    System.out.print("> ");
-                }
-            }
+            input = convertInputToInteger(2, 2);
 
             // Exit if the user chooses number 2
             if (input == 2)
@@ -115,6 +70,67 @@ public class RecreationClubMembershipApp {
         }
     }
 
+    public static void registerLogin()
+    {
+        System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
+        System.out.print("Register(1)\t");
+        System.out.print("Login(2)\n");
+    }
+
+    public static void loginExit()
+    {
+        System.out.print("Login(1)\t");
+        System.out.print("Exit(2)\n");
+        System.out.print("\n> ");
+    }
+
+    public static void chooseAppFeature(int num)
+    {
+        if (num == 1)
+        {
+            registerLogin();
+        }
+        else if (num == 2)
+        {
+            loginExit();
+        }
+    }
+
+    // Converts user input fot choosing what to do in the app to an integer
+    // Max input is the maximum number the user can enter
+    public static int convertInputToInteger(int maxInput, int featureNum)
+    {
+        Boolean checkValidInput = false;
+        int input = 0;
+        Scanner in = new Scanner(System.in);
+        while (checkValidInput == false || (input < 1 || input > maxInput))
+        {
+            try
+            {
+                input = Integer.parseInt(in.nextLine());
+                checkValidInput = true;
+                if (input < 1 || input > maxInput)
+                {
+                    clearConsole();
+                    chooseAppFeature(featureNum);
+                    System.out.println("\nPlease enter a valid number");
+                    System.out.print("> ");
+                    checkValidInput = false;
+                    
+                }
+            }
+            catch (NumberFormatException e)
+            {
+                clearConsole();
+                chooseAppFeature(featureNum);
+                System.out.println("\nPlease enter a valid number");
+                System.out.print("> ");
+            }
+        }
+        return input;
+
+    }
+
     public static void RegisterationQuestions(ClubManager manager) throws IOException
     {
         Scanner input1 = new Scanner(System.in);
@@ -125,8 +141,15 @@ public class RecreationClubMembershipApp {
         {
             System.out.print("Enter your first name: ");
             firstName = input1.nextLine();
+            if (firstName == "" || firstName == null)
+            {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
+                System.out.println("Can't leave first name empty.\n");
+            }
         }
-        System.out.println();
+        clearConsole();
+        System.out.println("*** Registration ***\n");
 
         // Asks for the last name of the user
         String lastName = "";
@@ -134,8 +157,15 @@ public class RecreationClubMembershipApp {
         {
             System.out.print("Enter your last name: ");
             lastName = input1.nextLine();
+            if (lastName == "" || lastName == null)
+            {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
+                System.out.println("Can't leave last name empty.\n");
+            }
         }
-        System.out.println();
+        clearConsole();
+        System.out.println("*** Registration ***\n");
 
         // Asks for the email of the user
         // Makes sure that a person cannot register with an email that is already being used
@@ -149,10 +179,20 @@ public class RecreationClubMembershipApp {
 
             if (emailFound == true)
             {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
                 System.out.println("This email is already being used by a current member. Please enter another email.\n");
             }
+
+            if (email == "" || email == null)
+            {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
+                System.out.println("Can't leave email empty.\n");
+            }
         }
-        System.out.println();
+        clearConsole();
+        System.out.println("*** Registration ***\n");
 
         // Asks user for a password.
         // Makes sure password is longer than 8 characters
@@ -164,6 +204,8 @@ public class RecreationClubMembershipApp {
 
             if (password.length() < 8)
             {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
                 System.out.println("Password needs to be at least 8 characters.");
             }
             System.out.println();
@@ -179,10 +221,19 @@ public class RecreationClubMembershipApp {
 
             if (password.equals(password2) == false)
             {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
                 System.out.println("Passwords do not match. Please enter your password again.");
                 System.out.println();
             }
         }
         manager.registerMember(firstName, lastName, email, password);
+    }
+
+    // Clears the console
+    public static void clearConsole()
+    {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
