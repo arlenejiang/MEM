@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class RecreationClubMembershipApp {
+    static Scanner in = new Scanner(System.in);
     public static void main(String args[]) {
         // Creates a manager object and catched IOException
         clearConsole();
@@ -55,7 +56,7 @@ public class RecreationClubMembershipApp {
 
         // For logging in.
         if (input == 2) {
-
+            log_in();
         }
     }
 
@@ -84,7 +85,6 @@ public class RecreationClubMembershipApp {
     public static int convertInputToInteger(int maxInput, int featureNum) {
         Boolean checkValidInput = false;
         int input = 0;
-        Scanner in = new Scanner(System.in);
         while (checkValidInput == false || (input < 1 || input > maxInput)) {
             try {
                 input = Integer.parseInt(in.nextLine());
@@ -110,13 +110,12 @@ public class RecreationClubMembershipApp {
     }
 
     public static void RegisterationQuestions(ClubMain manager) throws IOException {
-        Scanner input1 = new Scanner(System.in);
 
         // Asks for the first name of the user
         String firstName = "";
         while (firstName == "" || firstName == null) {
             System.out.print("Enter your first name: ");
-            firstName = input1.nextLine();
+            firstName = in.nextLine();
             if (firstName == "" || firstName == null) {
                 clearConsole();
                 System.out.println("*** Registration ***\n");
@@ -130,7 +129,7 @@ public class RecreationClubMembershipApp {
         String lastName = "";
         while (lastName == "" || lastName == null) {
             System.out.print("Enter your last name: ");
-            lastName = input1.nextLine();
+            lastName = in.nextLine();
             if (lastName == "" || lastName == null) {
                 clearConsole();
                 System.out.println("*** Registration ***\n");
@@ -147,7 +146,7 @@ public class RecreationClubMembershipApp {
         String email = "";
         while (emailFound == true || email == "" || email == null) {
             System.out.print("Enter your email: ");
-            email = input1.nextLine();
+            email = in.nextLine();
             emailFound = manager.checkEmail(email);
 
             if (emailFound == true) {
@@ -176,7 +175,7 @@ public class RecreationClubMembershipApp {
         while (password.equals(password2) == false) {
             while (password.length() < 8) {
                 System.out.print("Enter your password: ");
-                password = input1.nextLine();
+                password = in.nextLine();
 
                 if (password.length() < 8) {
                     clearConsole();
@@ -187,7 +186,7 @@ public class RecreationClubMembershipApp {
             }
 
             System.out.print("Re-Enter your password: ");
-            password2 = input1.nextLine();
+            password2 = in.nextLine();
 
             if (password.equals(password2) == false) {
                 clearConsole();
@@ -197,17 +196,16 @@ public class RecreationClubMembershipApp {
                 password = "-1";
             }
         }
-        input1.close();
+        in.close();
         manager.registerMember(firstName, lastName, email, password);
     }
 
     // Log in Feature
     public static void log_in() {
-        Scanner scanner = new Scanner(System.in);
         System.out.print("Email: ");
-        String email = scanner.next();
+        String email= in.nextLine(); //reads string.
         System.out.print("Password: ");
-        String password = scanner.next();
+        String password = in.nextLine();
 
         ClubMain club = null;
         try {
@@ -220,25 +218,16 @@ public class RecreationClubMembershipApp {
             if ((member.getEmail()).equals(email) && (member.getPassword()).equals(password)) {
                 AfterLogIn(member);
             } else {
-                System.out.println(
-                        "You have entered one or more of the following pieces of information incorrectly: username and/or password.");
+                System.out.println("You have entered one or more of the following pieces of information incorrectly: username and/or password.");
                 System.out.println("Please try again");
                 log_in();
             }
         }
-
-        scanner.close();
     }
 
     // After log in options for staff and players
     public static void AfterLogIn(AMember member) {
         clearConsole();
-        ClubMain manager = null;
-        try {
-            manager = new ClubMain();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
 
         // Gives the user the option of entering S to send announcement, F for finance feature, 
         // P for practice schedule/scheduling, and E to exit
@@ -251,11 +240,10 @@ public class RecreationClubMembershipApp {
         System.out.print("Exit (E)");
         System.out.print("\n> ");
 
-        Scanner scanner = new Scanner(System.in);
-        String in = scanner.next();
+        String option = in.nextLine();
 
         // If the input is a 1, go to annoucemnets
-        if (in.equalsIgnoreCase("S")) {
+        if (option.equalsIgnoreCase("S")) {
             // try {
                 clearConsole();
                 System.out.println("*** Send Announcement ***\n");
@@ -284,15 +272,14 @@ public class RecreationClubMembershipApp {
             System.out.println("\nHave a nice day\n");
             System.exit(0);
             }
-        } else if (in.equalsIgnoreCase("F")) {
+        } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
-        } else if (in.equalsIgnoreCase("P")) {
+        } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
-        } else if (in.equalsIgnoreCase("E")) {
+        } else if (option.equalsIgnoreCase("E")) {
             System.out.println("\nHave a nice day\n");
             System.exit(0);
         }
-        scanner.close();
     }
 
     // Clears the console
