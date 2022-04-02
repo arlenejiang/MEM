@@ -104,7 +104,6 @@ public class RecreationClubMembershipApp {
                 System.out.print("> ");
             }
         }
-        in.close();
         return input;
 
     }
@@ -196,7 +195,6 @@ public class RecreationClubMembershipApp {
                 password = "-1";
             }
         }
-        in.close();
         manager.registerMember(firstName, lastName, email, password);
     }
 
