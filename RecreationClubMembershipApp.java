@@ -196,26 +196,28 @@ public class RecreationClubMembershipApp {
 
         // Asks user for a password.
         // Makes sure password is longer than 8 characters
-        String password = "";  
-        while (password.length() < 8)
-        {
-            System.out.print("Enter your password: ");
-            password = input1.nextLine();
-
-            if (password.length() < 8)
-            {
-                clearConsole();
-                System.out.println("*** Registration ***\n");
-                System.out.println("Password needs to be at least 8 characters.");
-            }
-            System.out.println();
-        }
+        String password = "0";  
+       
 
         // Asks user to verify password
         // Makes sure that the password is the same as the password entered before.
-        String password2 = "";
+        String password2 = "1";
         while (password.equals(password2) == false)
         {
+            while (password.length() < 8)
+            {
+                System.out.print("Enter your password: ");
+                password = input1.nextLine();
+    
+                if (password.length() < 8)
+                {
+                    clearConsole();
+                    System.out.println("*** Registration ***\n");
+                    System.out.println("Password needs to be at least 8 characters.");
+                }
+                System.out.println();
+            }
+
             System.out.print("Re-Enter your password: ");
             password2 = input1.nextLine();
 
@@ -225,6 +227,7 @@ public class RecreationClubMembershipApp {
                 System.out.println("*** Registration ***\n");
                 System.out.println("Passwords do not match. Please enter your password again.");
                 System.out.println();
+                password = "-1";
             }
         }
         manager.registerMember(firstName, lastName, email, password);
