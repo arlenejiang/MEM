@@ -224,6 +224,11 @@ public class RecreationClubMembershipApp {
                     log_in();
                 }
             }
+            else{
+                System.out.println("You have entered one or more of the following pieces of information incorrectly: username and/or password.");
+                    System.out.println("Please try again");
+                    log_in();
+            }
         }    
     }
 
