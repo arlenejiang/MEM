@@ -1,4 +1,7 @@
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.security.KeyStore.Entry;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -213,25 +216,28 @@ public class RecreationClubMembershipApp {
             System.out.println(e.getMessage());
         }
 
+        ArrayList<AMember> people = new ArrayList<>();
+
         for (Map.Entry<String,AMember> entry : club.members.entrySet()){
-            if(entry.getKey().equals(email)){
-                AMember member = entry.getValue();
-                if ((member.getPassword()).equals(password)) {
-                    AfterLogIn(member);
-                } else {
-                    System.out.println("You have entered one or more of the following pieces of information incorrectly: username and/or password.");
-                    System.out.println("Please try again");
-                    log_in();
-                }
+            people.add(entry.getValue());
+        } 
+
+        for(int i=0; i<people.size(); i++){
+            if(people.get(i).getEmail().equals(email) && people.get(i).getPassword().equals(password)){
+                AfterLogIn(people.get(i));
             }
-            else{
-                System.out.println("You have entered one or more of the following pieces of information incorrectly: username and/or password.");
-                    System.out.println("Please try again");
-                    log_in();
+            else if(i==people.size()-1){
+                PrintMessage();
             }
-        }    
+        }
+           
     }
 
+    public static void PrintMessage(){
+        System.out.println("You have entered one or more of the following pieces of information incorrectly: username and/or password.");
+        System.out.println("Please try again");
+        log_in();
+    }
     // After log in options for staff and players
     public static void AfterLogIn(AMember member) {
         clearConsole();
