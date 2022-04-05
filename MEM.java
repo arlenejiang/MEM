@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.util.Scanner;
 
-public class RecreationClubMembershipApp {
+public class MEM {
     public static void main(String args[])
     {
         // Creates a manager object and catched IOException
