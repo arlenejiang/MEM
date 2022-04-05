@@ -344,7 +344,7 @@ public class RecreationClubMembershipApp {
 
          // Send message
          Transport.send(message);
-         System.out.println("Sent message successfully....");
+         System.out.println("*** SENT ***");
       } catch (MessagingException mex) {
          mex.printStackTrace();
       }
