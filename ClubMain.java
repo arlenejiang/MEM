@@ -74,5 +74,10 @@ public class ClubMain
         }
         return false;
     }
+
+    public String[] getMembers()
+    {
+        return (String[]) members.keySet().toArray();
+    }
     
 }

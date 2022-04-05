@@ -296,7 +296,16 @@ public class RecreationClubMembershipApp {
     }
 
     public static void sendAnnouncement(String memberemail){
-      String to = "abcd@gmail.com";
+      ClubMain everyone = null; //Key-values of club members
+      String[] emailList = everyone.getMembers(); //all members emails
+
+      Address[] recipients;
+      int index = 0;
+      for (String email: emailList) 
+        {
+            recipients[index] = new InternetAddress(email); 
+            index++;
+        }
 
       // Sender's email ID needs to be mentioned
       String from = memberemail;
@@ -321,13 +330,17 @@ public class RecreationClubMembershipApp {
          message.setFrom(new InternetAddress(from));
 
          // Set To: header field of the header.
-         message.addRecipients(Message.RecipientType.TO, new InternetAddress(to));
+         message.addRecipients(Message.RecipientType.TO, recipients);
 
          // Set Subject: header field
-         message.setSubject("This is the Subject Line!");
+         System.out.println("Enter the subject line: ");
+         String subject = in.nextLine();
+         message.setSubject(subject);
 
          // Now set the actual message
-         message.setText("This is actual message");
+         System.out.println("Enter the announcement: ");
+         String announcement = in.nextLine();
+         message.setText(announcement);
 
          // Send message
          Transport.send(message);
@@ -337,6 +350,6 @@ public class RecreationClubMembershipApp {
       }
    }
 
-    }
-
 }
+
+
