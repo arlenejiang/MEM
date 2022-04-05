@@ -250,6 +250,7 @@ public class RecreationClubMembershipApp {
         }
         System.out.print("Finances (F)\t");
         System.out.print("Pratice Schedule (P)\n");
+        System.out.print("Attendace (A)\n");
         System.out.print("Exit (E)");
         System.out.print("\n> ");
 
@@ -289,6 +290,8 @@ public class RecreationClubMembershipApp {
             // insert finance code method here
         } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
+        } else if (option.equalsIgnoreCase("A")) {
+            // insert make a attendance method here
         } else if (option.equalsIgnoreCase("E")) {
             System.out.println("\nHave a nice day\n");
             System.exit(0);
