@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
-public class RecreationClubMembershipApp {
+public class MEM {
     static Scanner in = new Scanner(System.in);
     public static void main(String args[]) {
         // Creates a manager object and catched IOException
         clearConsole();
-        ClubMain manager = null;
+        ClubManager manager = null;
         try {
-            manager = new ClubMain();
+            manager = new ClubManager();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -112,7 +112,7 @@ public class RecreationClubMembershipApp {
 
     }
 
-    public static void RegisterationQuestions(ClubMain manager) throws IOException {
+    public static void RegisterationQuestions(ClubManager manager) throws IOException {
 
         // Asks for the first name of the user
         String firstName = "";
@@ -137,6 +137,20 @@ public class RecreationClubMembershipApp {
                 clearConsole();
                 System.out.println("*** Registration ***\n");
                 System.out.println("Can't leave last name empty.\n");
+            }
+        }
+        clearConsole();
+        System.out.println("*** Registration ***\n");
+
+        //Asks for phone number of the user
+        String phoneNumber = "";
+        while (phoneNumber == "" || phoneNumber == null) {
+            System.out.print("Enter your phone number: ");
+            phoneNumber = in.nextLine();
+            if (phoneNumber == "" || phoneNumber == null) {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
+                System.out.println("Can't leave phone number empty.\n");
             }
         }
         clearConsole();
@@ -199,7 +213,7 @@ public class RecreationClubMembershipApp {
                 password = "-1";
             }
         }
-        manager.registerMember(firstName, lastName, email, password);
+        manager.registerMember(firstName, lastName, phoneNumber, email, password);
     }
 
     // Log in Feature
@@ -209,9 +223,9 @@ public class RecreationClubMembershipApp {
         System.out.print("Password: ");
         String password = in.nextLine();
 
-        ClubMain club = null;
+        ClubManager club = null;
         try {
-            club = new ClubMain();
+            club = new ClubManager();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -250,6 +264,7 @@ public class RecreationClubMembershipApp {
         }
         System.out.print("Finances (F)\t");
         System.out.print("Pratice Schedule (P)\n");
+        System.out.print("Attendace (A)\n");
         System.out.print("Exit (E)");
         System.out.print("\n> ");
 
@@ -289,6 +304,8 @@ public class RecreationClubMembershipApp {
             // insert finance code method here
         } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
+        } else if (option.equalsIgnoreCase("A")) {
+            // insert make a attendance method here
         } else if (option.equalsIgnoreCase("E")) {
             System.out.println("\nHave a nice day\n");
             System.exit(0);
