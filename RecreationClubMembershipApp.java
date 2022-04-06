@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
@@ -220,18 +221,44 @@ public class RecreationClubMembershipApp {
             System.out.println(e.getMessage());
         }
 
+        // key.Set() return the values of that key
+        // entry.Set() returns the set of <key, value> of that entry
+
+        int count = 0;
+
+        // club.member.entrySet returns a array? contains all members key and values
         for (Map.Entry<String, AMember> entry : club.members.entrySet()) {
-            if (entry.getKey().equals(email)) {
-                AMember member = entry.getValue();
-                if ((member.getPassword()).equals(password)) {
+            // System.out.println(club.members.entrySet());
+
+            if (entry.getKey().equals(email)) { // if the email stored in the map matches the email input -> check for
+                                                // password
+
+                AMember member = entry.getValue(); // get they value of that key (type AMember) and store in member
+                if ((member.getPassword()).equals(password)) { // use getPassword method in AMember class
                     AfterLogIn(member);
+                    break;
                 } else {
+                    clearConsole();
                     System.out.println(
-                            "You have entered one or more of the following pieces of information incorrectly: username and/or password.");
-                    System.out.println("Please try again");
+                            "Incorect username and/or password. Please try again!");
+                    System.out.println("");
                     log_in();
                 }
             }
+
+            count++;
+            // System.out.println("Count: " + count);
+
+            // if email is incorrect
+            if (count == club.members.entrySet().size()) {
+                clearConsole();
+                System.out.println(
+                        "Incorect username. Please try again!");
+                System.out.println("");
+                log_in();
+            }
+
+            // System.out.println(entry.getKey());
         }
     }
 
@@ -286,6 +313,33 @@ public class RecreationClubMembershipApp {
 
     }
 
+    public static void PendingPayments(String email, String amount) throws IOException {
+
+        ATreasurer treasurer = null;
+
+        try {
+            treasurer = new ATreasurer();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        treasurer.addToMap(email, amount);
+        treasurer.writeToFile("PendingPayments.txt");
+    }
+
+    public static void ValidatePayments(String file) throws FileNotFoundException {
+
+        ATreasurer treasurer = null;
+
+        try {
+            treasurer = new ATreasurer();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        treasurer.UpdateMapandFile(file);
+    }
+
     // After log in options for staff and players
     public static void AfterLogIn(AMember member) {
         clearConsole();
@@ -297,8 +351,12 @@ public class RecreationClubMembershipApp {
         if (member.getRole().equals("Coach")) {
             System.out.print("Send Annoucement (S)\t");
         }
+
+        else if (member.getRole().equals("Treasurer")) {
+            System.out.print("Pending Payments List (L)\t");
+        }
         System.out.print("Finances (F)\t");
-        System.out.print("Pratice Schedule (P)\n");
+        System.out.print("Pratice Schedule (P)\t");
         System.out.print("Exit (E)");
         System.out.print("\n> ");
 
@@ -335,6 +393,32 @@ public class RecreationClubMembershipApp {
                 System.out.println("\nHave a nice day\n");
                 System.exit(0);
             }
+        } else if (option.equalsIgnoreCase("L")) {
+            clearConsole();
+            System.out.println("Showing list of pending payments\n");
+            try {
+                // System.out.println("*** Registration ***\n");
+                ValidatePayments("PendingPayments.txt");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+
+            System.out.print("Return to Main Screen(1)\t");
+            System.out.print("Exit(2)\n");
+            System.out.print("\n> ");
+
+            int anotherInput = convertInputToInteger(2, 1);
+
+            if (anotherInput == 1) {
+                clearConsole();
+                AfterLogIn(member);
+            }
+            // For exiting the annoucement feature.
+            else if (anotherInput == 2) {
+                System.out.println("\nHave a nice day!\n");
+                System.exit(0);
+            }
+
         } else if (option.equalsIgnoreCase("F")) {
             System.out.print("Top up account balance(1)\t");
             System.out.print("Return to Main Screen(2)\t");
@@ -355,26 +439,64 @@ public class RecreationClubMembershipApp {
                 System.out.println(
                         "5. Add your payment method. You can either link a credit/debit card or a bank account");
                 System.out.println("6. Click SEND to complete your payment!");
-            }
 
-            String amount = "";
+                String amount = "";
 
-            while (amount == "" || amount == null) {
-                System.out.print("\n\nEnter the amount you paid: $");
-                amount = in.nextLine();
+                while (amount == "" || amount == null) {
+                    System.out.print("\n\nEnter the amount you paid: $");
+                    amount = in.nextLine();
 
-                if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
-                    clearConsole();
-                    System.out.println("*** Payment ***\n");
-                    System.out.println("Invalid amount.\n");
-                    amount = "";
+                    if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
+                        clearConsole();
+                        System.out.println("*** Payment ***\n");
+                        System.out.println("Invalid amount.\n");
+                        amount = "";
+                    }
                 }
-            }
 
-            System.out.print("\n\nThank you for your payment! ");
-            System.out.println("Funds will be ready to use in 4-24 hours.");
-            PaypalConfirmationemail();
-            System.out.println("Check email");
+                System.out.print("\n\nThank you for your payment! ");
+                System.out.println("Funds will be ready to use in 4-24 hours.");
+                // PaypalConfirmationemail();
+                System.out.println("Check email");
+
+                try {
+                    // System.out.println("*** Registration ***\n");
+                    PendingPayments(member.getEmail(), amount);
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+
+                System.out.println("The amount is: " + amount);
+
+                System.out.print("Check your balance(1)\t");
+                System.out.print("Return to Main Screen(2)\t");
+                System.out.print("Exit(3)\n");
+                System.out.print("\n> ");
+
+                int anotherInput = convertInputToInteger(3, 1);
+
+                if (anotherInput == 1) {
+                    clearConsole();
+                    // System.out.println("Account balance: $" + balance);
+                } else if (anotherInput == 2) {
+                    clearConsole();
+                    AfterLogIn(member);
+                }
+                // For exiting the annoucement feature.
+                else if (anotherInput == 3) {
+                    System.out.println("\nHave a nice day!\n");
+                    System.exit(0);
+                }
+
+            } else if (input == 2) {
+                clearConsole();
+                AfterLogIn(member);
+            }
+            // For exiting the annoucement feature.
+            else if (input == 3) {
+                System.out.println("\nHave a nice day!\n");
+                System.exit(0);
+            }
 
             // System.out.println("member email: " + member.getEmail());
             // System.out.println("amount is: " + amount);
