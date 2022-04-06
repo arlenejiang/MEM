@@ -1,6 +1,12 @@
 import java.io.IOException;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
+import javax.mail.Session;
+import javax.mail.Transport;
 
 public class RecreationClubMembershipApp {
     static Scanner in = new Scanner(System.in);
@@ -229,6 +235,57 @@ public class RecreationClubMembershipApp {
         }
     }
 
+    public static void PaypalConfirmationemail() {
+
+        // email ID of Recipient (club's email)
+        String recipient = "group66club@gmail.com";
+
+        // email ID of Sender (Paypal email)
+        String sender = "group66paypal@gmail.com";
+
+        // using host as localhost
+        String host = "127.0.0.1";
+
+        // Getting system properties
+        Properties properties = System.getProperties();
+
+        // Setting up mail server
+        properties.setProperty("mail.smtp.host", host);
+
+        // creating session object to get properties
+        Session session = Session.getDefaultInstance(properties);
+
+        try {
+            // MimeMessage object
+            MimeMessage message = new MimeMessage(session);
+
+            // Set From Field: adding senders email to from field.
+            message.setFrom(new InternetAddress(sender));
+
+            // Set To Field: adding recipient's email to from field.
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+
+            // Set Subject: subject of the email
+            message.setSubject("This is Subject");
+
+            // set body of the email.
+            message.setText("This is a test mail");
+
+            // Send email.
+            Transport.send(message);
+
+            System.out.println("Mail successfully sent.");
+
+        }
+
+        catch (MessagingException mex)
+
+        {
+            mex.printStackTrace();
+        }
+
+    }
+
     // After log in options for staff and players
     public static void AfterLogIn(AMember member) {
         clearConsole();
@@ -298,8 +355,8 @@ public class RecreationClubMembershipApp {
                 System.out.println(
                         "5. Add your payment method. You can either link a credit/debit card or a bank account");
                 System.out.println("6. Click SEND to complete your payment!");
-
             }
+
             String amount = "";
 
             while (amount == "" || amount == null) {
@@ -316,6 +373,8 @@ public class RecreationClubMembershipApp {
 
             System.out.print("\n\nThank you for your payment! ");
             System.out.println("Funds will be ready to use in 4-24 hours.");
+            PaypalConfirmationemail();
+            System.out.println("Check email");
 
             // System.out.println("member email: " + member.getEmail());
             // System.out.println("amount is: " + amount);
