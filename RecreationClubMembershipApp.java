@@ -297,14 +297,23 @@ public class RecreationClubMembershipApp {
 
     public static void sendAnnouncement(String memberemail){
       ClubMain everyone = null; //Key-values of club members
+      try {
+        everyone = new ClubMain();
+       } catch (IOException e) {
+        System.out.println(e.getMessage());
+       }
       String[] emailList = everyone.getMembers(); //all members emails
 
-      Address[] recipients;
+      Address[] recipients = new Address[150];
       int index = 0;
-      for (String email: emailList) 
-        {
-            recipients[index] = new InternetAddress(email); 
-            index++;
+      try{
+        for (String email: emailList) 
+            {
+                recipients[index] = new InternetAddress(email); 
+                index++;
+            }
+        } catch (AddressException addex){
+            addex.printStackTrace();
         }
 
       // Sender's email ID needs to be mentioned
