@@ -29,22 +29,23 @@ public class Finances {
         while ((myReader.nextLine()).equals("Unpaid Monthly Rent")){};
         myReader.nextLine();
 
-        // Add previous unpaid months from file to list
+        // Add previous unpaid months from file to list rentMonths
         input = myReader.nextLine();
         while (input.length() > 0) {
             rentMonths.add(input);
             input = myReader.nextLine();
         }
-        // Add new unpaid months to list
+        // Add new unpaid months to list rentMonths
         rentCharge(lastUpdate); 
-        System.out.println(rentMonths);
 
+        // Add previous unpaid months from file to list coachFees
         myReader.nextLine();
         while(myReader.hasNextLine()) {
             coachFees.add(myReader.nextLine());
         }
         myReader.close();
 
+        //Output Fees
         RecreationClubMembershipApp.clearConsole();
         
         System.out.println("\n\nUNPAID DEBTS\n");
@@ -64,7 +65,7 @@ public class Finances {
             rYear = rDate.split(" ")[1];
             rMonth = rDate.split(" ")[0];
 
-            // Printing rent charge
+            // Print unpaid charges by due date
             if (Integer.valueOf(rYear) < Integer.valueOf(cYear) || 
             (cYear.equals(rYear) && 
             Arrays.asList(mos).indexOf(rMonth) <= Arrays.asList(mos).indexOf(cMonth))) {
@@ -117,6 +118,7 @@ public class Finances {
         myWriter.close();
     }
 
+    // TODO modify based on attendance logs
     private static void coachCharge(String date) throws FileNotFoundException {
         // Check number of rent days (1st of the month)
         String input;
@@ -124,12 +126,14 @@ public class Finances {
         LocalDate currentDate = LocalDate.now();
         int months = (int) ChronoUnit.MONTHS.between(lt.withDayOfMonth(1), currentDate);
 
+        // Scan log
         File myFile = new File("coaches.txt");
         Scanner myReader = new Scanner(myFile);
         
         myReader.close();
     }
 
+    // Adds unpaid rent months to list based on current date
     private static void rentCharge(String date) {
         int year = Integer.valueOf(date.substring(0, 4));
         int month = Integer.valueOf(date.substring(5, 7));
