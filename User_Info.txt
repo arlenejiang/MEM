@@ -1,16 +1,6 @@
-<<<<<<< HEAD
-P Sania_Syed sania.i.syed@gmail.com 123456Go
-P Thanh_Huynh hi.iris23@gmail.com Lego5000
-S Lasini_Kurukulasooriya lkurukul@cs.ryerson.ca SunnyDay
-P Natasha_Narasimhan natasha.narasimhan@ryerson.ca HappyDay
-P Lasini_Ehansa klasini02@gmail.com Testing123
-=======
 Ehansa Kuruku 4373885725 ehansa22@gmail.com Testing345 Member
-Amanda Scott 1234567890 amanda.scott@gmail.com AppleBee Treasurer
+Amanda Scott 1234567890 amandasctt470@gmail.com Helper76 Coach
 Arlene Jiang 2341236889 arlene.jiang@ryerson.ca HappyDay Member
-Sania Syed 8976053478 hgjdhksfh HappyMeal Member
-Josh Monty 5679876709 jmonty@yahoo.com Grifindor Coach
 Lasini Kurukulasooriya 6473459876 klasini02@gmail.com Testing123 Member
 Natasha Narasimhan 6477893021 natasha.narasimhan@ryerson.ca BlueMoon Member
-Sania Syed 6473459876 sania.i.syed@ryerson.ca SunnyDay Member
->>>>>>> dadf1d73403e1577296a57ca38b75f39ed4ea18e
+Sania Syed 6473459876 sania.i.syed@ryerson.ca SunnyDay Treasurer
