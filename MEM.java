@@ -340,12 +340,14 @@ public class MEM {
         final String username = coachEmail;
         final String password = coachPassword;
 
+        //For a single person, get rid of from here
         ClubManager manager = null;
         try {
             manager = new ClubManager();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        //to here
     
         System.out.println("Enter the subject line: ");
         String subj = in.nextLine();
@@ -376,7 +378,7 @@ public class MEM {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse(manager.emailsToString())
+                    InternetAddress.parse(manager.emailsToString()) //For 1 person, just enter the email string ex: "kffjk322@gmail.com"
             );
             message.setSubject("** ANNOUNCEMENT **: " + subj);
             message.setText("Hello! \n\n"
