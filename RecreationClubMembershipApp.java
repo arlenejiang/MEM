@@ -274,7 +274,7 @@ public class RecreationClubMembershipApp {
      * 3. Enable less secure app access
      */
 
-    public static void sendAnnouncements(String treasurerEmail, String treasurerPassword, String fullname) throws IOException {
+    public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullnamethrows IOException {
         final String username = treasurerEmail;
         final String password = treasurerPassword;
 
@@ -475,8 +475,7 @@ public class RecreationClubMembershipApp {
 
                 System.out.print("\n\nThank you for your payment! ");
                 System.out.println("Funds will be ready to use in 4-24 hours.");
-                // PaypalConfirmationemail();
-                System.out.println("Check email");
+                PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
 
                 try {
                     // System.out.println("*** Registration ***\n");
