@@ -46,7 +46,7 @@ public class Finances {
         myReader.close();
 
         //Output Fees
-        RecreationClubMembershipApp.clearConsole();
+        MEM.clearConsole();
         
         System.out.println("\n\nUNPAID DEBTS\n");
         System.out.println("Due Date\tFees\tPayee\n");
