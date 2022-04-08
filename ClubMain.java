@@ -6,16 +6,14 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-public class ClubMain 
-{
+public class ClubMain {
 
-    Map <String, AMember> members = new TreeMap<String, AMember>();
+    Map<String, AMember> members = new TreeMap<String, AMember>();
 
-    public ClubMain() throws IOException
-    {
+    public ClubMain() throws IOException {
         File input = new File("User_Info.txt");
         Scanner in = new Scanner(input);
-        
+
         String member = "";
         String firstName = "";
         String lastName = "";
@@ -25,8 +23,7 @@ public class ClubMain
 
         // Reads each member's info from the User_Info.txt file.
         // Adds the member's email and the member to the treeMap
-        while (in.hasNextLine())
-        {
+        while (in.hasNextLine()) {
             member = in.nextLine();
             Scanner word = new Scanner(member);
 
@@ -46,16 +43,15 @@ public class ClubMain
 
     // Add's a new member to the member's treeMap.
     // Writes out all the members to User_Info.txt
-    public void registerMember(String first, String last, String email, String password) throws FileNotFoundException
-    {
+    public void registerMember(String first, String last, String email, String password) throws FileNotFoundException {
         AMember person = new AMember(first, last, email, password, "Member");
         members.put(email, person);
 
         PrintWriter out = new PrintWriter("User_Info.txt");
-        
-        for (AMember member: members.values())
-        {
-            out.println(member.getFirstName() + " " + member.getLastName() + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole());
+
+        for (AMember member : members.values()) {
+            out.println(member.getFirstName() + " " + member.getLastName() + " " + member.getEmail() + " "
+                    + member.getPassword() + " " + member.getRole());
         }
 
         out.close();
@@ -63,16 +59,28 @@ public class ClubMain
 
     // Checks the user's email with the emails of the members already in the club
     // If the email is found, return true, else return false
-    public boolean checkEmail(String userEmail)
-    {
-        for (String email: members.keySet())
-        {
-            if (email.equals(userEmail))
-            {
+    public boolean checkEmail(String userEmail) {
+        for (String email : members.keySet()) {
+            if (email.equals(userEmail)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public String emailsToString(){
+        String allEmails = "";
+        for (String email: members.keySet())
+        {
+            allEmails += email + ", ";
+        }
+        
+        String removeSplice = "";
+        if (allEmails != null && allEmails.length() > 1){
+            removeSplice += allEmails.substring(0, allEmails.length() - 2);
+        }
+
+        return removeSplice;
     }
     
 }

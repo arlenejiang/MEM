@@ -274,9 +274,9 @@ public class RecreationClubMembershipApp {
      * 3. Enable less secure app access
      */
 
-    public static void sendAnnouncements(String coachEmail, String coachPassword, String fullname) throws IOException {
-        final String username = coachEmail;
-        final String password = coachPassword;
+    public static void sendAnnouncements(String treasurerEmail, String treasurerPassword, String fullname) throws IOException {
+        final String username = treasurerEmail;
+        final String password = treasurerPassword;
 
         // For a single person, get rid of from here
         // ClubManager manager = null;
@@ -317,7 +317,7 @@ public class RecreationClubMembershipApp {
                     Message.RecipientType.TO,
                     //
                     InternetAddress.parse("group66club@gmail.com") // For 1 person, just enter the email string ex:
-                                                                    // "kffjk322@gmail.com"
+                                                                   // "kffjk322@gmail.com"
             );
             message.setSubject("** ANNOUNCEMENT **: " + subj);
             message.setText("Hello! \n\n"
@@ -331,7 +331,6 @@ public class RecreationClubMembershipApp {
             e.printStackTrace();
         }
     }
-
 
     public static void PendingPayments(String email, String amount) throws IOException {
 
