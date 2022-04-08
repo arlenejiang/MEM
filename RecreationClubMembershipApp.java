@@ -276,8 +276,8 @@ public class RecreationClubMembershipApp {
 
     public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullname)
             throws IOException {
-        final String username = treasurerEmail;
-        final String password = treasurerPassword;
+        // final String username = treasurerEmail;
+        // final String password = treasurerPassword;
 
         // For a single person, get rid of from here
         // ClubManager manager = null;
@@ -306,14 +306,14 @@ public class RecreationClubMembershipApp {
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(treasurerEmail, treasurerPassword);
+                        return new PasswordAuthentication("group66paypal@gmail.com", "april2022");
                     }
                 });
 
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
+            message.setFrom(new InternetAddress("group66paypal@gmail.com"));
             message.setRecipients(
                     Message.RecipientType.TO,
                     //
