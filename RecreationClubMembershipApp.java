@@ -262,56 +262,76 @@ public class RecreationClubMembershipApp {
         }
     }
 
-    public static void PaypalConfirmationemail() {
+    /*
+     * NOTE: Can only send through Gmail. Can send to any address.
+     * 
+     * 1. Go onto the sender's Gmail.
+     * 2. Go to settings icon > See All Settings > Forwarding and POP/IMAP
+     * 3. Enable IMAP access
+     * 
+     * 1. Go onto myaccount.google.com
+     * 2. Scroll down to less secure app access
+     * 3. Enable less secure app access
+     */
 
-        // email ID of Recipient (club's email)
-        String recipient = "group66club@gmail.com";
+    public static void sendAnnouncements(String coachEmail, String coachPassword, String fullname) throws IOException {
+        final String username = coachEmail;
+        final String password = coachPassword;
 
-        // email ID of Sender (Paypal email)
-        String sender = "group66paypal@gmail.com";
+        // For a single person, get rid of from here
+        // ClubManager manager = null;
+        // try {
+        // manager = new ClubManager();
+        // } catch (IOException e) {
+        // System.out.println(e.getMessage());
 
-        // using host as localhost
-        String host = "127.0.0.1";
+        System.out.println("Enter the subject line: ");
 
-        // Getting system properties
-        Properties properties = System.getProperties();
+        String subj = in.nextLine();
+        System.out.println("Enter the body of the email (with \\n for new lines): ");
+        String body = "";
+        String next;
 
-        // Setting up mail server
-        properties.setProperty("mail.smtp.host", host);
+        while (in.hasNextLine() && !(next = in.nextLine()).equals("")) {
+            body += next;
+            body += "\n";
+        }
 
-        // creating session object to get properties
-        Session session = Session.getDefaultInstance(properties);
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
 
         try {
-            // MimeMessage object
-            MimeMessage message = new MimeMessage(session);
 
-            // Set From Field: adding senders email to from field.
-            message.setFrom(new InternetAddress(sender));
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    //
+                    InternetAddress.parse("group66club@gmail.com") // For 1 person, just enter the email string ex:
+                                                                    // "kffjk322@gmail.com"
+            );
+            message.setSubject("** ANNOUNCEMENT **: " + subj);
+            message.setText("Hello! \n\n"
+                    + body + "\n\n" + fullname);
 
-            // Set To Field: adding recipient's email to from field.
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
-
-            // Set Subject: subject of the email
-            message.setSubject("This is Subject");
-
-            // set body of the email.
-            message.setText("This is a test mail");
-
-            // Send email.
             Transport.send(message);
 
-            System.out.println("Mail successfully sent.");
+            System.out.println("Done");
 
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
-
-        catch (MessagingException mex)
-
-        {
-            mex.printStackTrace();
-        }
-
     }
+
 
     public static void PendingPayments(String email, String amount) throws IOException {
 
