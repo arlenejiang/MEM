@@ -274,6 +274,8 @@ public class RecreationClubMembershipApp {
      * 3. Enable less secure app access
      */
 
+    // Send confirmation from PayPal to Treasurer when a member paid
+    // Send remainder from PayPal to member who missed the a payment
     public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullname)
             throws IOException {
         // final String username = treasurerEmail;
@@ -286,9 +288,9 @@ public class RecreationClubMembershipApp {
         // } catch (IOException e) {
         // System.out.println(e.getMessage());
 
-        System.out.println("Enter the subject line: ");
+        // System.out.println("Enter the subject line: ");
 
-        String subj = in.nextLine();
+        String subj = "";
         System.out.println("Enter the body of the email (with \\n for new lines): ");
         String body = "";
         String next;
