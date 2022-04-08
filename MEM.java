@@ -302,6 +302,33 @@ public class MEM {
             }
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
+            if (member.getRole().equals("Treasurer")) {
+                System.out.print("Display Debts (D)\t");
+                option = in.nextLine();
+                if (option.equalsIgnoreCase("D")) {
+                    try {
+                        Finances.displayDebt();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+                System.out.print("Return to Main Screen(1)\t");
+                System.out.print("Exit(2)\n");
+                System.out.print("\n> ");
+
+                int input = convertInputToInteger(2, 1);
+
+                // If the input is a 1, return to the main screen --- Refactor
+                if (input == 1) {
+                    clearConsole();
+                    AfterLogIn(member);
+                }
+                else if (input == 2) {
+                    System.out.println("\nHave a nice day\n");
+                    System.exit(0);
+                }
+            }
         } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
         } else if (option.equalsIgnoreCase("A")) {
