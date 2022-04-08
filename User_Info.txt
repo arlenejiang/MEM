@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-P Sania_Syed sania.i.syed@gmail.com 123456Go
-P Thanh_Huynh hi.iris23@gmail.com Lego5000
-S Lasini_Kurukulasooriya lkurukul@cs.ryerson.ca SunnyDay
-P Natasha_Narasimhan natasha.narasimhan@ryerson.ca HappyDay
-P Lasini_Ehansa klasini02@gmail.com Testing123
-=======
 Ehansa Kuruku 4373885725 ehansa22@gmail.com Testing345 Member
 Amanda Scott 1234567890 amanda.scott@gmail.com AppleBee Treasurer
 Arlene Jiang 2341236889 arlene.jiang@ryerson.ca HappyDay Member
