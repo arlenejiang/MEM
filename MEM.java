@@ -624,10 +624,10 @@ public class MEM {
     
         System.out.println("Enter the subject line: ");
         String subj = in.nextLine();
-        System.out.println("Enter the body of the email (with \\n for new lines): ");
+        System.out.println("Enter the body of the email (Press S to Send): ");
         String body = "";
         String next;
-        while(in.hasNextLine() && !(next = in.nextLine()).equals("")){
+        while(in.hasNextLine() && !(next = in.nextLine()).equals("S")){
             body += next;
             body += "\n";
         }
