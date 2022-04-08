@@ -1,15 +1,18 @@
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.security.KeyStore.Entry;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
-public class RecreationClubMembershipApp {
+public class MEM {
     static Scanner in = new Scanner(System.in);
     public static void main(String args[]) {
         // Creates a manager object and catched IOException
         clearConsole();
-        ClubMain manager = null;
+        ClubManager manager = null;
         try {
-            manager = new ClubMain();
+            manager = new ClubManager();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -109,7 +112,7 @@ public class RecreationClubMembershipApp {
 
     }
 
-    public static void RegisterationQuestions(ClubMain manager) throws IOException {
+    public static void RegisterationQuestions(ClubManager manager) throws IOException {
 
         // Asks for the first name of the user
         String firstName = "";
@@ -134,6 +137,20 @@ public class RecreationClubMembershipApp {
                 clearConsole();
                 System.out.println("*** Registration ***\n");
                 System.out.println("Can't leave last name empty.\n");
+            }
+        }
+        clearConsole();
+        System.out.println("*** Registration ***\n");
+
+        //Asks for phone number of the user
+        String phoneNumber = "";
+        while (phoneNumber == "" || phoneNumber == null) {
+            System.out.print("Enter your phone number: ");
+            phoneNumber = in.nextLine();
+            if (phoneNumber == "" || phoneNumber == null) {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
+                System.out.println("Can't leave phone number empty.\n");
             }
         }
         clearConsole();
@@ -196,7 +213,7 @@ public class RecreationClubMembershipApp {
                 password = "-1";
             }
         }
-        manager.registerMember(firstName, lastName, email, password);
+        manager.registerMember(firstName, lastName, phoneNumber, email, password);
     }
 
     // Log in Feature
@@ -206,27 +223,35 @@ public class RecreationClubMembershipApp {
         System.out.print("Password: ");
         String password = in.nextLine();
 
-        ClubMain club = null;
+        ClubManager club = null;
         try {
-            club = new ClubMain();
+            club = new ClubManager();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
 
+        ArrayList<AMember> people = new ArrayList<>();
+
         for (Map.Entry<String,AMember> entry : club.members.entrySet()){
-            if(entry.getKey().equals(email)){
-                AMember member = entry.getValue();
-                if ((member.getPassword()).equals(password)) {
-                    AfterLogIn(member);
-                } else {
-                    System.out.println("You have entered one or more of the following pieces of information incorrectly: username and/or password.");
-                    System.out.println("Please try again");
-                    log_in();
-                }
+            people.add(entry.getValue());
+        } 
+
+        for(int i=0; i<people.size(); i++){
+            if(people.get(i).getEmail().equals(email) && people.get(i).getPassword().equals(password)){
+                AfterLogIn(people.get(i));
             }
-        }    
+            else if(i==people.size()-1){
+                PrintMessage();
+            }
+        }
+           
     }
 
+    public static void PrintMessage(){
+        System.out.println("You have entered one or more of the following pieces of information incorrectly: username and/or password.");
+        System.out.println("Please try again");
+        log_in();
+    }
     // After log in options for staff and players
     public static void AfterLogIn(AMember member) {
         clearConsole();
@@ -239,6 +264,7 @@ public class RecreationClubMembershipApp {
         }
         System.out.print("Finances (F)\t");
         System.out.print("Pratice Schedule (P)\n");
+        System.out.print("Attendace (A)\n");
         System.out.print("Exit (E)");
         System.out.print("\n> ");
 
@@ -276,8 +302,37 @@ public class RecreationClubMembershipApp {
             }
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
+            if (member.getRole().equals("Treasurer")) {
+                System.out.print("Display Debts (D)\t");
+                option = in.nextLine();
+                if (option.equalsIgnoreCase("D")) {
+                    try {
+                        Finances.displayDebt();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+                System.out.print("Return to Main Screen(1)\t");
+                System.out.print("Exit(2)\n");
+                System.out.print("\n> ");
+
+                int input = convertInputToInteger(2, 1);
+
+                // If the input is a 1, return to the main screen --- Refactor
+                if (input == 1) {
+                    clearConsole();
+                    AfterLogIn(member);
+                }
+                else if (input == 2) {
+                    System.out.println("\nHave a nice day\n");
+                    System.exit(0);
+                }
+            }
         } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
+        } else if (option.equalsIgnoreCase("A")) {
+            // insert make a attendance method here
         } else if (option.equalsIgnoreCase("E")) {
             System.out.println("\nHave a nice day\n");
             System.exit(0);

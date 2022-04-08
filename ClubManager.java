@@ -6,12 +6,12 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-public class ClubMain 
+public class ClubManager 
 {
 
     Map <String, AMember> members = new TreeMap<String, AMember>();
 
-    public ClubMain() throws IOException
+    public ClubManager() throws IOException
     {
         File input = new File("User_Info.txt");
         Scanner in = new Scanner(input);
@@ -19,6 +19,7 @@ public class ClubMain
         String member = "";
         String firstName = "";
         String lastName = "";
+        String phoneNumber = "";
         String email = "";
         String password = "";
         String role = "";
@@ -32,11 +33,12 @@ public class ClubMain
 
             firstName = word.next();
             lastName = word.next();
+            phoneNumber = word.next();
             email = word.next();
             password = word.next();
             role = word.next();
 
-            AMember person = new AMember(firstName, lastName, email, password, role);
+            AMember person = new AMember(firstName, lastName, phoneNumber, email, password, role);
             members.put(email, person);
             word.close();
         }
@@ -46,16 +48,16 @@ public class ClubMain
 
     // Add's a new member to the member's treeMap.
     // Writes out all the members to User_Info.txt
-    public void registerMember(String first, String last, String email, String password) throws FileNotFoundException
+    public void registerMember(String first, String last, String phoneNumber, String email, String password) throws FileNotFoundException
     {
-        AMember person = new AMember(first, last, email, password, "Member");
+        AMember person = new AMember(first, last, phoneNumber, email, password, "Member");
         members.put(email, person);
 
         PrintWriter out = new PrintWriter("User_Info.txt");
         
         for (AMember member: members.values())
         {
-            out.println(member.getFirstName() + " " + member.getLastName() + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole());
+            out.println(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber() + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole());
         }
 
         out.close();
