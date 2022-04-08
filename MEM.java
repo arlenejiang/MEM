@@ -13,7 +13,7 @@ import javax.mail.internet.*;
 import javax.activation.*;
 import javax.mail.Session;
 import javax.mail.Transport;
-
+// import javax.mail.Authenticator;
 import javax.mail.Session;
 
 public class MEM {
@@ -277,64 +277,64 @@ public class MEM {
      * 3. Enable less secure app access
      */
 
-    // public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullname)
-    //         throws IOException {
-    //     final String username = treasurerEmail;
-    //     final String password = treasurerPassword;
+    public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullname)
+            throws IOException {
+        final String username = treasurerEmail;
+        final String password = treasurerPassword;
 
-    //     // For a single person, get rid of from here
-    //     // ClubManager manager = null;
-    //     // try {
-    //     // manager = new ClubManager();
-    //     // } catch (IOException e) {
-    //     // System.out.println(e.getMessage());
+        // For a single person, get rid of from here
+        // ClubManager manager = null;
+        // try {
+        // manager = new ClubManager();
+        // } catch (IOException e) {
+        // System.out.println(e.getMessage());
 
-    //     System.out.println("Enter the subject line: ");
+        System.out.println("Enter the subject line: ");
 
-    //     String subj = in.nextLine();
-    //     System.out.println("Enter the body of the email (with \\n for new lines): ");
-    //     String body = "";
-    //     String next;
+        String subj = in.nextLine();
+        System.out.println("Enter the body of the email (with \\n for new lines): ");
+        String body = "";
+        String next;
 
-    //     while (in.hasNextLine() && !(next = in.nextLine()).equals("")) {
-    //         body += next;
-    //         body += "\n";
-    //     }
+        while (in.hasNextLine() && !(next = in.nextLine()).equals("")) {
+            body += next;
+            body += "\n";
+        }
 
-    //     Properties prop = new Properties();
-    //     prop.put("mail.smtp.host", "imap.gmail.com");
-    //     prop.put("mail.smtp.port", "587");
-    //     prop.put("mail.smtp.auth", "true");
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
 
-    //     Session session = Session.getInstance(prop,
-    //             new javax.mail.Authenticator() {
-    //                 protected PasswordAuthentication getPasswordAuthentication() {
-    //                     return new PasswordAuthentication(treasurerEmail, treasurerPassword);
-    //                 }
-    //             });
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                        return new javax.mail.PasswordAuthentication(treasurerEmail, treasurerPassword);
+                    }
+                });
 
-    //     try {
+        try {
 
-    //         Message message = new MimeMessage(session);
-    //         message.setFrom(new InternetAddress(username));
-    //         message.setRecipients(
-    //                 Message.RecipientType.TO,
-    //                 //
-    //                 InternetAddress.parse("group66club@gmail.com") // For 1 person, just enter the email string ex:
-    //                                                                // "kffjk322@gmail.com"
-    //         );
-    //         message.setSubject("** ANNOUNCEMENT **: " + subj);
-    //         message.setText("Hello! \n\n"
-    //                 + body + "\n\n" + fullname);
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    //
+                    InternetAddress.parse("group66club@gmail.com") // For 1 person, just enter the email string ex:
+                                                                   // "kffjk322@gmail.com"
+            );
+            message.setSubject("** ANNOUNCEMENT **: " + subj);
+            message.setText("Hello! \n\n"
+                    + body + "\n\n" + fullname);
 
-    //         Transport.send(message);
+            Transport.send(message);
 
-    //         System.out.println("Done");
+            System.out.println("Done");
 
-    //     } catch (MessagingException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void PendingPayments(String email, String amount) throws FileNotFoundException {
 
@@ -640,8 +640,8 @@ public class MEM {
         
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
+                    protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                        return new javax.mail.PasswordAuthentication(username, password);
                     }
                 });
 
