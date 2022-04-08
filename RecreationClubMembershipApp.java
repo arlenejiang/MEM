@@ -274,7 +274,8 @@ public class RecreationClubMembershipApp {
      * 3. Enable less secure app access
      */
 
-    public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullnamethrows IOException {
+    public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullname)
+            throws IOException {
         final String username = treasurerEmail;
         final String password = treasurerPassword;
 
@@ -305,7 +306,7 @@ public class RecreationClubMembershipApp {
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(username, password);
+                        return new PasswordAuthentication(treasurerEmail, treasurerPassword);
                     }
                 });
 
@@ -332,7 +333,7 @@ public class RecreationClubMembershipApp {
         }
     }
 
-    public static void PendingPayments(String email, String amount) throws IOException {
+    public static void PendingPayments(String email, String amount) throws FileNotFoundException {
 
         ATreasurer treasurer = null;
 
@@ -344,6 +345,24 @@ public class RecreationClubMembershipApp {
 
         treasurer.addToMap(email, amount);
         treasurer.writeToFile("PendingPayments.txt");
+
+    }
+
+    public static void ApprovedPayments(String email, MemberBalance person) throws FileNotFoundException {
+
+        ATreasurer balance = null;
+
+        try {
+            balance = new ATreasurer();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        balance.addToBalance(email, person);
+
+        // balance.writeToFile("Balances.txt");
+        balance.writeToBalance();
+
     }
 
     public static void ValidatePayments(String file) throws FileNotFoundException {
@@ -475,11 +494,20 @@ public class RecreationClubMembershipApp {
 
                 System.out.print("\n\nThank you for your payment! ");
                 System.out.println("Funds will be ready to use in 4-24 hours.");
-                PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
+
+                // try {
+                // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
+                // } catch (IOException e) {
+                // System.out.println(e.getMessage());
+                // }
+
+                // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
+                // "0");
 
                 try {
                     // System.out.println("*** Registration ***\n");
                     PendingPayments(member.getEmail(), amount);
+                    // ApprovedPayments(member.getEmail(), balance);
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }

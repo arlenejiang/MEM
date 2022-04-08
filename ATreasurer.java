@@ -13,6 +13,8 @@ public class ATreasurer {
 
     Map<String, String> payments = new TreeMap<String, String>();
 
+    Map<String, MemberBalance> treasurers = new TreeMap<String, MemberBalance>();
+
     public ATreasurer() throws FileNotFoundException {
         File input = new File("PendingPayments.txt");
         Scanner in = new Scanner(input);
@@ -37,6 +39,42 @@ public class ATreasurer {
         }
 
         in.close();
+
+        File input2 = new File("Balances.txt");
+        Scanner sc = new Scanner(input2);
+
+        // public MemberBalance(String email, String balance, String numOfPayments,
+        // String missingPayments) {
+
+        String treasurer = "";
+        String email2 = "";
+        String balance = "";
+        String numOfPayments = "";
+        String missingPayments = "";
+
+        // Reads each member's info from the PendingPayments.txt file.
+        // Adds the member's email and the PendingAmount to the treeMap
+        while (sc.hasNextLine()) {
+
+            treasurer = sc.nextLine();
+            Scanner word2 = new Scanner(treasurer);
+
+            email2 = word2.next();
+
+            balance = word2.next();
+
+            numOfPayments = word2.next();
+
+            missingPayments = word2.next();
+
+            MemberBalance person = new MemberBalance(email2, balance, numOfPayments, missingPayments);
+
+            treasurers.put(email, person);
+
+            word2.close();
+        }
+
+        sc.close();
     }
 
     // Add's a new member to the member's treeMap.
@@ -44,6 +82,11 @@ public class ATreasurer {
     public void addToMap(String email, String amount) {
 
         payments.put(email, amount);
+    }
+
+    public void addToBalance(String email, MemberBalance person) {
+
+        treasurers.put(email, person);
     }
 
     public void writeToFile(String file) throws FileNotFoundException {
@@ -61,6 +104,33 @@ public class ATreasurer {
 
     }
 
+    public void writeToBalance() throws FileNotFoundException {
+
+        PrintWriter out = new PrintWriter("Balances.txt");
+
+        Set<String> keySet = treasurers.keySet();
+
+        // if (file.equals("PendingPayments.txt")) {
+        // for (String key : payments.keySet()) {
+        // // System.out.println(key + ": " + payments.get(key)); -> debugging purpose
+        // out.println(key + " " + payments.get(key));
+        // }
+        // }
+
+        // else if (file.equals("Balances.txt")) {
+        for (String key : keySet) {
+            // System.out.println(key + ": " + payments.get(key)); -> debugging purpose
+            MemberBalance str = treasurers.get(key);
+
+            out.println(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
+                    + str.getMissingPayments());
+        }
+        // }
+
+        out.close();
+
+    }
+
     public void PrintMap() {
 
         Set<String> keySet = payments.keySet();
@@ -71,6 +141,8 @@ public class ATreasurer {
     }
 
     public void UpdateMapandFile(String file) throws FileNotFoundException {
+
+        // MemberBalance person = new MemberBalance();
 
         Iterator<Map.Entry<String, String>> iterator = payments.entrySet().iterator();
 
@@ -105,6 +177,10 @@ public class ATreasurer {
             if (option.equalsIgnoreCase("A")) {
                 System.out.println("Key is: " + entry.getKey());
                 // keyToBeRemoved = entry.getKey();
+
+                MemberBalance person = new MemberBalance(entry.getKey(), entry.getValue(), "1", "0");
+                treasurers.put(entry.getKey(), person);
+
                 iterator.remove();
                 clearConsole();
 
@@ -112,62 +188,13 @@ public class ATreasurer {
 
             else {
                 clearConsole();
-                System.out.println("This will update the balance");
+                System.out.println("Deny option");
             }
 
         }
 
-        // if (entry.getKey().equals("t10huynh@ryerson.ca")) {
-        // keyToBeRemoved = entry.getKey();
-        // }
-        // // Check if this key is the required key
-        // if (keyToBeRemoved.equals(entry.getKey())) {
-
-        // // Remove this entry from HashMap
-        // iterator.remove();
-        // }
-        // }
-
-        // // Print the modified HashMap
-        // System.out.println("Modified HashMap: "
-        // + payments);
-
-        // for (Entry<String, String> payment : payments.entrySet()) {
-        // System.out.println("User ID: " + payment.getKey() + "\nPending Amount: $" +
-        // payment.getValue());
-
-        // Scanner in = new Scanner(System.in);
-        // String option = "";
-
-        // while (option == "" || option == null) {
-        // System.out.print("\nApprove (A)\t");
-        // System.out.print("Deny (D)\n");
-        // System.out.print("\n> ");
-
-        // option = in.nextLine();
-
-        // if (option == "" || option == null) {
-        // // clearConsole();
-        // // System.out.println("*** Payment ***\n");
-        // System.out.println("Please approve or deny transaction\n");
-        // option = "";
-        // }
-        // }
-
-        // if (option.equalsIgnoreCase("A")) {
-        // System.out.println("Key is: " + payment.getKey());
-        // String keyToBeRemoved = payment.getKey();
-        // payments.remove(keyToBeRemoved);
-
-        // }
-
-        // else {
-        // System.out.println("This will update the balance");
-        // }
-
-        // }
-
         writeToFile(file);
+        writeToBalance();
     }
 
     // Clears the console
