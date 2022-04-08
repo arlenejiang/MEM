@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.*;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
+import javax.mail.Session;
+import javax.mail.Transport;
 
 import javax.mail.Session;
 
@@ -390,8 +396,8 @@ public class MEM {
         }
 
         System.out.print("Finances (F)\t");
-        System.out.print("Pratice Schedule (P)\n");
-        System.out.print("Attendace (A)\n");
+        System.out.print("Practice Schedule (P)\n");
+        System.out.print("Attendance (A)\n");
         System.out.print("Exit (E)");
         System.out.print("\n> ");
 
@@ -399,15 +405,16 @@ public class MEM {
 
         // If the input is a 1, go to annoucemnets
         if (option.equalsIgnoreCase("S")) {
-            // try {
+             try {
+                clearConsole();
+                System.out.println("*** Send Announcement ***\n");
+                // insert method for sending email through java code
+                sendAnnouncements(member.email, member.password, member.firstName + member.lastName);
+             } catch (IOException e) {
+                 System.out.println(e.getMessage());
+             }
             clearConsole();
-            System.out.println("*** Send Announcement ***\n");
-            // insert method for sending email through java code
-            // } catch (IOException e) {
-            // System.out.println(e.getMessage());
-            // }
-            clearConsole();
-            System.out.println("Annoucement Succesfully Sent\n");
+            System.out.println("Announcement Successfully Sent\n");
 
             // Allows the user to choose if they want to return to the main screen or exit
             // after senting a annoucement
@@ -589,5 +596,73 @@ public class MEM {
     public static void clearConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    /* 
+        NOTE: Can only send through Gmail. Can send to any address.
+
+        1. Go onto the sender's Gmail.
+        2. Go to settings icon > See All Settings > Forwarding and POP/IMAP
+        3. Enable IMAP access
+
+        1. Go onto myaccount.google.com
+        2. Scroll down to less secure app access
+        3. Enable less secure app access
+    */
+    public static void sendAnnouncements(String coachEmail, String coachPassword, String fullname) throws IOException{
+        final String username = coachEmail;
+        final String password = coachPassword;
+
+        //For a single person, get rid of from here
+        ClubManager manager = null;
+        try {
+            manager = new ClubManager();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        //to here
+    
+        System.out.println("Enter the subject line: ");
+        String subj = in.nextLine();
+        System.out.println("Enter the body of the email (with \\n for new lines): ");
+        String body = "";
+        String next;
+        while(in.hasNextLine() && !(next = in.nextLine()).equals("")){
+            body += next;
+            body += "\n";
+        }
+
+        Properties prop = new Properties();
+		prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+        
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(manager.emailsToString()) //For 1 person, just enter the email string ex: "kffjk322@gmail.com"
+            );
+            message.setSubject("** ANNOUNCEMENT **: " + subj);
+            message.setText("Hello! \n\n"
+                    + body + "\n\n" + fullname);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -77,4 +77,17 @@ public class ClubManager
         return false;
     }
     
+    public String emailsToString(){
+        String allEmails = "";
+        for (String email: members.keySet())
+        {
+            allEmails += email + ", ";
+        }
+        String removeSplice = "";
+        if (allEmails != null && allEmails.length() > 1){
+            removeSplice += allEmails.substring(0, allEmails.length() - 2);
+        }
+
+        return removeSplice;
+    }
 }
