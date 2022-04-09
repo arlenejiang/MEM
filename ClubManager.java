@@ -59,42 +59,43 @@ public class ClubManager {
     }
 
     public static void fromFile(File file) {
-        
+
         Scanner sc = null;
         try {
             sc = new Scanner(new FileInputStream(file));
+
+            if (file.equals(new File("User_Info.txt"))) {
+                while (sc.hasNextLine()) {
+                    AMember person = new AMember(sc.next(), sc.next(), sc.next(), sc.next(), sc.next(), sc.next());
+                    members.put(person.getEmail(), person);
+                }
+            } else if (file.equals(new File("finances.txt"))) {
+                String input;
+                String lastUpdate = sc.nextLine().substring(0, 10);
+
+                while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {
+                }
+                ;
+                sc.nextLine();
+
+                // Add previous unpaid months from file to list rentMonths
+                input = sc.nextLine();
+                while (input.length() > 0) {
+                    Finances.rentMonths.add(input);
+                    input = sc.nextLine();
+                }
+                // Add new unpaid months to list rentMonths
+                Finances.rentCharge(lastUpdate);
+
+                // Add previous unpaid months from file to list coachFees
+                sc.nextLine();
+                while (sc.hasNextLine()) {
+                    Finances.coachFees.add(sc.nextLine());
+                }
+            }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-
-        if (file.equals(new File("User_Info.txt"))) {
-            while (sc.hasNextLine()) {
-                AMember person = new AMember(sc.next(), sc.next(), sc.next(), sc.next(), sc.next(), sc.next());
-                members.put(person.getEmail(), person);
-            }
-        } else if (file.equals(new File ("finances.txt"))) {
-            String input;
-            String lastUpdate = sc.nextLine().substring(0, 10);
-
-            while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {
-            }
-            ;
-            sc.nextLine();
-
-            // Add previous unpaid months from file to list rentMonths
-            input = sc.nextLine();
-            while (input.length() > 0) {
-                Finances.rentMonths.add(input);
-                input = sc.nextLine();
-            }
-            // Add new unpaid months to list rentMonths
-            Finances.rentCharge(lastUpdate);
-
-            // Add previous unpaid months from file to list coachFees
-            sc.nextLine();
-            while (sc.hasNextLine()) {
-                Finances.coachFees.add(sc.nextLine());
-            }
         }
         sc.close();
 
