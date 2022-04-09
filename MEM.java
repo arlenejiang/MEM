@@ -346,7 +346,7 @@ public class MEM {
         System.out.print("Exit(2)\n");
         System.out.print("\n> ");
 
-        int input =0;
+        int input = 0;
         int maxInput = 2;
         while ((input < 1 || input > maxInput) && in.hasNextLine()) {
             input = Integer.parseInt(in.nextLine());
@@ -370,15 +370,15 @@ public class MEM {
         // feature,
         // P for practice schedule/scheduling, and E to exit
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
-        if (member.getRole().equals("Coach")) {
+        if ((member.getRole().equals("Coach")) || (member.getRole().equals("Treasurer"))){
+            System.out.print("Attendance (A)\t");
+        } else if (member.getRole().equals("Coach")) {
             System.out.print("Send Annoucement (S)\t");
         } else if (member.getRole().equals("Treasurer")) {
             System.out.print("Pending Payments List (L)\t");
         }
-
         System.out.print("Finances (F)\t");
         System.out.print("Practice Schedule (P)\n");
-        System.out.print("Attendance (A)\n");
         System.out.print("Exit (E)");
         System.out.print("\n> ");
 
@@ -424,93 +424,98 @@ public class MEM {
                     }
                 }
                 returnOrExit(member);
-            }
-            System.out.print("Top up account balance(1)\t");
-            System.out.print("Return to Main Screen(2)\t");
-            System.out.print("Exit(3)\n");
-            System.out.print("\n> ");
-
-            int input = convertInputToInteger(3, 1);
-
-            // If the input is a 1, return to the main screen
-            if (input == 1) {
-                clearConsole();
-                System.out.println("Here are some steps to top up your account balance:");
-                System.out.println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
-                System.out.println("2. Click on the SEND option in PayPal.");
-                System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
-                System.out.println("4. Pay the amount you want to.");
-                System.out.println("4. Enter the amount you have paid through PayPal below.");
-
-                String amount = "";
-
-                while (amount == "" || amount == null) {
-                    System.out.print("\n\nEnter the amount you paid: $");
-                    amount = in.nextLine();
-
-                    if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
-                        clearConsole();
-                        System.out.println("*** Payment ***\n");
-                        System.out.println("Invalid amount.\n");
-                        amount = "";
-                    }
-                }
-
-                System.out.print("\n\nThank you for your payment! ");
-                System.out.println("Funds will be ready to use in 4-24 hours.");
-
-                // try {
-                // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
-                // } catch (IOException e) {
-                // System.out.println(e.getMessage());
-                // }
-
-                // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
-                // "0");
-
-                try {
-                    // System.out.println("*** Registration ***\n");
-                    PendingPayments(member.getEmail(), amount);
-                    // ApprovedPayments(member.getEmail(), balance);
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                }
-
-                System.out.println("The amount is: " + amount);
-
-                System.out.print("Check your balance(1)\t");
+            } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
+                System.out.print("Top up account balance(1)\t");
                 System.out.print("Return to Main Screen(2)\t");
                 System.out.print("Exit(3)\n");
                 System.out.print("\n> ");
 
-                int anotherInput = convertInputToInteger(3, 1);
+                int input = convertInputToInteger(3, 1);
 
-                if (anotherInput == 1) {
+                // If the input is a 1, return to the main screen
+                if (input == 1) {
                     clearConsole();
-                    // System.out.println("Account balance: $" + balance);
-                } else if (anotherInput == 2) {
+                    System.out.println("Here are some steps to top up your account balance:");
+                    System.out
+                            .println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
+                    System.out.println("2. Click on the SEND option in PayPal.");
+                    System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
+                    System.out.println("4. Pay the amount you want to.");
+                    System.out.println("4. Enter the amount you have paid through PayPal below.");
+
+                    String amount = "";
+
+                    while (amount == "" || amount == null) {
+                        System.out.print("\n\nEnter the amount you paid: $");
+                        amount = in.nextLine();
+
+                        if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
+                            clearConsole();
+                            System.out.println("*** Payment ***\n");
+                            System.out.println("Invalid amount.\n");
+                            amount = "";
+                        }
+                    }
+
+                    System.out.print("\n\nThank you for your payment! ");
+                    System.out.println("Funds will be ready to use in 4-24 hours.");
+
+                    // try {
+                    // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
+                    // } catch (IOException e) {
+                    // System.out.println(e.getMessage());
+                    // }
+
+                    // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
+                    // "0");
+
+                    try {
+                        // System.out.println("*** Registration ***\n");
+                        PendingPayments(member.getEmail(), amount);
+                        // ApprovedPayments(member.getEmail(), balance);
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    System.out.println("The amount is: " + amount);
+
+                    System.out.print("Check your balance(1)\t");
+                    System.out.print("Return to Main Screen(2)\t");
+                    System.out.print("Exit(3)\n");
+                    System.out.print("\n> ");
+
+                    int anotherInput = convertInputToInteger(3, 1);
+
+                    if (anotherInput == 1) {
+                        clearConsole();
+                        // System.out.println("Account balance: $" + balance);
+                    } else if (anotherInput == 2) {
+                        clearConsole();
+                        AfterLogIn(member);
+                    }
+                    // For exiting the annoucement feature.
+                    else if (anotherInput == 3) {
+                        System.out.println("\nHave a nice day!\n");
+                        System.exit(0);
+                    }
+
+                } else if (input == 2) {
                     clearConsole();
                     AfterLogIn(member);
                 }
                 // For exiting the annoucement feature.
-                else if (anotherInput == 3) {
+                else if (input == 3) {
                     System.out.println("\nHave a nice day!\n");
                     System.exit(0);
                 }
+            }
 
-            } else if (input == 2) {
-                clearConsole();
-                AfterLogIn(member);
-            }
-            // For exiting the annoucement feature.
-            else if (input == 3) {
-                System.out.println("\nHave a nice day!\n");
-                System.exit(0);
-            }
         } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
+            returnOrExit(member);
         } else if (option.equalsIgnoreCase("A")) {
             // insert make a attendance method here
+            returnOrExit(member);
         } else if (option.equalsIgnoreCase("E")) {
             System.out.println("\nHave a nice day\n");
             System.exit(0);
