@@ -1,20 +1,13 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.PasswordAuthentication;
-import java.security.KeyStore.Entry;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.activation.*;
 import javax.mail.Session;
 import javax.mail.Transport;
-// import javax.mail.Authenticator;
-import javax.mail.Session;
 
 public class MEM {
     static Scanner in = new Scanner(System.in);
@@ -309,7 +302,7 @@ public class MEM {
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
                     protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-                        return new javax.mail.PasswordAuthentication(treasurerEmail, treasurerPassword);
+                        return new javax.mail.PasswordAuthentication(username, password);
                     }
                 });
 
@@ -408,7 +401,7 @@ public class MEM {
              try {
                 clearConsole();
                 System.out.println("*** Send Announcement ***\n");
-                // insert method for sending email through java code
+                // method for sending email through java code
                 sendAnnouncements(member.email, member.password, member.firstName + member.lastName);
              } catch (IOException e) {
                  System.out.println(e.getMessage());
@@ -470,7 +463,6 @@ public class MEM {
                     try {
                         Finances.displayDebt();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
