@@ -370,16 +370,16 @@ public class MEM {
         // feature,
         // P for practice schedule/scheduling, and E to exit
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
-        if ((member.getRole().equals("Coach")) || (member.getRole().equals("Treasurer"))){
-            System.out.print("Attendance (A)\t");
-        } else if (member.getRole().equals("Coach")) {
+        if (member.getRole().equals("Coach")) {
             System.out.print("Send Annoucement (S)\t");
+            System.out.print("Attendance (A)\t");
         } else if (member.getRole().equals("Treasurer")) {
             System.out.print("Pending Payments List (L)\t");
+            System.out.print("Attendance (A)\t");
         }
         System.out.print("Finances (F)\t");
-        System.out.print("Practice Schedule (P)\n");
-        System.out.print("Exit (E)");
+        System.out.print("Practice Schedule (P)\t");
+        System.out.print("Exit (E)\n");
         System.out.print("\n> ");
 
         String option = in.nextLine();
@@ -509,7 +509,7 @@ public class MEM {
                     System.exit(0);
                 }
             }
-
+            returnOrExit(member);
         } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
             returnOrExit(member);
