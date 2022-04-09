@@ -126,14 +126,14 @@ public class ClubManager {
     }
 
     public static void toFile(FileWriter file) throws IOException{
-        if(file.equals(new FileWriter("User_Info.txt"))){
+        if(file.equals(new FileWriter("User_Info.txt", true))){
             for (Entry<String, AMember> entry : members.entrySet()){
                 AMember member = entry.getValue();
                 file.write(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
                  + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n");
             }
         }
-        else if (file.equals(new FileWriter("finances2.txt"))) {
+        else if (file.equals(new FileWriter("finances2.txt", true))) {
             file.write(java.time.Clock.systemUTC().instant().toString());
             file.write("\n\nUnpaid Monthly Rent\n");
             for (String months : Finances.rentMonths) {
@@ -145,13 +145,13 @@ public class ClubManager {
                 file.write(cf + "\n");
             }
         } 
-        else if(file.equals(new FileWriter("PendingPayments.txt"))){
+        else if(file.equals(new FileWriter("PendingPayments.txt", true))){
             for (Entry<String, String> email : ATreasurer.payments.entrySet()){
                 String amount = email.getValue();
                 file.write(email + " " + amount + "\n");
             }
         }
-        else if(file.equals(new FileWriter("Balances.txt"))){
+        else if(file.equals(new FileWriter("Balances.txt", true))){
             for (Entry<String, MemberBalance> entry : ATreasurer.treasurers.entrySet()){
                 MemberBalance str = entry.getValue();
                 file.write(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
