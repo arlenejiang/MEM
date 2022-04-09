@@ -244,16 +244,15 @@ public class MEM {
         for (int i = 0; i < people.size(); i++) {
             if (people.get(i).getEmail().equals(email) && people.get(i).getPassword().equals(password)) {
                 AfterLogIn(people.get(i));
-            } else if (i == people.size() - 1) {
-                PrintMessage();
+            } else if (i == people.size()) {
+                ErrorPrintMessage();
             }
         }
 
     }
 
-    public static void PrintMessage() {
-        System.out.println(
-                "You have entered one or more of the following pieces of information incorrectly: username and/or password.");
+    public static void ErrorPrintMessage() {
+        System.out.println("You have entered one or more of the following pieces of information incorrectly: username and/or password.");
         System.out.println("Please try again");
         log_in();
     }
@@ -371,7 +370,7 @@ public class MEM {
             System.out.println(e.getMessage());
         }
 
-        treasurer.UpdateMapandFile(file);
+        treasurer.Choose(file);
     }
 
     // After log in options for staff and players
@@ -569,14 +568,6 @@ public class MEM {
                 System.out.println("\nHave a nice day!\n");
                 System.exit(0);
             }
-
-            // System.out.println("member email: " + member.getEmail());
-            // System.out.println("amount is: " + amount);
-
-            // int balance = Integer.parseInt(amount);
-            // System.out.println("Balance before top up: $" + member.getBalance());
-
-            // member.setBalance(member.getBalance() + balance);
         } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
         } else if (option.equalsIgnoreCase("A")) {

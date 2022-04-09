@@ -88,7 +88,7 @@ public class ATreasurer {
         }
     }
 
-    public void UpdateMapandFile(String file) throws FileNotFoundException {
+    public void Choose(String file) throws FileNotFoundException {
 
         // MemberBalance person = new MemberBalance();
 
@@ -136,7 +136,7 @@ public class ATreasurer {
 
                 else {
                     clearConsole();
-                    System.out.println("Deny option");
+                    System.out.println("Payment Denied");
                 }
             }
 
