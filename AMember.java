@@ -101,5 +101,9 @@ public class AMember {
         this.role = role;
     }
 
+    public String toString(){
+        return firstName + " " + lastName + " " + phoneNumber + " " + email + " " + password + " " + role;
+    }
+
 
 }

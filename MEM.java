@@ -1,9 +1,13 @@
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.Map.Entry;
+
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.mail.Session;
@@ -11,10 +15,21 @@ import javax.mail.Transport;
 
 public class MEM {
     static Scanner in = new Scanner(System.in);
+    static File file1 = new File("PendingPayments.txt");
+    static File file2 = new File("Balances.txt");
 
     public static void main(String args[]) {
         // Creates a manager object and catched IOException
         clearConsole();
+
+        // Reads each member's info from the PendingPayments.txt file.
+        // Adds the member's email and the PendingAmount to the treeMap
+        ClubManager.fromFile(file1);
+
+        // Reads each member's info from the PendingPayments.txt file.
+        // Adds the member's email and the PendingAmount to the treeMap
+        ClubManager.fromFile(file2);
+        Finances.getData();
         ClubManager manager = null;
         try {
             manager = new ClubManager();
@@ -87,6 +102,7 @@ public class MEM {
         } else if (num == 2) {
             loginExit();
         }
+
     }
 
     // Converts user input fot choosing what to do in the app to an integer
@@ -228,30 +244,26 @@ public class MEM {
         System.out.print("Password: ");
         String password = in.nextLine();
 
-        ClubManager club = null;
-        try {
-            club = new ClubManager();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
         ArrayList<AMember> people = new ArrayList<>();
 
-        for (Map.Entry<String, AMember> entry : club.members.entrySet()) {
+        for (Map.Entry<String, AMember> entry : ClubManager.members.entrySet()) {
             people.add(entry.getValue());
         }
 
+        Boolean flag = true;
         for (int i = 0; i < people.size(); i++) {
             if (people.get(i).getEmail().equals(email) && people.get(i).getPassword().equals(password)) {
                 AfterLogIn(people.get(i));
-            } else if (i == people.size() - 1) {
-                PrintMessage();
+                flag = false;
             }
+        }
+        if (flag) {
+            ErrorPrintMessage();
         }
 
     }
 
-    public static void PrintMessage() {
+    public static void ErrorPrintMessage() {
         System.out.println(
                 "You have entered one or more of the following pieces of information incorrectly: username and/or password.");
         System.out.println("Please try again");
@@ -329,49 +341,39 @@ public class MEM {
         }
     }
 
-    public static void PendingPayments(String email, String amount) throws FileNotFoundException {
-
-        ATreasurer treasurer = null;
-
-        try {
-            treasurer = new ATreasurer();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        treasurer.addToMap(email, amount);
-        treasurer.writeToFile("PendingPayments.txt");
+    public static void PendingPayments(String email, String amount) throws IOException {
+        ATreasurer.addToMap(email, amount);
+        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
 
     }
 
-    public static void ApprovedPayments(String email, MemberBalance person) throws FileNotFoundException {
+    public static void ApprovedPayments(String email, MemberBalance person) throws IOException {
 
-        ATreasurer balance = null;
+        ATreasurer.addToBalance(email, person);
 
-        try {
-            balance = new ATreasurer();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        balance.addToBalance(email, person);
-
-        // balance.writeToFile("Balances.txt");
-        balance.writeToBalance();
+        ClubManager.toFile(new FileWriter("Balances.txt"));
 
     }
 
-    public static void ValidatePayments(String file) throws FileNotFoundException {
+    public static void returnOrExit(AMember member) {
+        System.out.print("Return to Main Screen(1)\t");
+        System.out.print("Exit(2)\n");
+        System.out.print("\n> ");
 
-        ATreasurer treasurer = null;
-
-        try {
-            treasurer = new ATreasurer();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        int input = 0;
+        int maxInput = 2;
+        while ((input < 1 || input > maxInput) && in.hasNextLine()) {
+            input = Integer.parseInt(in.nextLine());
         }
-
-        treasurer.UpdateMapandFile(file);
+        if (input == 1) {
+            clearConsole();
+            AfterLogIn(member);
+        }
+        // For exiting the annoucement feature.
+        else if (input == 2) {
+            System.out.println("\nHave a nice day!\n");
+            System.exit(0);
+        }
     }
 
     // After log in options for staff and players
@@ -384,75 +386,44 @@ public class MEM {
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         if (member.getRole().equals("Coach")) {
             System.out.print("Send Annoucement (S)\t");
+            System.out.print("Attendance (A)\t");
         } else if (member.getRole().equals("Treasurer")) {
             System.out.print("Pending Payments List (L)\t");
+            System.out.print("Attendance (A)\t");
         }
-
         System.out.print("Finances (F)\t");
-        System.out.print("Practice Schedule (P)\n");
-        System.out.print("Attendance (A)\n");
-        System.out.print("Exit (E)");
+        System.out.print("Practice Schedule (P)\t");
+        System.out.print("Exit (E)\n");
         System.out.print("\n> ");
 
         String option = in.nextLine();
 
         // If the input is a 1, go to annoucemnets
         if (option.equalsIgnoreCase("S")) {
-             try {
+            try {
                 clearConsole();
                 System.out.println("*** Send Announcement ***\n");
                 // method for sending email through java code
                 sendAnnouncements(member.email, member.password, member.firstName + member.lastName);
-             } catch (IOException e) {
-                 System.out.println(e.getMessage());
-             }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
             clearConsole();
             System.out.println("Announcement Successfully Sent\n");
 
             // Allows the user to choose if they want to return to the main screen or exit
             // after senting a annoucement
-            // Enter 1 to main screen, enter 2 to exit.
-            System.out.print("Return to Main Screen(1)\t");
-            System.out.print("Exit(2)\n");
-            System.out.print("\n> ");
-
-            int input = convertInputToInteger(2, 1);
-
-            // If the input is a 1, return to the main screen
-            if (input == 1) {
-                clearConsole();
-                AfterLogIn(member);
-            }
-            // For exiting the annoucement feature.
-            else if (input == 2) {
-                System.out.println("\nHave a nice day\n");
-                System.exit(0);
-            }
+            returnOrExit(member);
         } else if (option.equalsIgnoreCase("L")) {
             clearConsole();
             System.out.println("Showing list of pending payments\n");
             try {
-                // System.out.println("*** Registration ***\n");
-                ValidatePayments("PendingPayments.txt");
+                ATreasurer.Choose();
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
 
-            System.out.print("Return to Main Screen(1)\t");
-            System.out.print("Exit(2)\n");
-            System.out.print("\n> ");
-
-            int anotherInput = convertInputToInteger(2, 1);
-
-            if (anotherInput == 1) {
-                clearConsole();
-                AfterLogIn(member);
-            }
-            // For exiting the annoucement feature.
-            else if (anotherInput == 2) {
-                System.out.println("\nHave a nice day!\n");
-                System.exit(0);
-            }
+            returnOrExit(member);
 
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
@@ -466,118 +437,99 @@ public class MEM {
                         e.printStackTrace();
                     }
                 }
-                System.out.print("Return to Main Screen(1)\t");
-                System.out.print("Exit(2)\n");
-                System.out.print("\n> ");
-
-                int input = convertInputToInteger(2, 1);
-
-                // If the input is a 1, return to the main screen --- Refactor
-                if (input == 1) {
-                    clearConsole();
-                    AfterLogIn(member);
-                } else if (input == 2) {
-                    System.out.println("\nHave a nice day\n");
-                    System.exit(0);
-                }
-            }
-            System.out.print("Top up account balance(1)\t");
-            System.out.print("Return to Main Screen(2)\t");
-            System.out.print("Exit(3)\n");
-            System.out.print("\n> ");
-
-            int input = convertInputToInteger(3, 1);
-
-            // If the input is a 1, return to the main screen
-            if (input == 1) {
-                clearConsole();
-                System.out.println("Here are some steps to top up your account balance:");
-                System.out
-                        .println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
-                System.out.println("2. Click SEND");
-                System.out.println("3. Log in to PayPal. Sign up if you don't have an account");
-                System.out.println("4. Enter the amount you want to send");
-                System.out.println(
-                        "5. Add your payment method. You can either link a credit/debit card or a bank account");
-                System.out.println("6. Click SEND to complete your payment!");
-
-                String amount = "";
-
-                while (amount == "" || amount == null) {
-                    System.out.print("\n\nEnter the amount you paid: $");
-                    amount = in.nextLine();
-
-                    if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
-                        clearConsole();
-                        System.out.println("*** Payment ***\n");
-                        System.out.println("Invalid amount.\n");
-                        amount = "";
-                    }
-                }
-
-                System.out.print("\n\nThank you for your payment! ");
-                System.out.println("Funds will be ready to use in 4-24 hours.");
-
-                // try {
-                // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
-                // } catch (IOException e) {
-                // System.out.println(e.getMessage());
-                // }
-
-                // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
-                // "0");
-
-                try {
-                    // System.out.println("*** Registration ***\n");
-                    PendingPayments(member.getEmail(), amount);
-                    // ApprovedPayments(member.getEmail(), balance);
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                }
-
-                System.out.println("The amount is: " + amount);
-
-                System.out.print("Check your balance(1)\t");
+                returnOrExit(member);
+            } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
+                System.out.print("Top up account balance(1)\t");
                 System.out.print("Return to Main Screen(2)\t");
                 System.out.print("Exit(3)\n");
                 System.out.print("\n> ");
 
-                int anotherInput = convertInputToInteger(3, 1);
+                int input = convertInputToInteger(3, 1);
 
-                if (anotherInput == 1) {
+                // If the input is a 1, return to the main screen
+                if (input == 1) {
                     clearConsole();
-                    // System.out.println("Account balance: $" + balance);
-                } else if (anotherInput == 2) {
+                    System.out.println("Here are some steps to top up your account balance:");
+                    System.out
+                            .println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
+                    System.out.println("2. Click on the SEND option in PayPal.");
+                    System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
+                    System.out.println("4. Pay the amount you want to.");
+                    System.out.println("4. Enter the amount you have paid through PayPal below.");
+
+                    String amount = "";
+
+                    while (amount == "" || amount == null) {
+                        System.out.print("\n\nEnter the amount you paid: $");
+                        amount = in.nextLine();
+
+                        if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
+                            clearConsole();
+                            System.out.println("*** Payment ***\n");
+                            System.out.println("Invalid amount.\n");
+                            amount = "";
+                        }
+                    }
+
+                    System.out.print("\n\nThank you for your payment! ");
+                    System.out.println("Funds will be ready to use in 4-24 hours.");
+
+                    // try {
+                    // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
+                    // } catch (IOException e) {
+                    // System.out.println(e.getMessage());
+                    // }
+
+                    // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
+                    // "0");
+
+                    try {
+                        // System.out.println("*** Registration ***\n");
+                        PendingPayments(member.getEmail(), amount);
+                        // ApprovedPayments(member.getEmail(), balance);
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    System.out.println("The amount is: " + amount);
+
+                    System.out.print("Check your balance(1)\t");
+                    System.out.print("Return to Main Screen(2)\t");
+                    System.out.print("Exit(3)\n");
+                    System.out.print("\n> ");
+
+                    int anotherInput = convertInputToInteger(3, 1);
+
+                    if (anotherInput == 1) {
+                        clearConsole();
+                        // System.out.println("Account balance: $" + balance);
+                    } else if (anotherInput == 2) {
+                        clearConsole();
+                        AfterLogIn(member);
+                    }
+                    // For exiting the annoucement feature.
+                    else if (anotherInput == 3) {
+                        System.out.println("\nHave a nice day!\n");
+                        System.exit(0);
+                    }
+
+                } else if (input == 2) {
                     clearConsole();
                     AfterLogIn(member);
                 }
                 // For exiting the annoucement feature.
-                else if (anotherInput == 3) {
+                else if (input == 3) {
                     System.out.println("\nHave a nice day!\n");
                     System.exit(0);
                 }
-
-            } else if (input == 2) {
-                clearConsole();
-                AfterLogIn(member);
             }
-            // For exiting the annoucement feature.
-            else if (input == 3) {
-                System.out.println("\nHave a nice day!\n");
-                System.exit(0);
-            }
-
-            // System.out.println("member email: " + member.getEmail());
-            // System.out.println("amount is: " + amount);
-
-            // int balance = Integer.parseInt(amount);
-            // System.out.println("Balance before top up: $" + member.getBalance());
-
-            // member.setBalance(member.getBalance() + balance);
+            returnOrExit(member);
         } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
+            returnOrExit(member);
         } else if (option.equalsIgnoreCase("A")) {
             // insert make a attendance method here
+            returnOrExit(member);
         } else if (option.equalsIgnoreCase("E")) {
             System.out.println("\nHave a nice day\n");
             System.exit(0);
@@ -590,46 +542,46 @@ public class MEM {
         System.out.flush();
     }
 
-    /* 
-        NOTE: Can only send through Gmail. Can send to any address.
-
-        1. Go onto the sender's Gmail.
-        2. Go to settings icon > See All Settings > Forwarding and POP/IMAP
-        3. Enable IMAP access
-
-        1. Go onto myaccount.google.com
-        2. Scroll down to less secure app access
-        3. Enable less secure app access
-    */
-    public static void sendAnnouncements(String coachEmail, String coachPassword, String fullname) throws IOException{
+    /*
+     * NOTE: Can only send through Gmail. Can send to any address.
+     * 
+     * 1. Go onto the sender's Gmail.
+     * 2. Go to settings icon > See All Settings > Forwarding and POP/IMAP
+     * 3. Enable IMAP access
+     * 
+     * 1. Go onto myaccount.google.com
+     * 2. Scroll down to less secure app access
+     * 3. Enable less secure app access
+     */
+    public static void sendAnnouncements(String coachEmail, String coachPassword, String fullname) throws IOException {
         final String username = coachEmail;
         final String password = coachPassword;
 
-        //For a single person, get rid of from here
+        // For a single person, get rid of from here
         ClubManager manager = null;
         try {
             manager = new ClubManager();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        //to here
-    
+        // to here
+
         System.out.println("Enter the subject line: ");
         String subj = in.nextLine();
         System.out.println("Enter the body of the email (Press S to Send): ");
         String body = "";
         String next;
-        while(in.hasNextLine() && !(next = in.nextLine()).equals("S")){
+        while (in.hasNextLine() && !(next = in.nextLine()).equals("S")) {
             body += next;
             body += "\n";
         }
 
         Properties prop = new Properties();
-		prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.host", "imap.gmail.com");
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true"); //TLS
-        
+        prop.put("mail.smtp.starttls.enable", "true"); // TLS
+
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
                     protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
@@ -643,7 +595,8 @@ public class MEM {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse(manager.emailsToString()) //For 1 person, just enter the email string ex: "kffjk322@gmail.com"
+                    InternetAddress.parse(manager.emailsToString()) // For 1 person, just enter the email string ex:
+                                                                    // "kffjk322@gmail.com"
             );
             message.setSubject("** ANNOUNCEMENT **: " + subj);
             message.setText("Hello! \n\n"

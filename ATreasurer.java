@@ -1,134 +1,48 @@
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Map.Entry;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
-public class ATreasurer {
+public class ATreasurer extends AMember{
 
-    Map<String, String> payments = new TreeMap<String, String>();
+    static Map<String, String> payments = new TreeMap<String, String>();
+    static Map<String, MemberBalance> treasurers = new TreeMap<String, MemberBalance>();
+    
+    String first ;
+    String last;
+    String phoneNumber;
+    String email;
+    String password;
+    String role;
 
-    Map<String, MemberBalance> treasurers = new TreeMap<String, MemberBalance>();
-
-    public ATreasurer() throws FileNotFoundException {
-        File input = new File("PendingPayments.txt");
-        Scanner in = new Scanner(input);
-
-        String member = "";
-        String email = "";
-        String amount = "";
-
-        // Reads each member's info from the PendingPayments.txt file.
-        // Adds the member's email and the PendingAmount to the treeMap
-        while (in.hasNextLine()) {
-
-            member = in.nextLine();
-            Scanner word = new Scanner(member);
-
-            email = word.next();
-
-            amount = word.next();
-
-            payments.put(email, amount);
-            word.close();
+    public ATreasurer(){
+        for(Entry<String, AMember> entry: ClubManager.members.entrySet()){
+            AMember member = entry.getValue();
+            if(member.getRole().equals("Treasurer")){
+                this.first = member.getFirstName();
+                this.last = member.getLastName();
+                this.phoneNumber = member.getPhoneNumber();
+                this.email = member.getEmail();
+                this.password = member.getPassword();
+                this.role = member.getRole();
+            }
         }
-
-        in.close();
-
-        File input2 = new File("Balances.txt");
-        Scanner sc = new Scanner(input2);
-
-        // public MemberBalance(String email, String balance, String numOfPayments,
-        // String missingPayments) {
-
-        String treasurer = "";
-        String email2 = "";
-        String balance = "";
-        String numOfPayments = "";
-        String missingPayments = "";
-
-        // Reads each member's info from the PendingPayments.txt file.
-        // Adds the member's email and the PendingAmount to the treeMap
-        while (sc.hasNextLine()) {
-
-            treasurer = sc.nextLine();
-            Scanner word2 = new Scanner(treasurer);
-
-            email2 = word2.next();
-
-            balance = word2.next();
-
-            numOfPayments = word2.next();
-
-            missingPayments = word2.next();
-
-            MemberBalance person = new MemberBalance(email2, balance, numOfPayments, missingPayments);
-
-            treasurers.put(email, person);
-
-            word2.close();
-        }
-
-        sc.close();
     }
 
-    // Add's a new member to the member's treeMap.
-    // Writes out all the members to User_Info.txt
-    public void addToMap(String email, String amount) {
+    // Add's a new member to the member's payment treeMap.
+    // Writes out all the members to PendingPayments.txt
+    public static void addToMap(String email, String amount) {
 
         payments.put(email, amount);
     }
 
-    public void addToBalance(String email, MemberBalance person) {
+    public static void addToBalance(String email, MemberBalance person) {
 
         treasurers.put(email, person);
-    }
-
-    public void writeToFile(String file) throws FileNotFoundException {
-
-        PrintWriter out = new PrintWriter(file);
-
-        Set<String> keySet = payments.keySet();
-
-        for (String key : keySet) {
-            // System.out.println(key + ": " + payments.get(key)); -> debugging purpose
-            out.println(key + " " + payments.get(key));
-        }
-
-        out.close();
-
-    }
-
-    public void writeToBalance() throws FileNotFoundException {
-
-        PrintWriter out = new PrintWriter("Balances.txt");
-
-        Set<String> keySet = treasurers.keySet();
-
-        // if (file.equals("PendingPayments.txt")) {
-        // for (String key : payments.keySet()) {
-        // // System.out.println(key + ": " + payments.get(key)); -> debugging purpose
-        // out.println(key + " " + payments.get(key));
-        // }
-        // }
-
-        // else if (file.equals("Balances.txt")) {
-        for (String key : keySet) {
-            // System.out.println(key + ": " + payments.get(key)); -> debugging purpose
-            MemberBalance str = treasurers.get(key);
-
-            out.println(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
-                    + str.getMissingPayments());
-        }
-        // }
-
-        out.close();
-
     }
 
     public void PrintMap() {
@@ -140,7 +54,7 @@ public class ATreasurer {
         }
     }
 
-    public void UpdateMapandFile(String file) throws FileNotFoundException {
+    public static void Choose() throws IOException {
 
         // MemberBalance person = new MemberBalance();
 
@@ -154,7 +68,6 @@ public class ATreasurer {
 
             System.out.println("User ID: " + entry.getKey() + "\nPending Amount: $" + entry.getValue());
 
-            Scanner in = new Scanner(System.in);
             String option = "";
 
             while (option == "" || option == null) {
@@ -162,7 +75,7 @@ public class ATreasurer {
                 System.out.print("Deny (D)\n");
                 System.out.print("\n> ");
 
-                option = in.nextLine();
+                option = MEM.in.nextLine();
 
                 if (option == "" || option == null) {
                     // clearConsole();
@@ -186,15 +99,14 @@ public class ATreasurer {
 
             }
 
-            else {
+            else if (option.equalsIgnoreCase("D")) {
                 clearConsole();
-                System.out.println("Deny option");
+                System.out.println("Payment Denied");
             }
-
         }
 
-        writeToFile(file);
-        writeToBalance();
+        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
+        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
     }
 
     // Clears the console
