@@ -79,11 +79,8 @@ public class ClubManager {
             } else if (file.equals(new File("finances.txt"))) {
                 String lastUpdate = sc.nextLine().substring(0, 10);
 
-                while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {
-                }
-                ;
+                while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {}
                 sc.nextLine();
-
                 // Add previous unpaid months from file to list rentMonths
                 line = sc.nextLine();
                 while (line.length() > 0) {

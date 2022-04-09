@@ -15,6 +15,7 @@ public class MEM {
     public static void main(String args[]) {
         // Creates a manager object and catched IOException
         clearConsole();
+        Finances.getData();
         ClubManager manager = null;
         try {
             manager = new ClubManager();

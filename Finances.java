@@ -19,7 +19,7 @@ public class Finances {
     static File file1 = new File("finances.txt");
     static FileWriter file2 = null;
     
-    public static void main(String[] args) {
+    public static void getData() {
         ClubManager.fromFile(file1);
     }
 
@@ -88,25 +88,25 @@ public class Finances {
     }
 
     // TODO modify based on attendance logs
-    private static void coachCharge(String date) throws FileNotFoundException {
-        // Check number of rent days (1st of the month)
-        String input;
-        LocalDate lt= LocalDate.parse(date);
-        LocalDate currentDate = LocalDate.now();
-        int months = (int) ChronoUnit.MONTHS.between(lt.withDayOfMonth(1), currentDate);
+    // private static void coachCharge(String date) throws FileNotFoundException {
+    //     // Check number of rent days (1st of the month)
+    //     String input;
+    //     LocalDate lt= LocalDate.parse(date);
+    //     LocalDate currentDate = LocalDate.now();
+    //     int months = (int) ChronoUnit.MONTHS.between(lt.withDayOfMonth(1), currentDate);
 
-        // Scan log
-        File myFile = new File("coaches.txt");
-        //Scanner myReader = new Scanner(myFile);
+    //     // Scan log
+    //     File myFile = new File("coaches.txt");
+    //     //Scanner myReader = new Scanner(myFile);
         
-        //myReader.close();
-    }
+    //     //myReader.close();
+    // }
 
     // Adds unpaid rent months to list based on current date
     static void rentCharge(String date) {
         int year = Integer.valueOf(date.substring(0, 4));
         int month = Integer.valueOf(date.substring(5, 7));
-
+        
         // Check number of rent days (1st of the month)
         LocalDate lt= LocalDate.parse(date);
         LocalDate currentDate = LocalDate.now();
