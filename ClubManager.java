@@ -66,8 +66,11 @@ public class ClubManager {
 
             if (file.equals(new File("User_Info.txt"))) {
                 while (sc.hasNextLine()) {
-                    AMember person = new AMember(sc.next(), sc.next(), sc.next(), sc.next(), sc.next(), sc.next());
-                    members.put(person.getEmail(), person);
+                    String member = sc.nextLine();
+                    try (Scanner word = new Scanner(member)) {
+                        AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(), word.next());
+                        members.put(person.getEmail(), person);
+                    }
                 }
             } else if (file.equals(new File("finances.txt"))) {
                 String input;
