@@ -1,23 +1,26 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Map.Entry;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class ATreasurer {
+public class ATreasurer extends AMember{
 
     static Map<String, String> payments = new TreeMap<String, String>();
     static Map<String, MemberBalance> treasurers = new TreeMap<String, MemberBalance>();
-    File file1 = new File("PendingPayments.txt");
-    File file2 = new File("Balances.txt");
+    static File file1 = new File("PendingPayments.txt");
+    static File file2 = new File("Balances.txt");
+    String first ;
+    String last;
+    String phoneNumber;
+    String email;
+    String password;
+    String role;
 
-    public ATreasurer() throws FileNotFoundException {
-
+    public static void main(String[] args) {
         // Reads each member's info from the PendingPayments.txt file.
         // Adds the member's email and the PendingAmount to the treeMap
         ClubManager.fromFile(file1);
@@ -25,6 +28,20 @@ public class ATreasurer {
         // Reads each member's info from the PendingPayments.txt file.
         // Adds the member's email and the PendingAmount to the treeMap
         ClubManager.fromFile(file2);
+    }
+
+    public ATreasurer(){
+        for(Entry<String, AMember> entry: ClubManager.members.entrySet()){
+            AMember member = entry.getValue();
+            if(member.getRole().equals("Treasurer")){
+                this.first = member.getFirstName();
+                this.last = member.getLastName();
+                this.phoneNumber = member.getPhoneNumber();
+                this.email = member.getEmail();
+                this.password = member.getPassword();
+                this.role = member.getRole();
+            }
+        }
     }
 
     // Add's a new member to the member's payment treeMap.

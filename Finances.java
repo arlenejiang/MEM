@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
-import java.util.Scanner;
 import java.util.Arrays;
 
 /**
