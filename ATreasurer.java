@@ -11,24 +11,13 @@ public class ATreasurer extends AMember{
 
     static Map<String, String> payments = new TreeMap<String, String>();
     static Map<String, MemberBalance> treasurers = new TreeMap<String, MemberBalance>();
-    static File file1 = new File("PendingPayments.txt");
-    static File file2 = new File("Balances.txt");
+    
     String first ;
     String last;
     String phoneNumber;
     String email;
     String password;
     String role;
-
-    public static void main(String[] args) {
-        // Reads each member's info from the PendingPayments.txt file.
-        // Adds the member's email and the PendingAmount to the treeMap
-        ClubManager.fromFile(file1);
-
-        // Reads each member's info from the PendingPayments.txt file.
-        // Adds the member's email and the PendingAmount to the treeMap
-        ClubManager.fromFile(file2);
-    }
 
     public ATreasurer(){
         for(Entry<String, AMember> entry: ClubManager.members.entrySet()){

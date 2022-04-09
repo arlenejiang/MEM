@@ -1,9 +1,13 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.Map.Entry;
+
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.mail.Session;
@@ -11,10 +15,20 @@ import javax.mail.Transport;
 
 public class MEM {
     static Scanner in = new Scanner(System.in);
+    static File file1 = new File("PendingPayments.txt");
+    static File file2 = new File("Balances.txt");
 
     public static void main(String args[]) {
         // Creates a manager object and catched IOException
         clearConsole();
+
+        // Reads each member's info from the PendingPayments.txt file.
+        // Adds the member's email and the PendingAmount to the treeMap
+        ClubManager.fromFile(file1);
+
+        // Reads each member's info from the PendingPayments.txt file.
+        // Adds the member's email and the PendingAmount to the treeMap
+        ClubManager.fromFile(file2);
         Finances.getData();
         ClubManager manager = null;
         try {

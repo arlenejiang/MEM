@@ -95,7 +95,7 @@ public class ClubManager {
                 while (sc.hasNextLine()) {
                     Finances.coachFees.add(sc.nextLine());
                 }
-            }else if (file.equals(new File("PendingPayments.txt"))) {
+            } else if (file.equals(new File("PendingPayments.txt"))) {
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
                     Scanner word = new Scanner(line);
