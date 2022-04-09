@@ -228,13 +228,6 @@ public class MEM {
         System.out.print("Password: ");
         String password = in.nextLine();
 
-        ClubManager club = null;
-        try {
-            club = new ClubManager();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
         ArrayList<AMember> people = new ArrayList<>();
 
         for (Map.Entry<String, AMember> entry : ClubManager.members.entrySet()) {
