@@ -61,19 +61,19 @@ public class ClubManager {
     public static void fromFile(File file) {
 
         Scanner sc = null;
+        String line;
         try {
             sc = new Scanner(new FileInputStream(file));
 
             if (file.equals(new File("User_Info.txt"))) {
                 while (sc.hasNextLine()) {
-                    String member = sc.nextLine();
-                    try (Scanner word = new Scanner(member)) {
+                    line = sc.nextLine();
+                    try (Scanner word = new Scanner(line)) {
                         AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(), word.next());
                         members.put(person.getEmail(), person);
                     }
                 }
             } else if (file.equals(new File("finances.txt"))) {
-                String input;
                 String lastUpdate = sc.nextLine().substring(0, 10);
 
                 while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {
@@ -82,10 +82,10 @@ public class ClubManager {
                 sc.nextLine();
 
                 // Add previous unpaid months from file to list rentMonths
-                input = sc.nextLine();
-                while (input.length() > 0) {
-                    Finances.rentMonths.add(input);
-                    input = sc.nextLine();
+                line = sc.nextLine();
+                while (line.length() > 0) {
+                    Finances.rentMonths.add(line);
+                    line = sc.nextLine();
                 }
                 // Add new unpaid months to list rentMonths
                 Finances.rentCharge(lastUpdate);
@@ -94,6 +94,25 @@ public class ClubManager {
                 sc.nextLine();
                 while (sc.hasNextLine()) {
                     Finances.coachFees.add(sc.nextLine());
+                }
+            }
+            else if(file.equals(new File("PendingPayments.txt"))){
+                while (sc.hasNextLine()) {
+                    line = sc.nextLine();
+                    Scanner word = new Scanner(line);
+                    ATreasurer.payments.put(word.next(), word.next());
+                    word.close();
+                }
+            }
+            else if(file.equals(new File("Balances.txt"))){
+                while (sc.hasNextLine()) {
+
+                    line = sc.nextLine();
+                    Scanner word = new Scanner(line);
+                    MemberBalance person = new MemberBalance(word.next(), word.next(), word.next(), word.next());
+        
+                    ATreasurer.treasurers.put(person.getEmail(), person);
+                    word.close();
                 }
             }
 

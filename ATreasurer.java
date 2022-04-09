@@ -9,74 +9,24 @@ import java.util.TreeMap;
 
 public class ATreasurer {
 
-    Map<String, String> payments = new TreeMap<String, String>();
-
-    Map<String, MemberBalance> treasurers = new TreeMap<String, MemberBalance>();
+    static Map<String, String> payments = new TreeMap<String, String>();
+    static Map<String, MemberBalance> treasurers = new TreeMap<String, MemberBalance>();
+    File file1 = new File("PendingPayments.txt");
+    File file2 = new File("Balances.txt");
 
     public ATreasurer() throws FileNotFoundException {
-        File input = new File("PendingPayments.txt");
-        Scanner in = new Scanner(input);
-
-        String member = "";
-        String email = "";
-        String amount = "";
 
         // Reads each member's info from the PendingPayments.txt file.
         // Adds the member's email and the PendingAmount to the treeMap
-        while (in.hasNextLine()) {
-
-            member = in.nextLine();
-            Scanner word = new Scanner(member);
-
-            email = word.next();
-
-            amount = word.next();
-
-            payments.put(email, amount);
-            word.close();
-        }
-
-        in.close();
-
-        File input2 = new File("Balances.txt");
-        Scanner sc = new Scanner(input2);
-
-        // public MemberBalance(String email, String balance, String numOfPayments,
-        // String missingPayments) {
-
-        String treasurer = "";
-        String email2 = "";
-        String balance = "";
-        String numOfPayments = "";
-        String missingPayments = "";
+        ClubManager.fromFile(file1);
 
         // Reads each member's info from the PendingPayments.txt file.
         // Adds the member's email and the PendingAmount to the treeMap
-        while (sc.hasNextLine()) {
-
-            treasurer = sc.nextLine();
-            Scanner word2 = new Scanner(treasurer);
-
-            email2 = word2.next();
-
-            balance = word2.next();
-
-            numOfPayments = word2.next();
-
-            missingPayments = word2.next();
-
-            MemberBalance person = new MemberBalance(email2, balance, numOfPayments, missingPayments);
-
-            treasurers.put(email, person);
-
-            word2.close();
-        }
-
-        sc.close();
+        ClubManager.fromFile(file2);
     }
 
-    // Add's a new member to the member's treeMap.
-    // Writes out all the members to User_Info.txt
+    // Add's a new member to the member's payment treeMap.
+    // Writes out all the members to PendingPayments.txt
     public void addToMap(String email, String amount) {
 
         payments.put(email, amount);
