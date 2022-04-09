@@ -11,9 +11,10 @@ public class ClubManager {
 
     static Map<String, AMember> members = new TreeMap<String, AMember>();
     Scanner in = new Scanner(System.in);
+    File file = new File("User_Info.txt");
 
     public ClubManager() throws IOException {
-        fromFile("User_Info.txt");
+        fromFile(file);
     }
 
     // Add's a new member to the member's treeMap.
@@ -57,8 +58,8 @@ public class ClubManager {
         return removeSplice;
     }
 
-    public static void fromFile(String fileName) {
-        File file = new File(fileName);
+    public static void fromFile(File file) {
+        
         Scanner sc = null;
         try {
             sc = new Scanner(new FileInputStream(file));
@@ -66,12 +67,12 @@ public class ClubManager {
             e.printStackTrace();
         }
 
-        if (fileName.equals("User_Info.txt")) {
+        if (file.equals(new File("User_Info.txt"))) {
             while (sc.hasNextLine()) {
                 AMember person = new AMember(sc.next(), sc.next(), sc.next(), sc.next(), sc.next(), sc.next());
                 members.put(person.getEmail(), person);
             }
-        } else if (fileName.equals("finances.txt")) {
+        } else if (file.equals(new File ("finances.txt"))) {
             String input;
             String lastUpdate = sc.nextLine().substring(0, 10);
 

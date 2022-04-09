@@ -17,11 +17,12 @@ public class Finances {
     static int RENT = 500;
     static LinkedList<String> rentMonths = new LinkedList<String>();
     static LinkedList<String> coachFees = new LinkedList<String>();
+    static File file = new File("User_Info.txt");
     
 
     public static void displayDebt() throws IOException{
         
-        ClubManager.fromFile("finances.txt");
+        ClubManager.fromFile(file);
 
         //Output Fees
         MEM.clearConsole();
