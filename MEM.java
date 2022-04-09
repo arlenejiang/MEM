@@ -1,5 +1,8 @@
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
@@ -235,12 +238,15 @@ public class MEM {
             people.add(entry.getValue());
         }
 
+        Boolean flag = true;
         for (int i = 0; i < people.size(); i++) {
             if (people.get(i).getEmail().equals(email) && people.get(i).getPassword().equals(password)) {
                 AfterLogIn(people.get(i));
-            } else if (i == people.size()) {
-                ErrorPrintMessage();
+                flag = false;
             }
+        }
+        if (flag) {
+            ErrorPrintMessage();
         }
 
     }
@@ -323,49 +329,18 @@ public class MEM {
         }
     }
 
-    public static void PendingPayments(String email, String amount) throws FileNotFoundException {
-
-        ATreasurer treasurer = null;
-
-        try {
-            treasurer = new ATreasurer();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        treasurer.addToMap(email, amount);
-        treasurer.writeToFile("PendingPayments.txt");
+    public static void PendingPayments(String email, String amount) throws IOException {
+        ATreasurer.addToMap(email, amount);
+        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
 
     }
 
-    public static void ApprovedPayments(String email, MemberBalance person) throws FileNotFoundException {
+    public static void ApprovedPayments(String email, MemberBalance person) throws IOException {
 
-        ATreasurer balance = null;
+        ATreasurer.addToBalance(email, person);
 
-        try {
-            balance = new ATreasurer();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        ClubManager.toFile(new FileWriter("Balances.txt"));
 
-        balance.addToBalance(email, person);
-
-        // balance.writeToFile("Balances.txt");
-        balance.writeToBalance();
-
-    }
-
-    public static void ValidatePayments(String file) throws FileNotFoundException {
-
-        ATreasurer treasurer = null;
-
-        try {
-            treasurer = new ATreasurer();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        treasurer.Choose(file);
     }
 
     public static void returnOrExit(AMember member) {
@@ -373,21 +348,19 @@ public class MEM {
         System.out.print("Exit(2)\n");
         System.out.print("\n> ");
 
-        int input = 0;
+        int input =0;
         int maxInput = 2;
-        while (input < 1 || input > maxInput) {
+        while ((input < 1 || input > maxInput) && in.hasNextLine()) {
             input = Integer.parseInt(in.nextLine());
-            if(input>0 && input<=maxInput){
-                if (input == 1) {
-                    clearConsole();
-                    AfterLogIn(member);
-                }
-                // For exiting the annoucement feature.
-                else if (input == 2) {
-                    System.out.println("\nHave a nice day!\n");
-                    System.exit(0);
-                }
-            }
+        }
+        if (input == 1) {
+            clearConsole();
+            AfterLogIn(member);
+        }
+        // For exiting the annoucement feature.
+        else if (input == 2) {
+            System.out.println("\nHave a nice day!\n");
+            System.exit(0);
         }
     }
 
@@ -433,10 +406,9 @@ public class MEM {
             clearConsole();
             System.out.println("Showing list of pending payments\n");
             try {
-                // System.out.println("*** Registration ***\n");
-                ValidatePayments("PendingPayments.txt");
+                ATreasurer.Choose();
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
 
             returnOrExit(member);

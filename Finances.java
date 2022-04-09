@@ -20,11 +20,11 @@ public class Finances {
     static File file1 = new File("finances.txt");
     static FileWriter file2 = null;
     
+    public static void main(String[] args) {
+        ClubManager.fromFile(file1);
+    }
 
     public static void displayDebt() throws IOException{
-        
-        ClubManager.fromFile(file1);
-
         //Output Fees
         MEM.clearConsole();
         
@@ -98,9 +98,9 @@ public class Finances {
 
         // Scan log
         File myFile = new File("coaches.txt");
-        Scanner myReader = new Scanner(myFile);
+        //Scanner myReader = new Scanner(myFile);
         
-        myReader.close();
+        //myReader.close();
     }
 
     // Adds unpaid rent months to list based on current date

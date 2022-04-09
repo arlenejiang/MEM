@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
@@ -144,5 +145,18 @@ public class ClubManager {
                 file.write(cf + "\n");
             }
         } 
+        else if(file.equals(new FileWriter("PendingPayments.txt"))){
+            for (Entry<String, String> email : ATreasurer.payments.entrySet()){
+                String amount = email.getValue();
+                file.write(email + " " + amount + "\n");
+            }
+        }
+        else if(file.equals(new FileWriter("Balances.txt"))){
+            for (Entry<String, MemberBalance> entry : ATreasurer.treasurers.entrySet()){
+                MemberBalance str = entry.getValue();
+                file.write(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
+                + str.getMissingPayments() + "\n");
+            }
+        }
     }
 }

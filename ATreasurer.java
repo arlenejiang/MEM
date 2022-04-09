@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Map;
@@ -27,56 +29,14 @@ public class ATreasurer {
 
     // Add's a new member to the member's payment treeMap.
     // Writes out all the members to PendingPayments.txt
-    public void addToMap(String email, String amount) {
+    public static void addToMap(String email, String amount) {
 
         payments.put(email, amount);
     }
 
-    public void addToBalance(String email, MemberBalance person) {
+    public static void addToBalance(String email, MemberBalance person) {
 
         treasurers.put(email, person);
-    }
-
-    public void writeToFile(String file) throws FileNotFoundException {
-
-        PrintWriter out = new PrintWriter(file);
-
-        Set<String> keySet = payments.keySet();
-
-        for (String key : keySet) {
-            // System.out.println(key + ": " + payments.get(key)); -> debugging purpose
-            out.println(key + " " + payments.get(key));
-        }
-
-        out.close();
-
-    }
-
-    public void writeToBalance() throws FileNotFoundException {
-
-        PrintWriter out = new PrintWriter("Balances.txt");
-
-        Set<String> keySet = treasurers.keySet();
-
-        // if (file.equals("PendingPayments.txt")) {
-        // for (String key : payments.keySet()) {
-        // // System.out.println(key + ": " + payments.get(key)); -> debugging purpose
-        // out.println(key + " " + payments.get(key));
-        // }
-        // }
-
-        // else if (file.equals("Balances.txt")) {
-        for (String key : keySet) {
-            // System.out.println(key + ": " + payments.get(key)); -> debugging purpose
-            MemberBalance str = treasurers.get(key);
-
-            out.println(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
-                    + str.getMissingPayments());
-        }
-        // }
-
-        out.close();
-
     }
 
     public void PrintMap() {
@@ -88,7 +48,7 @@ public class ATreasurer {
         }
     }
 
-    public void Choose(String file) throws FileNotFoundException {
+    public static void Choose() throws IOException {
 
         // MemberBalance person = new MemberBalance();
 
@@ -102,48 +62,45 @@ public class ATreasurer {
 
             System.out.println("User ID: " + entry.getKey() + "\nPending Amount: $" + entry.getValue());
 
-            try (Scanner in = new Scanner(System.in)) {
-                String option = "";
+            String option = "";
 
-                while (option == "" || option == null) {
-                    System.out.print("\nApprove (A)\t");
-                    System.out.print("Deny (D)\n");
-                    System.out.print("\n> ");
+            while (option == "" || option == null) {
+                System.out.print("\nApprove (A)\t");
+                System.out.print("Deny (D)\n");
+                System.out.print("\n> ");
 
-                    option = in.nextLine();
+                option = MEM.in.nextLine();
 
-                    if (option == "" || option == null) {
-                        // clearConsole();
-                        // System.out.println("*** Payment ***\n");
-                        System.out.println("Please approve or deny transaction\n");
-                        option = "";
-                    }
-                }
-
-                // String keyToBeRemoved = "";
-
-                if (option.equalsIgnoreCase("A")) {
-                    System.out.println("Key is: " + entry.getKey());
-                    // keyToBeRemoved = entry.getKey();
-
-                    MemberBalance person = new MemberBalance(entry.getKey(), entry.getValue(), "1", "0");
-                    treasurers.put(entry.getKey(), person);
-
-                    iterator.remove();
-                    clearConsole();
-
-                }
-
-                else {
-                    clearConsole();
-                    System.out.println("Payment Denied");
+                if (option == "" || option == null) {
+                    // clearConsole();
+                    // System.out.println("*** Payment ***\n");
+                    System.out.println("Please approve or deny transaction\n");
+                    option = "";
                 }
             }
 
+            // String keyToBeRemoved = "";
+
+            if (option.equalsIgnoreCase("A")) {
+                System.out.println("Key is: " + entry.getKey());
+                // keyToBeRemoved = entry.getKey();
+
+                MemberBalance person = new MemberBalance(entry.getKey(), entry.getValue(), "1", "0");
+                treasurers.put(entry.getKey(), person);
+
+                iterator.remove();
+                clearConsole();
+
+            }
+
+            else if (option.equalsIgnoreCase("D")) {
+                clearConsole();
+                System.out.println("Payment Denied");
+            }
         }
 
-        writeToFile(file);
-        writeToBalance();
+        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
+        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
     }
 
     // Clears the console
