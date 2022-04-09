@@ -1,13 +1,11 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 public class ATreasurer {
 
@@ -154,41 +152,42 @@ public class ATreasurer {
 
             System.out.println("User ID: " + entry.getKey() + "\nPending Amount: $" + entry.getValue());
 
-            Scanner in = new Scanner(System.in);
-            String option = "";
+            try (Scanner in = new Scanner(System.in)) {
+                String option = "";
 
-            while (option == "" || option == null) {
-                System.out.print("\nApprove (A)\t");
-                System.out.print("Deny (D)\n");
-                System.out.print("\n> ");
+                while (option == "" || option == null) {
+                    System.out.print("\nApprove (A)\t");
+                    System.out.print("Deny (D)\n");
+                    System.out.print("\n> ");
 
-                option = in.nextLine();
+                    option = in.nextLine();
 
-                if (option == "" || option == null) {
-                    // clearConsole();
-                    // System.out.println("*** Payment ***\n");
-                    System.out.println("Please approve or deny transaction\n");
-                    option = "";
+                    if (option == "" || option == null) {
+                        // clearConsole();
+                        // System.out.println("*** Payment ***\n");
+                        System.out.println("Please approve or deny transaction\n");
+                        option = "";
+                    }
                 }
-            }
 
-            // String keyToBeRemoved = "";
+                // String keyToBeRemoved = "";
 
-            if (option.equalsIgnoreCase("A")) {
-                System.out.println("Key is: " + entry.getKey());
-                // keyToBeRemoved = entry.getKey();
+                if (option.equalsIgnoreCase("A")) {
+                    System.out.println("Key is: " + entry.getKey());
+                    // keyToBeRemoved = entry.getKey();
 
-                MemberBalance person = new MemberBalance(entry.getKey(), entry.getValue(), "1", "0");
-                treasurers.put(entry.getKey(), person);
+                    MemberBalance person = new MemberBalance(entry.getKey(), entry.getValue(), "1", "0");
+                    treasurers.put(entry.getKey(), person);
 
-                iterator.remove();
-                clearConsole();
+                    iterator.remove();
+                    clearConsole();
 
-            }
+                }
 
-            else {
-                clearConsole();
-                System.out.println("Deny option");
+                else {
+                    clearConsole();
+                    System.out.println("Deny option");
+                }
             }
 
         }

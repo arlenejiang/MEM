@@ -237,7 +237,7 @@ public class MEM {
 
         ArrayList<AMember> people = new ArrayList<>();
 
-        for (Map.Entry<String, AMember> entry : club.members.entrySet()) {
+        for (Map.Entry<String, AMember> entry : ClubManager.members.entrySet()) {
             people.add(entry.getValue());
         }
 
