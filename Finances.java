@@ -21,29 +21,7 @@ public class Finances {
 
     public static void displayDebt() throws IOException{
         
-        String input;
-        File myFile = new File("finances.txt");
-        Scanner myReader = new Scanner(myFile);
-        String lastUpdate = myReader.nextLine().substring(0,10);
-        
-        while ((myReader.nextLine()).equals("Unpaid Monthly Rent")){};
-        myReader.nextLine();
-
-        // Add previous unpaid months from file to list rentMonths
-        input = myReader.nextLine();
-        while (input.length() > 0) {
-            rentMonths.add(input);
-            input = myReader.nextLine();
-        }
-        // Add new unpaid months to list rentMonths
-        rentCharge(lastUpdate); 
-
-        // Add previous unpaid months from file to list coachFees
-        myReader.nextLine();
-        while(myReader.hasNextLine()) {
-            coachFees.add(myReader.nextLine());
-        }
-        myReader.close();
+        ClubManager.fromFile("finances.txt");
 
         //Output Fees
         MEM.clearConsole();
@@ -134,7 +112,7 @@ public class Finances {
     }
 
     // Adds unpaid rent months to list based on current date
-    private static void rentCharge(String date) {
+    static void rentCharge(String date) {
         int year = Integer.valueOf(date.substring(0, 4));
         int month = Integer.valueOf(date.substring(5, 7));
 
