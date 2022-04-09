@@ -87,6 +87,7 @@ public class MEM {
         } else if (num == 2) {
             loginExit();
         }
+
     }
 
     // Converts user input fot choosing what to do in the app to an integer
@@ -245,7 +246,8 @@ public class MEM {
     }
 
     public static void ErrorPrintMessage() {
-        System.out.println("You have entered one or more of the following pieces of information incorrectly: username and/or password.");
+        System.out.println(
+                "You have entered one or more of the following pieces of information incorrectly: username and/or password.");
         System.out.println("Please try again");
         log_in();
     }
@@ -366,6 +368,29 @@ public class MEM {
         treasurer.Choose(file);
     }
 
+    public static void returnOrExit(AMember member) {
+        System.out.print("Return to Main Screen(1)\t");
+        System.out.print("Exit(2)\n");
+        System.out.print("\n> ");
+
+        int input = 0;
+        int maxInput = 2;
+        while (input < 1 || input > maxInput) {
+            input = Integer.parseInt(in.nextLine());
+            if(input>0 && input<=maxInput){
+                if (input == 1) {
+                    clearConsole();
+                    AfterLogIn(member);
+                }
+                // For exiting the annoucement feature.
+                else if (input == 2) {
+                    System.out.println("\nHave a nice day!\n");
+                    System.exit(0);
+                }
+            }
+        }
+    }
+
     // After log in options for staff and players
     public static void AfterLogIn(AMember member) {
         clearConsole();
@@ -390,36 +415,20 @@ public class MEM {
 
         // If the input is a 1, go to annoucemnets
         if (option.equalsIgnoreCase("S")) {
-             try {
+            try {
                 clearConsole();
                 System.out.println("*** Send Announcement ***\n");
                 // method for sending email through java code
                 sendAnnouncements(member.email, member.password, member.firstName + member.lastName);
-             } catch (IOException e) {
-                 System.out.println(e.getMessage());
-             }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
             clearConsole();
             System.out.println("Announcement Successfully Sent\n");
 
             // Allows the user to choose if they want to return to the main screen or exit
             // after senting a annoucement
-            // Enter 1 to main screen, enter 2 to exit.
-            System.out.print("Return to Main Screen(1)\t");
-            System.out.print("Exit(2)\n");
-            System.out.print("\n> ");
-
-            int input = convertInputToInteger(2, 1);
-
-            // If the input is a 1, return to the main screen
-            if (input == 1) {
-                clearConsole();
-                AfterLogIn(member);
-            }
-            // For exiting the annoucement feature.
-            else if (input == 2) {
-                System.out.println("\nHave a nice day\n");
-                System.exit(0);
-            }
+            returnOrExit(member);
         } else if (option.equalsIgnoreCase("L")) {
             clearConsole();
             System.out.println("Showing list of pending payments\n");
@@ -430,21 +439,7 @@ public class MEM {
                 System.out.println(e.getMessage());
             }
 
-            System.out.print("Return to Main Screen(1)\t");
-            System.out.print("Exit(2)\n");
-            System.out.print("\n> ");
-
-            int anotherInput = convertInputToInteger(2, 1);
-
-            if (anotherInput == 1) {
-                clearConsole();
-                AfterLogIn(member);
-            }
-            // For exiting the annoucement feature.
-            else if (anotherInput == 2) {
-                System.out.println("\nHave a nice day!\n");
-                System.exit(0);
-            }
+            returnOrExit(member);
 
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
@@ -458,20 +453,7 @@ public class MEM {
                         e.printStackTrace();
                     }
                 }
-                System.out.print("Return to Main Screen(1)\t");
-                System.out.print("Exit(2)\n");
-                System.out.print("\n> ");
-
-                int input = convertInputToInteger(2, 1);
-
-                // If the input is a 1, return to the main screen --- Refactor
-                if (input == 1) {
-                    clearConsole();
-                    AfterLogIn(member);
-                } else if (input == 2) {
-                    System.out.println("\nHave a nice day\n");
-                    System.exit(0);
-                }
+                returnOrExit(member);
             }
             System.out.print("Top up account balance(1)\t");
             System.out.print("Return to Main Screen(2)\t");
@@ -484,14 +466,11 @@ public class MEM {
             if (input == 1) {
                 clearConsole();
                 System.out.println("Here are some steps to top up your account balance:");
-                System.out
-                        .println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
-                System.out.println("2. Click SEND");
-                System.out.println("3. Log in to PayPal. Sign up if you don't have an account");
-                System.out.println("4. Enter the amount you want to send");
-                System.out.println(
-                        "5. Add your payment method. You can either link a credit/debit card or a bank account");
-                System.out.println("6. Click SEND to complete your payment!");
+                System.out.println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
+                System.out.println("2. Click on the SEND option in PayPal.");
+                System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
+                System.out.println("4. Pay the amount you want to.");
+                System.out.println("4. Enter the amount you have paid through PayPal below.");
 
                 String amount = "";
 
@@ -574,46 +553,46 @@ public class MEM {
         System.out.flush();
     }
 
-    /* 
-        NOTE: Can only send through Gmail. Can send to any address.
-
-        1. Go onto the sender's Gmail.
-        2. Go to settings icon > See All Settings > Forwarding and POP/IMAP
-        3. Enable IMAP access
-
-        1. Go onto myaccount.google.com
-        2. Scroll down to less secure app access
-        3. Enable less secure app access
-    */
-    public static void sendAnnouncements(String coachEmail, String coachPassword, String fullname) throws IOException{
+    /*
+     * NOTE: Can only send through Gmail. Can send to any address.
+     * 
+     * 1. Go onto the sender's Gmail.
+     * 2. Go to settings icon > See All Settings > Forwarding and POP/IMAP
+     * 3. Enable IMAP access
+     * 
+     * 1. Go onto myaccount.google.com
+     * 2. Scroll down to less secure app access
+     * 3. Enable less secure app access
+     */
+    public static void sendAnnouncements(String coachEmail, String coachPassword, String fullname) throws IOException {
         final String username = coachEmail;
         final String password = coachPassword;
 
-        //For a single person, get rid of from here
+        // For a single person, get rid of from here
         ClubManager manager = null;
         try {
             manager = new ClubManager();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        //to here
-    
+        // to here
+
         System.out.println("Enter the subject line: ");
         String subj = in.nextLine();
         System.out.println("Enter the body of the email (Press S to Send): ");
         String body = "";
         String next;
-        while(in.hasNextLine() && !(next = in.nextLine()).equals("S")){
+        while (in.hasNextLine() && !(next = in.nextLine()).equals("S")) {
             body += next;
             body += "\n";
         }
 
         Properties prop = new Properties();
-		prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.host", "imap.gmail.com");
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true"); //TLS
-        
+        prop.put("mail.smtp.starttls.enable", "true"); // TLS
+
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
                     protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
@@ -627,7 +606,8 @@ public class MEM {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse(manager.emailsToString()) //For 1 person, just enter the email string ex: "kffjk322@gmail.com"
+                    InternetAddress.parse(manager.emailsToString()) // For 1 person, just enter the email string ex:
+                                                                    // "kffjk322@gmail.com"
             );
             message.setSubject("** ANNOUNCEMENT **: " + subj);
             message.setText("Hello! \n\n"
