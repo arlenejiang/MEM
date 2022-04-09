@@ -1,11 +1,13 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 public class ClubManager {
 
@@ -69,7 +71,8 @@ public class ClubManager {
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
                     try (Scanner word = new Scanner(line)) {
-                        AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(), word.next());
+                        AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(),
+                                word.next());
                         members.put(person.getEmail(), person);
                     }
                 }
@@ -95,22 +98,20 @@ public class ClubManager {
                 while (sc.hasNextLine()) {
                     Finances.coachFees.add(sc.nextLine());
                 }
-            }
-            else if(file.equals(new File("PendingPayments.txt"))){
+            }else if (file.equals(new File("PendingPayments.txt"))) {
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
                     Scanner word = new Scanner(line);
                     ATreasurer.payments.put(word.next(), word.next());
                     word.close();
                 }
-            }
-            else if(file.equals(new File("Balances.txt"))){
+            } else if (file.equals(new File("Balances.txt"))) {
                 while (sc.hasNextLine()) {
 
                     line = sc.nextLine();
                     Scanner word = new Scanner(line);
                     MemberBalance person = new MemberBalance(word.next(), word.next(), word.next(), word.next());
-        
+
                     ATreasurer.treasurers.put(person.getEmail(), person);
                     word.close();
                 }
@@ -121,5 +122,27 @@ public class ClubManager {
         }
         sc.close();
 
+    }
+
+    public static void toFile(FileWriter file) throws IOException{
+        if(file.equals(new FileWriter("User_Info.txt"))){
+            for (Entry<String, AMember> entry : members.entrySet()){
+                AMember member = entry.getValue();
+                file.write(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
+                 + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n");
+            }
+        }
+        else if (file.equals(new FileWriter("finances2.txt"))) {
+            file.write(java.time.Clock.systemUTC().instant().toString());
+            file.write("\n\nUnpaid Monthly Rent\n");
+            for (String months : Finances.rentMonths) {
+                file.write(months);
+                file.write("\n");
+            }
+            file.write("\nUnpaid Coach Fees\n");
+            for (String cf : Finances.coachFees) {
+                file.write(cf + "\n");
+            }
+        } 
     }
 }

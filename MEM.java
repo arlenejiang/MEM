@@ -434,10 +434,7 @@ public class MEM {
             System.out.print("Exit(2)\n");
             System.out.print("\n> ");
 
-            int anotherInput = 0;
-            while(anotherInput<3 && anotherInput>0){
-                anotherInput = in.nextInt();
-            }
+            int anotherInput = convertInputToInteger(2, 1);
 
             if (anotherInput == 1) {
                 clearConsole();

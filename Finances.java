@@ -17,12 +17,13 @@ public class Finances {
     static int RENT = 500;
     static LinkedList<String> rentMonths = new LinkedList<String>();
     static LinkedList<String> coachFees = new LinkedList<String>();
-    static File file = new File("User_Info.txt");
+    static File file1 = new File("finances.txt");
+    static FileWriter file2 = null;
     
 
     public static void displayDebt() throws IOException{
         
-        ClubManager.fromFile(file);
+        ClubManager.fromFile(file1);
 
         //Output Fees
         MEM.clearConsole();
@@ -82,19 +83,9 @@ public class Finances {
         
 
         // Update finances.txt file
-        FileWriter myWriter = new FileWriter("finances2.txt");
-        myWriter.write(java.time.Clock.systemUTC().instant().toString());
-        myWriter.write("\n\nUnpaid Monthly Rent\n");
-        for (String months: rentMonths){
-            myWriter.write(months);
-            myWriter.write("\n");
-        }
-        myWriter.write("\nUnpaid Coach Fees\n");
-        for (String cf: coachFees){
-            myWriter.write(cf + "\n");
-        }
-       
-        myWriter.close();
+        file2 = new FileWriter("finances2.txt");
+        ClubManager.toFile(file2);
+        file2.close();
     }
 
     // TODO modify based on attendance logs
