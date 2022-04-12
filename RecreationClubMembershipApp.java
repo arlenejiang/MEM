@@ -276,29 +276,31 @@ public class RecreationClubMembershipApp {
 
     // Send confirmation from PayPal to Treasurer when a member paid
     // Send remainder from PayPal to member who missed the a payment
-    public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullname)
-            throws IOException {
+    public static void PaypalEmail(String memberEmail, String amount, String option) throws IOException {
         // final String username = treasurerEmail;
         // final String password = treasurerPassword;
 
-        // For a single person, get rid of from here
-        // ClubManager manager = null;
-        // try {
-        // manager = new ClubManager();
-        // } catch (IOException e) {
-        // System.out.println(e.getMessage());
-
-        // System.out.println("Enter the subject line: ");
+        String treasurerEmail = "group66club@gmail.com";
+        String paypalEmail = "group66paypal@gmail.com";
+        String paypalPassword = "april2022";
 
         String subj = "";
-        System.out.println("Enter the body of the email (with \\n for new lines): ");
         String body = "";
-        String next;
 
-        while (in.hasNextLine() && !(next = in.nextLine()).equals("")) {
-            body += next;
-            body += "\n";
+        if (option.equalsIgnoreCase("C")) {
+            subj = "Money Sent from " + memberEmail;
+            body = memberEmail + " sent you $" + amount + "(CAD).";
         }
+
+        // String subj = "";
+        // System.out.println("Enter the body of the email (with \\n for new lines): ");
+        // String body = "";
+        // String next;
+
+        // while (in.hasNextLine() && !(next = in.nextLine()).equals("")) {
+        // body += next;
+        // body += "\n";
+        // }
 
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "imap.gmail.com");
@@ -308,23 +310,23 @@ public class RecreationClubMembershipApp {
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("group66paypal@gmail.com", "april2022");
+                        return new PasswordAuthentication(paypalEmail, paypalPassword);
                     }
                 });
 
         try {
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("group66paypal@gmail.com"));
+            message.setFrom(new InternetAddress(paypalEmail));
             message.setRecipients(
                     Message.RecipientType.TO,
                     //
-                    InternetAddress.parse("group66club@gmail.com") // For 1 person, just enter the email string ex:
-                                                                   // "kffjk322@gmail.com"
+                    InternetAddress.parse(treasurerEmail) // For 1 person, just enter the email string ex:
+                                                          // "kffjk322@gmail.com"
             );
             message.setSubject("** ANNOUNCEMENT **: " + subj);
             message.setText("Hello! \n\n"
-                    + body + "\n\n" + fullname);
+                    + body);
 
             Transport.send(message);
 
@@ -497,11 +499,14 @@ public class RecreationClubMembershipApp {
                 System.out.print("\n\nThank you for your payment! ");
                 System.out.println("Funds will be ready to use in 4-24 hours.");
 
-                // try {
-                // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
-                // } catch (IOException e) {
-                // System.out.println(e.getMessage());
-                // }
+                // public static void PaypalEmail(String memberEmail, String amount, String
+                // option) throws IOException {
+
+                try {
+                    PaypalEmail(member.email, amount, "c");
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
 
                 // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
                 // "0");

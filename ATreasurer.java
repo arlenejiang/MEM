@@ -185,7 +185,8 @@ public class ATreasurer {
                 clearConsole();
 
             }
-
+            // if deny -> send an email to the member telling them that there payment is
+            // denied
             else {
                 clearConsole();
                 System.out.println("Deny option");
