@@ -610,4 +610,9 @@ public class MEM {
             e.printStackTrace();
         }
     }
+
+    public static void incomeStatement(){
+
+
+    }
 }
