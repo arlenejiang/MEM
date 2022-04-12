@@ -109,6 +109,7 @@ public class ATreasurer extends AMember{
                 addToBalance(entry.getKey(), person);
 
                 iterator.remove();
+                ClubManager.toFile(new FileWriter("PendingPayments.txt"));
                 clearConsole();
 
             }
@@ -118,9 +119,6 @@ public class ATreasurer extends AMember{
                 System.out.println("Payment Denied");
             }
         }
-
-        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
-        ClubManager.toFile(new FileWriter("Balances.txt"));
     }
 
     // Clears the console
