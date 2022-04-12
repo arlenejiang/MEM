@@ -10,7 +10,7 @@ import java.util.TreeMap;
 public class ATreasurer extends AMember{
 
     static Map<String, String> payments = new TreeMap<String, String>();
-    static Map<String, MemberBalance> treasurers = new TreeMap<String, MemberBalance>();
+    static Map<String, MemberBalance> balance = new TreeMap<String, MemberBalance>();
     
     String first ;
     String last;
@@ -42,7 +42,7 @@ public class ATreasurer extends AMember{
 
     public static void addToBalance(String email, MemberBalance person) {
 
-        treasurers.put(email, person);
+        balance.put(email, person);
     }
 
     public void PrintMap() {
@@ -92,7 +92,7 @@ public class ATreasurer extends AMember{
                 // keyToBeRemoved = entry.getKey();
 
                 MemberBalance person = new MemberBalance(entry.getKey(), entry.getValue(), "1", "0");
-                treasurers.put(entry.getKey(), person);
+                balance.put(entry.getKey(), person);
 
                 iterator.remove();
                 clearConsole();

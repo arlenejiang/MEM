@@ -348,9 +348,7 @@ public class MEM {
     }
 
     public static void ApprovedPayments(String email, MemberBalance person) throws IOException {
-
         ATreasurer.addToBalance(email, person);
-
         ClubManager.toFile(new FileWriter("Balances.txt"));
 
     }
@@ -455,7 +453,7 @@ public class MEM {
                     System.out.println("2. Click on the SEND option in PayPal.");
                     System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
                     System.out.println("4. Pay the amount you want to.");
-                    System.out.println("4. Enter the amount you have paid through PayPal below.");
+                    System.out.println("5. Enter the amount you have paid through PayPal below.");
 
                     String amount = "";
 

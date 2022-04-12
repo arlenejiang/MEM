@@ -109,7 +109,7 @@ public class ClubManager {
                     Scanner word = new Scanner(line);
                     MemberBalance person = new MemberBalance(word.next(), word.next(), word.next(), word.next());
 
-                    ATreasurer.treasurers.put(person.getEmail(), person);
+                    ATreasurer.balance.put(person.getEmail(), person);
                     word.close();
                 }
             }
@@ -129,18 +129,6 @@ public class ClubManager {
                  + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n");
             }
         }
-        else if (file.equals(new FileWriter("finances2.txt", true))) {
-            file.write(java.time.Clock.systemUTC().instant().toString());
-            file.write("\n\nUnpaid Monthly Rent\n");
-            for (String months : Finances.rentMonths) {
-                file.write(months);
-                file.write("\n");
-            }
-            file.write("\nUnpaid Coach Fees\n");
-            for (String cf : Finances.coachFees) {
-                file.write(cf + "\n");
-            }
-        } 
         else if(file.equals(new FileWriter("PendingPayments.txt", true))){
             for (Entry<String, String> email : ATreasurer.payments.entrySet()){
                 String amount = email.getValue();
@@ -148,7 +136,7 @@ public class ClubManager {
             }
         }
         else if(file.equals(new FileWriter("Balances.txt", true))){
-            for (Entry<String, MemberBalance> entry : ATreasurer.treasurers.entrySet()){
+            for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()){
                 MemberBalance str = entry.getValue();
                 file.write(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
                 + str.getMissingPayments() + "\n");
