@@ -1,20 +1,20 @@
 public class MemberBalance {
 
     String email;
-    String balance;
+    int balance;
     String numOfPayments;
     String missingPayments;
 
     // Default constructor method
     public MemberBalance() {
         this.email = "";
-        this.balance = "";
+        this.balance = 0;
         this.numOfPayments = "";
         this.missingPayments = "";
     }
 
     // Constructor method for a member
-    public MemberBalance(String email, String balance, String numOfPayments, String missingPayments) {
+    public MemberBalance(String email, int balance, String numOfPayments, String missingPayments) {
         this.email = email;
         this.balance = balance;
         this.numOfPayments = numOfPayments;
@@ -36,12 +36,12 @@ public class MemberBalance {
     }
 
     // Gets the balance of the member
-    public String getBalance() {
+    public int getBalance() {
         return this.balance;
     }
 
     // Sets the balance of the member
-    public void setBalance(String amount) {
+    public void setBalance(int amount) {
         this.balance = amount;
     }
 
@@ -65,8 +65,8 @@ public class MemberBalance {
         this.missingPayments = num;
     }
 
-    public String updateBalance(int amount) {
-        return Integer.toString(Integer.parseInt(this.balance) + amount);
+    public int updateBalance(int amount) {
+        return this.balance + amount;
     }
 
     public String updateNumOfPayments() {

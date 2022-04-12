@@ -107,7 +107,7 @@ public class ClubManager {
 
                     line = sc.nextLine();
                     Scanner word = new Scanner(line);
-                    MemberBalance person = new MemberBalance(word.next(), word.next(), word.next(), word.next());
+                    MemberBalance person = new MemberBalance(word.next(), Integer.parseInt(word.next()), word.next(), word.next());
 
                     ATreasurer.balance.put(person.getEmail(), person);
                     word.close();

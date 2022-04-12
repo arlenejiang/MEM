@@ -33,6 +33,28 @@ public class ATreasurer extends AMember{
         }
     }
 
+    // Add's a new member to the member's payment treeMap.
+    // Writes out all the members to PendingPayments.txt
+    public static void addToMap(String email, String amount) {
+
+        payments.put(email, amount);
+        try {
+            ClubManager.toFile(new FileWriter("PendingPayments.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addToBalance(String email, MemberBalance person) {
+
+        balance.put(email, person);
+        try {
+            ClubManager.toFile(new FileWriter("Balances.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void PrintMap() {
 
         Set<String> keySet = payments.keySet();
@@ -80,9 +102,11 @@ public class ATreasurer extends AMember{
                 // keyToBeRemoved = entry.getKey();
 
                 MemberBalance person = new MemberBalance(entry.getKey());
-                person.balance = String.valueOf(Integer.parseInt(person.balance)+Integer.parseInt(entry.getValue()));
+                person.updateBalance(Integer.parseInt(entry.getValue()));
+                for(int i=0; i<(person.getBalance()/10); i++) person.updateNumOfPayments();
+
                 // entry.getValue(), "1", "0");
-                balance.put(entry.getKey(), person);
+                addToBalance(entry.getKey(), person);
 
                 iterator.remove();
                 clearConsole();
@@ -96,7 +120,7 @@ public class ATreasurer extends AMember{
         }
 
         ClubManager.toFile(new FileWriter("PendingPayments.txt"));
-        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
+        ClubManager.toFile(new FileWriter("Balances.txt"));
     }
 
     // Clears the console

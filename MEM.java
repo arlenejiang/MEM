@@ -341,16 +341,8 @@ public class MEM {
         }
     }
 
-    public static void PendingPayments(String email, String amount) throws IOException {
-        ATreasurer.payments.put(email, amount);
-        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
-
-    }
-
     public static void ApprovedPayments(String email, MemberBalance person) throws IOException {
-        ATreasurer.balance.put(email, person);
-        ClubManager.toFile(new FileWriter("Balances.txt"));
-
+        
     }
 
     public static void returnOrExit(AMember member) {
@@ -481,13 +473,7 @@ public class MEM {
                     // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
                     // "0");
 
-                    try {
-                        // System.out.println("*** Registration ***\n");
-                        PendingPayments(member.getEmail(), amount);
-                        // ApprovedPayments(member.getEmail(), balance);
-                    } catch (IOException e) {
-                        System.out.println(e.getMessage());
-                    }
+                    ATreasurer.addToMap(member.getEmail(), amount);
 
                     System.out.println("The amount is: " + amount);
 
