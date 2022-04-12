@@ -21,6 +21,10 @@ public class MemberBalance {
         this.missingPayments = missingPayments;
     }
 
+    public MemberBalance(String email){
+        this.email = email;
+    }
+
     // Gets the email of the member
     public String getEmail() {
         return this.email;

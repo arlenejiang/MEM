@@ -342,13 +342,13 @@ public class MEM {
     }
 
     public static void PendingPayments(String email, String amount) throws IOException {
-        ATreasurer.addToMap(email, amount);
+        ATreasurer.payments.put(email, amount);
         ClubManager.toFile(new FileWriter("PendingPayments.txt"));
 
     }
 
     public static void ApprovedPayments(String email, MemberBalance person) throws IOException {
-        ATreasurer.addToBalance(email, person);
+        ATreasurer.balance.put(email, person);
         ClubManager.toFile(new FileWriter("Balances.txt"));
 
     }
@@ -500,6 +500,8 @@ public class MEM {
 
                     if (anotherInput == 1) {
                         clearConsole();
+                        MemberBalance bal = new MemberBalance(member.getEmail());
+                        System.out.println("Current Balance: $" + bal.getBalance());
                         // System.out.println("Account balance: $" + balance);
                     } else if (anotherInput == 2) {
                         clearConsole();
@@ -507,6 +509,7 @@ public class MEM {
                     }
                     // For exiting the annoucement feature.
                     else if (anotherInput == 3) {
+                        clearConsole();
                         System.out.println("\nHave a nice day!\n");
                         System.exit(0);
                     }
@@ -517,6 +520,7 @@ public class MEM {
                 }
                 // For exiting the annoucement feature.
                 else if (input == 3) {
+                    clearConsole();
                     System.out.println("\nHave a nice day!\n");
                     System.exit(0);
                 }
@@ -529,6 +533,7 @@ public class MEM {
             // insert make a attendance method here
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("E")) {
+            clearConsole();
             System.out.println("\nHave a nice day\n");
             System.exit(0);
         }

@@ -33,18 +33,6 @@ public class ATreasurer extends AMember{
         }
     }
 
-    // Add's a new member to the member's payment treeMap.
-    // Writes out all the members to PendingPayments.txt
-    public static void addToMap(String email, String amount) {
-
-        payments.put(email, amount);
-    }
-
-    public static void addToBalance(String email, MemberBalance person) {
-
-        balance.put(email, person);
-    }
-
     public void PrintMap() {
 
         Set<String> keySet = payments.keySet();
@@ -91,7 +79,9 @@ public class ATreasurer extends AMember{
                 System.out.println("Key is: " + entry.getKey());
                 // keyToBeRemoved = entry.getKey();
 
-                MemberBalance person = new MemberBalance(entry.getKey(), entry.getValue(), "1", "0");
+                MemberBalance person = new MemberBalance(entry.getKey());
+                person.balance = String.valueOf(Integer.parseInt(person.balance)+Integer.parseInt(entry.getValue()));
+                // entry.getValue(), "1", "0");
                 balance.put(entry.getKey(), person);
 
                 iterator.remove();
