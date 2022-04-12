@@ -1,0 +1,9 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\lasin\\Desktop\\W2022\\CPS 406\\A2\\jaf-1.1.1\\activation.jar",
+        "c:\\Users\\lasin\\Desktop\\W2022\\CPS 406\\A2\\javax.mail.jar",
+        "c:\\Users\\natas\\JavaMailFiles\\javax.mail.jar",
+        "c:\\Users\\natas\\JavaMailFiles\\activation-1.1.1.jar"
+    ]
+}
