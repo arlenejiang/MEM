@@ -63,15 +63,16 @@ public class ClubManager {
         return removeSplice;
     }
 
-    public static void fromFile(File file) throws IOException {
+    public static void fromFile(File file) {
 
         Scanner sc = null;
         String line;
         try {
-            BufferedReader n = new BufferedReader(new FileReader(file));
-            
+            sc = new Scanner(new FileInputStream(file));
+
             if (file.equals(new File("User_Info.txt"))) {
-                while ((line=n.readLine())!=null) {
+                while (sc.hasNextLine()) {
+                    line = sc.nextLine();
                     try (Scanner word = new Scanner(line)) {
                         AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(),
                                 word.next());
@@ -79,32 +80,35 @@ public class ClubManager {
                     }
                 }
             } else if (file.equals(new File("finances.txt"))) {
-                String lastUpdate = n.readLine().substring(0, 10);
+                String lastUpdate = sc.nextLine().substring(0, 10);
 
-                while ((line = n.readLine()).equals("Unpaid Monthly Rent")) {}
-                n.readLine();
+                while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {}
+                sc.nextLine();
                 // Add previous unpaid months from file to list rentMonths
-                line = n.readLine();
+                line = sc.nextLine();
                 while (line.length() > 0) {
                     Finances.rentMonths.add(line);
-                    line = n.readLine();
+                    line = sc.nextLine();
                 }
                 // Add new unpaid months to list rentMonths
                 Finances.rentCharge(lastUpdate);
 
                 // Add previous unpaid months from file to list coachFees
-                n.readLine();
-                while ((line=n.readLine())!=null) {
-                    Finances.coachFees.add(line);
+                sc.nextLine();
+                while (sc.hasNextLine()) {
+                    Finances.coachFees.add(sc.nextLine());
                 }
             } else if (file.equals(new File("PendingPayments.txt"))) {
-                while ((line=n.readLine())!=null) {
+                while (sc.hasNextLine()) {
+                    line = sc.nextLine();
                     Scanner word = new Scanner(line);
                     ATreasurer.payments.put(word.next(), word.next());
                     word.close();
                 }
             } else if (file.equals(new File("Balances.txt"))) {
-                while ((line=n.readLine())!=null) {
+                while (sc.hasNextLine()) {
+
+                    line = sc.nextLine();
                     Scanner word = new Scanner(line);
                     MemberBalance person = new MemberBalance(word.next(), Integer.parseInt(word.next()), word.next(), word.next());
 
@@ -112,39 +116,46 @@ public class ClubManager {
                     word.close();
                 }
             }
-            n.close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        sc.close();
 
     }
 
     public static void toFile(FileWriter file) throws IOException{
-        BufferedWriter n = new BufferedWriter(file);
         if(file.equals(new FileWriter("User_Info.txt", true))){
-
             for (Entry<String, AMember> entry : members.entrySet()){
                 AMember member = entry.getValue();
-                n.write(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
+                file.write(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
                  + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n");
-                 n.flush();
             }
         }
+        else if (file.equals(new FileWriter("finances2.txt", true))) {
+            file.write(java.time.Clock.systemUTC().instant().toString());
+            file.write("\n\nUnpaid Monthly Rent\n");
+            for (String months : Finances.rentMonths) {
+                file.write(months);
+                file.write("\n");
+            }
+            file.write("\nUnpaid Coach Fees\n");
+            for (String cf : Finances.coachFees) {
+                file.write(cf + "\n");
+            }
+        } 
         else if(file.equals(new FileWriter("PendingPayments.txt", true))){
             for (Entry<String, String> email : ATreasurer.payments.entrySet()){
                 String amount = email.getValue();
-                n.write(email + " " + amount + "\n");
-                n.flush();
+                file.write(email + " " + amount + "\n");
             }
         }
         else if(file.equals(new FileWriter("Balances.txt", true))){
             for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()){
                 MemberBalance str = entry.getValue();
-                n.write(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
+                file.write(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
                 + str.getMissingPayments() + "\n");
-                n.flush();
             }
         }
-        n.close();
     }
 }
