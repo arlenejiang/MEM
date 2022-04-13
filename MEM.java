@@ -612,7 +612,19 @@ public class MEM {
     }
 
     public static void incomeStatement(){
+        System.out.println("** INCOME STATEMENT **");
+        System.out.println("--------------------------------------------------\n> REVENUE");
+        //Print out revenue
+        System.out.println("--------------------------------------------------\n> EXPENSES");
+        //Print out expenses
+        System.out.println("--------------------------------------------------\n> PROFIT");
+        //Calculate Profit (R-E)
+    }
 
-
+    //Move to this to 
+    public String calculateProfit(){
+        String totalProfit = "";
+        
+        return "";
     }
 }
