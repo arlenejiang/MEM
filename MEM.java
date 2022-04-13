@@ -24,19 +24,11 @@ public class MEM {
 
         // Reads each member's info from the PendingPayments.txt file.
         // Adds the member's email and the PendingAmount to the treeMap
-        try {
-            ClubManager.fromFile(file1);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        ClubManager.fromFile(file1);
 
         // Reads each member's info from the PendingPayments.txt file.
         // Adds the member's email and the PendingAmount to the treeMap
-        try {
-            ClubManager.fromFile(file2);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        ClubManager.fromFile(file2);
         Finances.getData();
         ClubManager manager = null;
         try {

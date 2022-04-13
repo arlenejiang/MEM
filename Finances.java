@@ -19,11 +19,7 @@ public class Finances {
     static FileWriter file2 = null;
     
     public static void getData() {
-        try {
-            ClubManager.fromFile(file1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ClubManager.fromFile(file1);
     }
 
     public static void displayDebt() throws IOException{
