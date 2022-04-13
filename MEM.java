@@ -473,7 +473,7 @@ public class MEM {
                     // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
                     // "0");
 
-                    ATreasurer.addToMap(member.getEmail(), amount);
+                    ATreasurer.addToMap(member.getEmail(), Integer.parseInt(amount));
 
                     System.out.println("The amount is: " + amount);
 

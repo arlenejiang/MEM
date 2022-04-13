@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 public class ATreasurer extends AMember{
 
-    static Map<String, String> payments = new TreeMap<String, String>();
+    static Map<String, Integer> payments = new TreeMap<String, Integer>();
     static Map<String, MemberBalance> balance = new TreeMap<String, MemberBalance>();
     
     String first ;
@@ -35,7 +35,7 @@ public class ATreasurer extends AMember{
 
     // Add's a new member to the member's payment treeMap.
     // Writes out all the members to PendingPayments.txt
-    public static void addToMap(String email, String amount) {
+    public static void addToMap(String email, int amount) {
 
         payments.put(email, amount);
         try {
@@ -68,13 +68,13 @@ public class ATreasurer extends AMember{
 
         // MemberBalance person = new MemberBalance();
 
-        Iterator<Map.Entry<String, String>> iterator = payments.entrySet().iterator();
+        Iterator<Map.Entry<String, Integer>> iterator = payments.entrySet().iterator();
 
         // Iterate over the HashMap
         while (iterator.hasNext()) {
 
             // Get the entry at this iteration
-            Map.Entry<String, String> entry = iterator.next();
+            Map.Entry<String, Integer> entry = iterator.next();
 
             System.out.println("User ID: " + entry.getKey() + "\nPending Amount: $" + entry.getValue());
 
@@ -102,7 +102,7 @@ public class ATreasurer extends AMember{
                 // keyToBeRemoved = entry.getKey();
 
                 MemberBalance person = new MemberBalance(entry.getKey());
-                person.updateBalance(Integer.parseInt(entry.getValue()));
+                person.updateBalance(entry.getValue());
                 for(int i=0; i<(person.getBalance()/10); i++) person.updateNumOfPayments();
 
                 // entry.getValue(), "1", "0");

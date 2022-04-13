@@ -79,7 +79,8 @@ public class ClubManager {
                         members.put(person.getEmail(), person);
                     }
                 }
-            } else if (file.equals(new File("finances.txt"))) {
+            }
+            if (file.equals(new File("finances.txt"))) {
                 String lastUpdate = sc.nextLine().substring(0, 10);
 
                 while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {}
@@ -98,14 +99,16 @@ public class ClubManager {
                 while (sc.hasNextLine()) {
                     Finances.coachFees.add(sc.nextLine());
                 }
-            } else if (file.equals(new File("PendingPayments.txt"))) {
+            } 
+            if (file.equals(new File("PendingPayments.txt"))) {
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
                     Scanner word = new Scanner(line);
-                    ATreasurer.payments.put(word.next(), word.next());
+                    ATreasurer.payments.put(word.next(), Integer.parseInt(word.next()));
                     word.close();
                 }
-            } else if (file.equals(new File("Balances.txt"))) {
+            } 
+            if (file.equals(new File("Balances.txt"))) {
                 while (sc.hasNextLine()) {
 
                     line = sc.nextLine();
@@ -132,7 +135,7 @@ public class ClubManager {
                  + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n");
             }
         }
-        else if (file.equals(new FileWriter("finances2.txt", true))) {
+        if (file.equals(new FileWriter("finances2.txt", true))) {
             file.write(java.time.Clock.systemUTC().instant().toString());
             file.write("\n\nUnpaid Monthly Rent\n");
             for (String months : Finances.rentMonths) {
@@ -144,13 +147,13 @@ public class ClubManager {
                 file.write(cf + "\n");
             }
         } 
-        else if(file.equals(new FileWriter("PendingPayments.txt", true))){
-            for (Entry<String, String> email : ATreasurer.payments.entrySet()){
-                String amount = email.getValue();
+        if(file.equals(new FileWriter("PendingPayments.txt", true))){
+            for (Entry<String, Integer> email : ATreasurer.payments.entrySet()){
+                int amount = email.getValue();
                 file.write(email + " " + amount + "\n");
             }
         }
-        else if(file.equals(new FileWriter("Balances.txt", true))){
+        if(file.equals(new FileWriter("Balances.txt", true))){
             for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()){
                 MemberBalance str = entry.getValue();
                 file.write(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
