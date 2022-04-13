@@ -339,10 +339,6 @@ public class MEM {
         }
     }
 
-    public static void ApprovedPayments(String email, MemberBalance person) throws IOException {
-        
-    }
-
     public static void returnOrExit(AMember member) {
         System.out.print("Return to Main Screen(1)\t");
         System.out.print("Exit(2)\n");
@@ -449,19 +445,19 @@ public class MEM {
                     System.out.println("4. Pay the amount you want to ($10/practice class, and you can only pay for 12 classes in a row).");
                     System.out.println("5. Enter the amount you have paid through PayPal below.");
 
-                    int amount = 0;
+                    String amount = "";
 
-                    while (amount<10 || amount>120) {
-                        System.out.print("\n\nEnter the amount you paid: $");
-                        amount = in.nextInt();
+                while (amount == "" || amount == null) {
+                    System.out.print("\n\nEnter the amount you paid: $");
+                    amount = in.nextLine();
 
-                        if (amount<10 || amount>120) {
-                            clearConsole();
-                            System.out.println("*** Payment ***\n");
-                            System.out.println("Invalid amount.\n");
-                            amount = 0;
-                        }
+                    if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
+                        clearConsole();
+                        System.out.println("*** Payment ***\n");
+                        System.out.println("Invalid amount.\n");
+                        amount = "";
                     }
+                }
 
                     System.out.print("\n\nThank you for your payment! ");
                     System.out.println("Funds will be ready to use in 4-24 hours.");
@@ -475,14 +471,16 @@ public class MEM {
                     // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
                     // "0");
                     
-                    ATreasurer.payments.put(member.getEmail(), amount);
+                    ATreasurer.payments.put(member.getEmail(), Integer.parseInt(amount));
+                    
                     try {
                         ClubManager.toFile(new FileWriter("PendingPayments.txt"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
-                    System.out.println("The amount is: " + amount);
+                    //for debugging reasons, the line below should show the amount after it has been updated to the map
+                    System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));
 
                     System.out.print("Check your balance(1)\t");
                     System.out.print("Return to Main Screen(2)\t");
