@@ -306,6 +306,7 @@ public class RecreationClubMembershipApp {
         prop.put("mail.smtp.host", "imap.gmail.com");
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
 
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
@@ -572,4 +573,5 @@ public class RecreationClubMembershipApp {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
 }
