@@ -445,8 +445,7 @@ public class MEM {
                 if (input == 1) {
                     clearConsole();
                     System.out.println("Here are some steps to top up your account balance:");
-                    System.out
-                            .println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
+                    System.out.println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
                     System.out.println("2. Click on the SEND option in PayPal.");
                     System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
                     System.out.println("4. Pay the amount you want to.");
