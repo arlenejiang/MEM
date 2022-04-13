@@ -1,5 +1,3 @@
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Iterator;
@@ -9,8 +7,8 @@ import java.util.TreeMap;
 
 public class ATreasurer extends AMember{
 
-    static Map<String, String> payments = new TreeMap<String, String>();
-    static Map<String, MemberBalance> treasurers = new TreeMap<String, MemberBalance>();
+    static Map<String, Integer> payments = new TreeMap<String, Integer>();
+    static Map<String, MemberBalance> balance = new TreeMap<String, MemberBalance>();
     
     String first ;
     String last;
@@ -35,15 +33,6 @@ public class ATreasurer extends AMember{
 
     // Add's a new member to the member's payment treeMap.
     // Writes out all the members to PendingPayments.txt
-    public static void addToMap(String email, String amount) {
-
-        payments.put(email, amount);
-    }
-
-    public static void addToBalance(String email, MemberBalance person) {
-
-        treasurers.put(email, person);
-    }
 
     public void PrintMap() {
 
@@ -58,13 +47,13 @@ public class ATreasurer extends AMember{
 
         // MemberBalance person = new MemberBalance();
 
-        Iterator<Map.Entry<String, String>> iterator = payments.entrySet().iterator();
+        Iterator<Map.Entry<String, Integer>> iterator = payments.entrySet().iterator();
 
         // Iterate over the HashMap
         while (iterator.hasNext()) {
 
             // Get the entry at this iteration
-            Map.Entry<String, String> entry = iterator.next();
+            Map.Entry<String, Integer> entry = iterator.next();
 
             System.out.println("User ID: " + entry.getKey() + "\nPending Amount: $" + entry.getValue());
 
@@ -88,14 +77,26 @@ public class ATreasurer extends AMember{
             // String keyToBeRemoved = "";
 
             if (option.equalsIgnoreCase("A")) {
-                System.out.println("Key is: " + entry.getKey());
-                // keyToBeRemoved = entry.getKey();
+                //System.out.println("Key is: " + entry.getKey());//debugging
 
-                MemberBalance person = new MemberBalance(entry.getKey(), entry.getValue(), "1", "0");
-                treasurers.put(entry.getKey(), person);
+                MemberBalance person = null;
+                
+                for(Entry<String, MemberBalance> e: balance.entrySet()){
+                    if(e.getKey().equals(entry.getKey())){
+                        person = e.getValue();
+                        //System.out.println(person.toString());////////debugging
+                        person.updateBalance(entry.getValue());//entry.getValue is the amount pending
+                        for(int i=0; i<(person.getBalance()/10); i+=10) {person.updateNumOfPayments();}
+                        iterator.remove();
 
-                iterator.remove();
-                clearConsole();
+                        
+                    }
+                }
+
+                //System.out.println("person addded: "+person.toString());//debugging
+
+                ClubManager.toFile("PendingPayments.txt");
+                ClubManager.toFile("Balances.txt");
 
             }
 
@@ -104,9 +105,6 @@ public class ATreasurer extends AMember{
                 System.out.println("Payment Denied");
             }
         }
-
-        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
-        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
     }
 
     // Clears the console
