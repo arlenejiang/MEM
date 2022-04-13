@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -131,37 +132,44 @@ public class ClubManager {
 
     }
 
-    public static void toFile(String fileName){
-        String path = System.getProperty("user.dir") + "\\src\\"+fileName;
-        String text = "";
-        if(fileName.equals("User_Info.txt")){
-            for (Entry<String, AMember> entry : members.entrySet()){
-                AMember member = entry.getValue();
-                text+= member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
-                 + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n";
-            }
-        }
-        else if(fileName.equals("PendingPayments.txt")){
-            for (Entry<String, Integer> email : ATreasurer.payments.entrySet()){
-                int amount = email.getValue();
-                text+= email + " " + String.valueOf(amount) + "\n";
-            }
-        }
-        else if(fileName.equals("Balances.txt")){
-            for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()){
-                MemberBalance str = entry.getValue();
-                text+= str.getEmail() + " " + String.valueOf(str.getBalance()) + " " + String.valueOf(str.getNumOfPayments()) + " "
-                + String.valueOf(str.getMissingPayments()) + "\n";
-            }
-        }
+    public static void toFile(String fileName) throws IOException{
+
+        FileWriter fw = null; 
+        BufferedWriter bw = null;
+        PrintWriter pw = null;
 
         try {
-            FileWriter fw = new FileWriter(path, true);
-            fw.write(text);
-            fw.close();
-        }
-        catch(IOException e) {
-            e.printStackTrace();
+            fw = new FileWriter(fileName, true);
+            bw = new BufferedWriter(fw);
+            pw = new PrintWriter(bw);
+            if(fileName.equals("User_Info.txt")){
+                for (Entry<String, AMember> entry : members.entrySet()){
+                    AMember member = entry.getValue();
+                    pw.println(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
+                     + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole());
+                }
+            }else if(fileName.equals("PendingPayments.txt")){
+                for (Entry<String, Integer> email : ATreasurer.payments.entrySet()){
+                    int amount = email.getValue();
+                    pw.println(email.getKey() + " " + String.valueOf(amount));
+                }
+            }
+            else if(fileName.equals("Balances.txt")){
+                for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()){
+                    MemberBalance str = entry.getValue();
+                    pw.println(str.getEmail() + " " + String.valueOf(str.getBalance()) + " " + String.valueOf(str.getNumOfPayments()) + " "
+                    + String.valueOf(str.getMissingPayments()));
+                }
+            }
+            System.out.println("Data Successfully appended into file");
+            pw.flush();
+        } finally {
+            try {
+                pw.close();
+                bw.close();
+                fw.close();
+            } catch (IOException io) {// can't do anything }
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ public class MEM {
     static File file1 = new File("PendingPayments.txt");
     static File file2 = new File("Balances.txt");
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         // Creates a manager object and catched IOException
         clearConsole();
 
@@ -235,7 +235,7 @@ public class MEM {
     }
 
     // Log in Feature
-    public static void log_in() {
+    public static void log_in() throws IOException {
         System.out.print("Email: ");
         String email = in.nextLine();
         System.out.print("Password: ");
@@ -260,7 +260,7 @@ public class MEM {
 
     }
 
-    public static void ErrorPrintMessage() {
+    public static void ErrorPrintMessage() throws IOException {
         System.out.println(
                 "You have entered one or more of the following pieces of information incorrectly: username and/or password.");
         System.out.println("Please try again");
@@ -338,7 +338,7 @@ public class MEM {
         }
     }
 
-    public static void returnOrExit(AMember member) {
+    public static void returnOrExit(AMember member) throws IOException {
         System.out.print("Return to Main Screen(1)\t");
         System.out.print("Exit(2)\n");
         System.out.print("\n> ");
@@ -360,7 +360,7 @@ public class MEM {
     }
 
     // After log in options for staff and players
-    public static void AfterLogIn(AMember member) {
+    public static void AfterLogIn(AMember member) throws IOException {
         clearConsole();
 
         // Gives the user the option of entering S to send announcement, F for finance
@@ -471,7 +471,7 @@ public class MEM {
                     // "0");
                     
                     ATreasurer.payments.put(member.getEmail(), Integer.parseInt(amount));
-                        ClubManager.toFile("PendingPayments.txt");
+                    ClubManager.toFile("PendingPayments.txt");
 
                     //for debugging reasons, the line below should show the amount after it has been updated to the map
                     System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));

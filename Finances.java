@@ -16,7 +16,6 @@ public class Finances {
     static LinkedList<String> rentMonths = new LinkedList<String>();
     static LinkedList<String> coachFees = new LinkedList<String>();
     static File file1 = new File("finances.txt");
-    static FileWriter file2 = null;
     
     public static void getData() {
         ClubManager.fromFile(file1);
@@ -78,12 +77,6 @@ public class Finances {
             System.out.printf("\t$%s", rFee);
             System.out.printf("\tHall Rent (%s)\n\n", rMonth);   
         }
-        
-
-        // Update finances.txt file
-        file2 = new FileWriter("finances2.txt");
-        ClubManager.toFile(file2);
-        file2.close();
     }
 
     // TODO modify based on attendance logs
