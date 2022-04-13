@@ -131,31 +131,37 @@ public class ClubManager {
 
     }
 
-    public static void toFile(FileWriter file){
-        try{
-        if(file.equals(new FileWriter("User_Info.txt", true))){
+    public static void toFile(String fileName){
+        String path = System.getProperty("user.dir") + "\\src\\"+fileName;
+        String text = "";
+        if(fileName.equals("User_Info.txt")){
             for (Entry<String, AMember> entry : members.entrySet()){
                 AMember member = entry.getValue();
-                file.write(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
-                 + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n");
+                text+= member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
+                 + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n";
             }
         }
-        if(file.equals(new FileWriter("PendingPayments.txt", true))){
+        else if(fileName.equals("PendingPayments.txt")){
             for (Entry<String, Integer> email : ATreasurer.payments.entrySet()){
                 int amount = email.getValue();
-                file.write(email + " " + String.valueOf(amount) + "\n");
+                text+= email + " " + String.valueOf(amount) + "\n";
             }
         }
-        if(file.equals(new FileWriter("Balances.txt", true))){
+        else if(fileName.equals("Balances.txt")){
             for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()){
                 MemberBalance str = entry.getValue();
-                file.write(str.getEmail() + " " + String.valueOf(str.getBalance()) + " " + String.valueOf(str.getNumOfPayments()) + " "
-                + String.valueOf(str.getMissingPayments()) + "\n");
+                text+= str.getEmail() + " " + String.valueOf(str.getBalance()) + " " + String.valueOf(str.getNumOfPayments()) + " "
+                + String.valueOf(str.getMissingPayments()) + "\n";
             }
         }
-    }
-    catch(IOException e){
-        e.printStackTrace();
-    }
+
+        try {
+            FileWriter fw = new FileWriter(path, true);
+            fw.write(text);
+            fw.close();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 }

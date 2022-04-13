@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -472,12 +471,7 @@ public class MEM {
                     // "0");
                     
                     ATreasurer.payments.put(member.getEmail(), Integer.parseInt(amount));
-                    
-                    try {
-                        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        ClubManager.toFile("PendingPayments.txt");
 
                     //for debugging reasons, the line below should show the amount after it has been updated to the map
                     System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));

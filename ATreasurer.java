@@ -1,4 +1,3 @@
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Iterator;
@@ -34,16 +33,6 @@ public class ATreasurer extends AMember{
 
     // Add's a new member to the member's payment treeMap.
     // Writes out all the members to PendingPayments.txt
-
-    public static void addToBalance(String email, MemberBalance person) {
-
-        balance.put(email, person);
-        try {
-            ClubManager.toFile(new FileWriter("Balances.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void PrintMap() {
 
@@ -96,10 +85,10 @@ public class ATreasurer extends AMember{
                 for(int i=0; i<(person.getBalance()/10); i++) person.updateNumOfPayments();
 
                 // entry.getValue(), "1", "0");
-                addToBalance(entry.getKey(), person);
+                balance.put(entry.getKey(), person);
 
                 iterator.remove();
-                ClubManager.toFile(new FileWriter("PendingPayments.txt"));
+                ClubManager.toFile("PendingPayments.txt");
                 clearConsole();
 
             }
