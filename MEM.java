@@ -406,7 +406,11 @@ public class MEM {
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("L")) {
             clearConsole();
+            ClubManager.fromFile(new File("PendingPayments.txt"));
+            ClubManager.fromFile(new File("Balances.txt"));
+            
             System.out.println("Showing list of pending payments\n");
+
             try {
                 ATreasurer.Choose();
             } catch (IOException e) {
@@ -473,7 +477,11 @@ public class MEM {
 
                     // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
                     // "0");
-
+                    try {
+                        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     ATreasurer.addToMap(member.getEmail(), Integer.parseInt(amount));
 
                     System.out.println("The amount is: " + amount);

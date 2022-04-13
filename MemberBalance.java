@@ -2,19 +2,19 @@ public class MemberBalance {
 
     String email;
     int balance;
-    String numOfPayments;
-    String missingPayments;
+    int numOfPayments;
+    int missingPayments;
 
     // Default constructor method
     public MemberBalance() {
         this.email = "";
         this.balance = 0;
-        this.numOfPayments = "";
-        this.missingPayments = "";
+        this.numOfPayments = 0;
+        this.missingPayments = 0;
     }
 
     // Constructor method for a member
-    public MemberBalance(String email, int balance, String numOfPayments, String missingPayments) {
+    public MemberBalance(String email, int balance, int numOfPayments, int missingPayments) {
         this.email = email;
         this.balance = balance;
         this.numOfPayments = numOfPayments;
@@ -46,22 +46,22 @@ public class MemberBalance {
     }
 
     // Gets the number of payments made by a member
-    public String getNumOfPayments() {
+    public int getNumOfPayments() {
         return this.numOfPayments;
     }
 
     // Sets the number of payments made by a member
-    public void setNumOfPayments(String num) {
+    public void setNumOfPayments(int num) {
         this.numOfPayments = num;
     }
 
     // Gets the number of payments a member missed
-    public String getMissingPayments() {
+    public int getMissingPayments() {
         return this.missingPayments;
     }
 
     // Sets the number of payments a member missed
-    public void setMissingPayments(String num) {
+    public void setMissingPayments(int num) {
         this.missingPayments = num;
     }
 
@@ -69,11 +69,11 @@ public class MemberBalance {
         return this.balance + amount;
     }
 
-    public String updateNumOfPayments() {
-        return Integer.toString(Integer.parseInt(this.numOfPayments) + 1);
+    public int updateNumOfPayments() {
+        return this.numOfPayments + 1;
     }
 
-    public String updateMissingPayments() {
-        return Integer.toString(Integer.parseInt(this.missingPayments) + 1);
+    public int updateMissingPayments() {
+        return this.missingPayments + 1;
     }
 }

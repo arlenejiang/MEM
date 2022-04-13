@@ -104,7 +104,7 @@ public class ClubManager {
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
                     Scanner word = new Scanner(line);
-                    ATreasurer.payments.put(word.next(), Integer.parseInt(word.next()));
+                    ATreasurer.addToMap(word.next(), word.nextInt());
                     word.close();
                 }
             } 
@@ -113,7 +113,7 @@ public class ClubManager {
 
                     line = sc.nextLine();
                     Scanner word = new Scanner(line);
-                    MemberBalance person = new MemberBalance(word.next(), Integer.parseInt(word.next()), word.next(), word.next());
+                    MemberBalance person = new MemberBalance(word.next(), word.nextInt(), word.nextInt(), word.nextInt());
 
                     ATreasurer.balance.put(person.getEmail(), person);
                     word.close();
