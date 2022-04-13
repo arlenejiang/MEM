@@ -1,9 +1,6 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -67,17 +64,18 @@ public class ClubManager {
 
         Scanner sc = null;
         String line;
+        Scanner word = null;
         try {
             sc = new Scanner(new FileInputStream(file));
 
             if (file.equals(new File("User_Info.txt"))) {
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
-                    try (Scanner word = new Scanner(line)) {
-                        AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(),
-                                word.next());
-                        members.put(person.getEmail(), person);
-                    }
+                    word = new Scanner(line);
+
+                    AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(),
+                        word.next());
+                    members.put(person.getEmail(), person);
                 }
             }
             if (file.equals(new File("finances.txt"))) {
@@ -101,18 +99,24 @@ public class ClubManager {
                 }
             } 
             if (file.equals(new File("PendingPayments.txt"))) {
+                String email;
+                int amount;
+
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
-                    Scanner word = new Scanner(line);
-                    ATreasurer.addToMap(word.next(), word.nextInt());
-                    word.close();
+                    word = new Scanner(line);
+
+                    email = word.next();
+                    amount = word.nextInt();
+                    
+                    ATreasurer.payments.put(email, amount);
                 }
             } 
             if (file.equals(new File("Balances.txt"))) {
                 while (sc.hasNextLine()) {
 
                     line = sc.nextLine();
-                    Scanner word = new Scanner(line);
+                    word = new Scanner(line);
                     MemberBalance person = new MemberBalance(word.next(), word.nextInt(), word.nextInt(), word.nextInt());
 
                     ATreasurer.balance.put(person.getEmail(), person);

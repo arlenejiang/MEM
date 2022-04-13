@@ -1,12 +1,10 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.Map.Entry;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -448,20 +446,20 @@ public class MEM {
                     System.out.println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
                     System.out.println("2. Click on the SEND option in PayPal.");
                     System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
-                    System.out.println("4. Pay the amount you want to.");
+                    System.out.println("4. Pay the amount you want to ($10/practice class, and you can only pay for 12 classes in a row).");
                     System.out.println("5. Enter the amount you have paid through PayPal below.");
 
-                    String amount = "";
+                    int amount = 0;
 
-                    while (amount == "" || amount == null) {
+                    while (amount<10 || amount>120) {
                         System.out.print("\n\nEnter the amount you paid: $");
-                        amount = in.nextLine();
+                        amount = in.nextInt();
 
-                        if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
+                        if (amount<10 || amount>120) {
                             clearConsole();
                             System.out.println("*** Payment ***\n");
                             System.out.println("Invalid amount.\n");
-                            amount = "";
+                            amount = 0;
                         }
                     }
 
@@ -476,12 +474,13 @@ public class MEM {
 
                     // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
                     // "0");
+                    
+                    ATreasurer.payments.put(member.getEmail(), amount);
                     try {
                         ClubManager.toFile(new FileWriter("PendingPayments.txt"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    ATreasurer.addToMap(member.getEmail(), Integer.parseInt(amount));
 
                     System.out.println("The amount is: " + amount);
 
