@@ -1,6 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -18,7 +16,7 @@ public class MEM {
     static File file1 = new File("PendingPayments.txt");
     static File file2 = new File("Balances.txt");
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         // Creates a manager object and catched IOException
         clearConsole();
 
@@ -238,7 +236,7 @@ public class MEM {
     }
 
     // Log in Feature
-    public static void log_in() {
+    public static void log_in() throws IOException {
         System.out.print("Email: ");
         String email = in.nextLine();
         System.out.print("Password: ");
@@ -263,7 +261,7 @@ public class MEM {
 
     }
 
-    public static void ErrorPrintMessage() {
+    public static void ErrorPrintMessage() throws IOException {
         System.out.println(
                 "You have entered one or more of the following pieces of information incorrectly: username and/or password.");
         System.out.println("Please try again");
@@ -341,21 +339,7 @@ public class MEM {
         }
     }
 
-    public static void PendingPayments(String email, String amount) throws IOException {
-        ATreasurer.addToMap(email, amount);
-        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
-
-    }
-
-    public static void ApprovedPayments(String email, MemberBalance person) throws IOException {
-
-        ATreasurer.addToBalance(email, person);
-
-        ClubManager.toFile(new FileWriter("Balances.txt"));
-
-    }
-
-    public static void returnOrExit(AMember member) {
+    public static void returnOrExit(AMember member) throws IOException {
         System.out.print("Return to Main Screen(1)\t");
         System.out.print("Exit(2)\n");
         System.out.print("\n> ");
@@ -377,7 +361,7 @@ public class MEM {
     }
 
     // After log in options for staff and players
-    public static void AfterLogIn(AMember member) {
+    public static void AfterLogIn(AMember member) throws IOException {
         clearConsole();
 
         // Gives the user the option of entering S to send announcement, F for finance
@@ -416,19 +400,24 @@ public class MEM {
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("L")) {
             clearConsole();
+            ClubManager.fromFile(new File("PendingPayments.txt"));
+            ClubManager.fromFile(new File("Balances.txt"));
+            
             System.out.println("Showing list of pending payments\n");
+
             try {
                 ATreasurer.Choose();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            System.out.println();
             returnOrExit(member);
 
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
             if (member.getRole().equals("Treasurer")) {
-                System.out.print("Display Debts (D)\t");
+                System.out.print("Display Debts (D)\n");
+                System.out.print(">");
                 option = in.nextLine();
                 if (option.equalsIgnoreCase("D")) {
                     try {
@@ -450,26 +439,25 @@ public class MEM {
                 if (input == 1) {
                     clearConsole();
                     System.out.println("Here are some steps to top up your account balance:");
-                    System.out
-                            .println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
+                    System.out.println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
                     System.out.println("2. Click on the SEND option in PayPal.");
                     System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
-                    System.out.println("4. Pay the amount you want to.");
-                    System.out.println("4. Enter the amount you have paid through PayPal below.");
+                    System.out.println("4. Pay the amount you want to ($10/practice class, and you can only pay for 12 classes in a row).");
+                    System.out.println("5. Enter the amount you have paid through PayPal below.");
 
                     String amount = "";
 
-                    while (amount == "" || amount == null) {
-                        System.out.print("\n\nEnter the amount you paid: $");
-                        amount = in.nextLine();
+                while (amount == "" || amount == null) {
+                    System.out.print("\n\nEnter the amount you paid: $");
+                    amount = in.nextLine();
 
-                        if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
-                            clearConsole();
-                            System.out.println("*** Payment ***\n");
-                            System.out.println("Invalid amount.\n");
-                            amount = "";
-                        }
+                    if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
+                        clearConsole();
+                        System.out.println("*** Payment ***\n");
+                        System.out.println("Invalid amount.\n");
+                        amount = "";
                     }
+                }
 
                     System.out.print("\n\nThank you for your payment! ");
                     System.out.println("Funds will be ready to use in 4-24 hours.");
@@ -482,16 +470,12 @@ public class MEM {
 
                     // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
                     // "0");
+                    
+                    ATreasurer.payments.put(member.getEmail(), Integer.parseInt(amount));
+                    ClubManager.toFile("PendingPayments.txt");
 
-                    try {
-                        // System.out.println("*** Registration ***\n");
-                        PendingPayments(member.getEmail(), amount);
-                        // ApprovedPayments(member.getEmail(), balance);
-                    } catch (IOException e) {
-                        System.out.println(e.getMessage());
-                    }
-
-                    System.out.println("The amount is: " + amount);
+                    //for debugging reasons, the line below should show the amount after it has been updated to the map
+                    System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));
 
                     System.out.print("Check your balance(1)\t");
                     System.out.print("Return to Main Screen(2)\t");
@@ -502,6 +486,15 @@ public class MEM {
 
                     if (anotherInput == 1) {
                         clearConsole();
+                        
+                        MemberBalance bal = null;
+                        for(Entry<String, MemberBalance> en: ATreasurer.balance.entrySet()){
+                            if(en.getKey().equals(member.getEmail())){
+                                bal = en.getValue();
+                            }
+                        }
+
+                        System.out.println("Current Balance: $" + bal.getBalance());
                         // System.out.println("Account balance: $" + balance);
                     } else if (anotherInput == 2) {
                         clearConsole();
@@ -509,6 +502,7 @@ public class MEM {
                     }
                     // For exiting the annoucement feature.
                     else if (anotherInput == 3) {
+                        clearConsole();
                         System.out.println("\nHave a nice day!\n");
                         System.exit(0);
                     }
@@ -519,6 +513,7 @@ public class MEM {
                 }
                 // For exiting the annoucement feature.
                 else if (input == 3) {
+                    clearConsole();
                     System.out.println("\nHave a nice day!\n");
                     System.exit(0);
                 }
@@ -531,15 +526,10 @@ public class MEM {
             // insert make a attendance method here
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("E")) {
+            clearConsole();
             System.out.println("\nHave a nice day\n");
             System.exit(0);
         }
-    }
-
-    // Clears the console
-    public static void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 
     /*
@@ -609,5 +599,11 @@ public class MEM {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    // Clears the console
+    public static void clearConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }

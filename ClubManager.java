@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -64,19 +65,21 @@ public class ClubManager {
 
         Scanner sc = null;
         String line;
+        Scanner word = null;
         try {
             sc = new Scanner(new FileInputStream(file));
 
             if (file.equals(new File("User_Info.txt"))) {
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
-                    try (Scanner word = new Scanner(line)) {
-                        AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(),
-                                word.next());
-                        members.put(person.getEmail(), person);
-                    }
+                    word = new Scanner(line);
+
+                    AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(),
+                        word.next());
+                    members.put(person.getEmail(), person);
                 }
-            } else if (file.equals(new File("finances.txt"))) {
+                //System.out.println("Import Donefrom1");
+            }else if (file.equals(new File("finances.txt"))) {
                 String lastUpdate = sc.nextLine().substring(0, 10);
 
                 while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {}
@@ -95,23 +98,34 @@ public class ClubManager {
                 while (sc.hasNextLine()) {
                     Finances.coachFees.add(sc.nextLine());
                 }
+                //System.out.println("Import Donefrom2");
             } else if (file.equals(new File("PendingPayments.txt"))) {
+                String email;
+                int amount;
+
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
-                    Scanner word = new Scanner(line);
-                    ATreasurer.payments.put(word.next(), word.next());
-                    word.close();
+                    //System.out.println(line);////////debugging
+                    word = new Scanner(line);
+
+                    email = word.next();
+                    amount = Integer.parseInt(word.next());
+                    
+                    ATreasurer.payments.put(email, amount);
                 }
+                //System.out.println("Import Donefrom3");
             } else if (file.equals(new File("Balances.txt"))) {
                 while (sc.hasNextLine()) {
 
                     line = sc.nextLine();
-                    Scanner word = new Scanner(line);
-                    MemberBalance person = new MemberBalance(word.next(), word.next(), word.next(), word.next());
+                    //System.out.println(line);////////debugging
+                    word = new Scanner(line);
+                    MemberBalance person = new MemberBalance(word.next(), word.nextInt(), word.nextInt(), word.nextInt());
 
-                    ATreasurer.treasurers.put(person.getEmail(), person);
+                    ATreasurer.balance.put(person.getEmail(), person);
                     word.close();
                 }
+                //System.out.println("Import Donefrom4");
             }
 
         } catch (FileNotFoundException e) {
@@ -121,37 +135,49 @@ public class ClubManager {
 
     }
 
-    public static void toFile(FileWriter file) throws IOException{
-        if(file.equals(new FileWriter("User_Info.txt", true))){
-            for (Entry<String, AMember> entry : members.entrySet()){
-                AMember member = entry.getValue();
-                file.write(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
-                 + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n");
+    public static void toFile(String fileName) throws IOException{
+
+        FileWriter fw = null; 
+        BufferedWriter bw = null;
+        PrintWriter pw = null;
+
+        FileWriter writer = new FileWriter(fileName);
+        writer.close(); 
+
+        try {
+            fw = new FileWriter(fileName, true);
+            bw = new BufferedWriter(fw);
+            pw = new PrintWriter(bw);
+            if(fileName.equals("User_Info.txt")){
+                for (Entry<String, AMember> entry : members.entrySet()){
+                    AMember member = entry.getValue();
+                    pw.println(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
+                     + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole());
+                }
+                //System.out.println("Import Doneto1");
+            }else if(fileName.equals("PendingPayments.txt")){
+                for (Entry<String, Integer> email : ATreasurer.payments.entrySet()){
+                    int amount = email.getValue();
+                    pw.println(email.getKey() + " " + String.valueOf(amount));
+                }
+                //System.out.println("Import Doneto2");
             }
-        }
-        else if (file.equals(new FileWriter("finances2.txt", true))) {
-            file.write(java.time.Clock.systemUTC().instant().toString());
-            file.write("\n\nUnpaid Monthly Rent\n");
-            for (String months : Finances.rentMonths) {
-                file.write(months);
-                file.write("\n");
+            else if(fileName.equals("Balances.txt")){
+                for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()){
+                    MemberBalance str = entry.getValue();
+                    pw.println(str.toString());
+                }
+                //System.out.println("Import Doneto3");
             }
-            file.write("\nUnpaid Coach Fees\n");
-            for (String cf : Finances.coachFees) {
-                file.write(cf + "\n");
-            }
-        } 
-        else if(file.equals(new FileWriter("PendingPayments.txt", true))){
-            for (Entry<String, String> email : ATreasurer.payments.entrySet()){
-                String amount = email.getValue();
-                file.write(email + " " + amount + "\n");
-            }
-        }
-        else if(file.equals(new FileWriter("Balances.txt", true))){
-            for (Entry<String, MemberBalance> entry : ATreasurer.treasurers.entrySet()){
-                MemberBalance str = entry.getValue();
-                file.write(str.getEmail() + " " + str.getBalance() + " " + str.getNumOfPayments() + " "
-                + str.getMissingPayments() + "\n");
+            //System.out.println("Data Successfully appended into file");
+            pw.flush();
+        } finally {
+            try {
+                pw.close();
+                bw.close();
+                fw.close();
+            } catch (IOException io) {
+                io.printStackTrace();
             }
         }
     }

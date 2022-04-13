@@ -16,7 +16,6 @@ public class Finances {
     static LinkedList<String> rentMonths = new LinkedList<String>();
     static LinkedList<String> coachFees = new LinkedList<String>();
     static File file1 = new File("finances.txt");
-    static FileWriter file2 = null;
     
     public static void getData() {
         ClubManager.fromFile(file1);
@@ -24,7 +23,7 @@ public class Finances {
 
     public static void displayDebt() throws IOException{
         //Output Fees
-        MEM.clearConsole();
+        clearConsole();
         
         System.out.println("\n\nUNPAID DEBTS\n");
         System.out.println("Due Date\tFees\tPayee\n");
@@ -78,12 +77,6 @@ public class Finances {
             System.out.printf("\t$%s", rFee);
             System.out.printf("\tHall Rent (%s)\n\n", rMonth);   
         }
-        
-
-        // Update finances.txt file
-        file2 = new FileWriter("finances2.txt");
-        ClubManager.toFile(file2);
-        file2.close();
     }
 
     // TODO modify based on attendance logs
@@ -122,5 +115,11 @@ public class Finances {
             }
             rentMonths.add(String.format("%s %d %d", mos[month-1], year, RENT));
         }
+    }
+
+    // Clears the console
+    public static void clearConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
