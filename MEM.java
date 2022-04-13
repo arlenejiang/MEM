@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.Map.Entry;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -409,7 +410,7 @@ public class MEM {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            System.out.println();
             returnOrExit(member);
 
         } else if (option.equalsIgnoreCase("F")) {
@@ -485,7 +486,14 @@ public class MEM {
 
                     if (anotherInput == 1) {
                         clearConsole();
-                        MemberBalance bal = new MemberBalance(member.getEmail());
+                        
+                        MemberBalance bal = null;
+                        for(Entry<String, MemberBalance> en: ATreasurer.balance.entrySet()){
+                            if(en.getKey().equals(member.getEmail())){
+                                bal = en.getValue();
+                            }
+                        }
+
                         System.out.println("Current Balance: $" + bal.getBalance());
                         // System.out.println("Account balance: $" + balance);
                     } else if (anotherInput == 2) {

@@ -77,8 +77,7 @@ public class ATreasurer extends AMember{
             // String keyToBeRemoved = "";
 
             if (option.equalsIgnoreCase("A")) {
-                System.out.println("Key is: " + entry.getKey());
-                // keyToBeRemoved = entry.getKey();
+                //System.out.println("Key is: " + entry.getKey());//debugging
 
                 MemberBalance person = null;
                 
@@ -88,14 +87,14 @@ public class ATreasurer extends AMember{
                         //System.out.println(person.toString());////////debugging
                         person.updateBalance(entry.getValue());//entry.getValue is the amount pending
                         for(int i=0; i<(person.getBalance()/10); i+=10) {person.updateNumOfPayments();}
+                        iterator.remove();
 
                         
                     }
                 }
 
-                //System.out.println("person addded: "+person.toString());
+                //System.out.println("person addded: "+person.toString());//debugging
 
-                iterator.remove();
                 ClubManager.toFile("PendingPayments.txt");
                 ClubManager.toFile("Balances.txt");
 
