@@ -24,7 +24,7 @@ public class Finances {
 
     public static void displayDebt() throws IOException{
         //Output Fees
-        MEM.clearConsole();
+        clearConsole();
         
         System.out.println("\n\nUNPAID DEBTS\n");
         System.out.println("Due Date\tFees\tPayee\n");
@@ -122,5 +122,11 @@ public class Finances {
             }
             rentMonths.add(String.format("%s %d %d", mos[month-1], year, RENT));
         }
+    }
+
+    // Clears the console
+    public static void clearConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }

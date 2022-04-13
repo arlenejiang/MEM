@@ -418,7 +418,8 @@ public class MEM {
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
             if (member.getRole().equals("Treasurer")) {
-                System.out.print("Display Debts (D)\t");
+                System.out.print("Display Debts (D)\n");
+                System.out.print(">");
                 option = in.nextLine();
                 if (option.equalsIgnoreCase("D")) {
                     try {
@@ -525,12 +526,6 @@ public class MEM {
         }
     }
 
-    // Clears the console
-    public static void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
     /*
      * NOTE: Can only send through Gmail. Can send to any address.
      * 
@@ -598,5 +593,11 @@ public class MEM {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    // Clears the console
+    public static void clearConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }

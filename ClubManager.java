@@ -135,18 +135,6 @@ public class ClubManager {
                  + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole() + "\n");
             }
         }
-        if (file.equals(new FileWriter("finances2.txt", true))) {
-            file.write(java.time.Clock.systemUTC().instant().toString());
-            file.write("\n\nUnpaid Monthly Rent\n");
-            for (String months : Finances.rentMonths) {
-                file.write(months);
-                file.write("\n");
-            }
-            file.write("\nUnpaid Coach Fees\n");
-            for (String cf : Finances.coachFees) {
-                file.write(cf + "\n");
-            }
-        } 
         if(file.equals(new FileWriter("PendingPayments.txt", true))){
             for (Entry<String, Integer> email : ATreasurer.payments.entrySet()){
                 int amount = email.getValue();
