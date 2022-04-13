@@ -80,16 +80,24 @@ public class ATreasurer extends AMember{
                 System.out.println("Key is: " + entry.getKey());
                 // keyToBeRemoved = entry.getKey();
 
-                MemberBalance person = new MemberBalance(entry.getKey());
-                person.updateBalance(entry.getValue());
-                for(int i=0; i<(person.getBalance()/10); i++) person.updateNumOfPayments();
+                MemberBalance person = null;
+                
+                for(Entry<String, MemberBalance> e: balance.entrySet()){
+                    if(e.getKey().equals(entry.getKey())){
+                        person = e.getValue();
+                        //System.out.println(person.toString());////////debugging
+                        person.updateBalance(entry.getValue());//entry.getValue is the amount pending
+                        for(int i=0; i<(person.getBalance()/10); i+=10) {person.updateNumOfPayments();}
 
-                // entry.getValue(), "1", "0");
-                balance.put(entry.getKey(), person);
+                        
+                    }
+                }
+
+                //System.out.println("person addded: "+person.toString());
 
                 iterator.remove();
                 ClubManager.toFile("PendingPayments.txt");
-                clearConsole();
+                ClubManager.toFile("Balances.txt");
 
             }
 

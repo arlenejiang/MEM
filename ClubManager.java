@@ -78,8 +78,8 @@ public class ClubManager {
                         word.next());
                     members.put(person.getEmail(), person);
                 }
-            }
-            if (file.equals(new File("finances.txt"))) {
+                //System.out.println("Import Donefrom1");
+            }else if (file.equals(new File("finances.txt"))) {
                 String lastUpdate = sc.nextLine().substring(0, 10);
 
                 while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {}
@@ -98,13 +98,14 @@ public class ClubManager {
                 while (sc.hasNextLine()) {
                     Finances.coachFees.add(sc.nextLine());
                 }
-            } 
-            if (file.equals(new File("PendingPayments.txt"))) {
+                //System.out.println("Import Donefrom2");
+            } else if (file.equals(new File("PendingPayments.txt"))) {
                 String email;
                 int amount;
 
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
+                    //System.out.println(line);////////debugging
                     word = new Scanner(line);
 
                     email = word.next();
@@ -112,17 +113,19 @@ public class ClubManager {
                     
                     ATreasurer.payments.put(email, amount);
                 }
-            } 
-            if (file.equals(new File("Balances.txt"))) {
+                //System.out.println("Import Donefrom3");
+            } else if (file.equals(new File("Balances.txt"))) {
                 while (sc.hasNextLine()) {
 
                     line = sc.nextLine();
+                    //System.out.println(line);////////debugging
                     word = new Scanner(line);
                     MemberBalance person = new MemberBalance(word.next(), word.nextInt(), word.nextInt(), word.nextInt());
 
                     ATreasurer.balance.put(person.getEmail(), person);
                     word.close();
                 }
+                //System.out.println("Import Donefrom4");
             }
 
         } catch (FileNotFoundException e) {
@@ -138,6 +141,9 @@ public class ClubManager {
         BufferedWriter bw = null;
         PrintWriter pw = null;
 
+        FileWriter writer = new FileWriter(fileName);
+        writer.close(); 
+
         try {
             fw = new FileWriter(fileName, true);
             bw = new BufferedWriter(fw);
@@ -148,27 +154,30 @@ public class ClubManager {
                     pw.println(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
                      + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole());
                 }
+                //System.out.println("Import Doneto1");
             }else if(fileName.equals("PendingPayments.txt")){
                 for (Entry<String, Integer> email : ATreasurer.payments.entrySet()){
                     int amount = email.getValue();
                     pw.println(email.getKey() + " " + String.valueOf(amount));
                 }
+                //System.out.println("Import Doneto2");
             }
             else if(fileName.equals("Balances.txt")){
                 for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()){
                     MemberBalance str = entry.getValue();
-                    pw.println(str.getEmail() + " " + String.valueOf(str.getBalance()) + " " + String.valueOf(str.getNumOfPayments()) + " "
-                    + String.valueOf(str.getMissingPayments()));
+                    pw.println(str.toString());
                 }
+                //System.out.println("Import Doneto3");
             }
-            System.out.println("Data Successfully appended into file");
+            //System.out.println("Data Successfully appended into file");
             pw.flush();
         } finally {
             try {
                 pw.close();
                 bw.close();
                 fw.close();
-            } catch (IOException io) {// can't do anything }
+            } catch (IOException io) {
+                io.printStackTrace();
             }
         }
     }

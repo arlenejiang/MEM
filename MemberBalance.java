@@ -5,14 +5,6 @@ public class MemberBalance {
     int numOfPayments;
     int missingPayments;
 
-    // Default constructor method
-    public MemberBalance() {
-        this.email = "";
-        this.balance = 0;
-        this.numOfPayments = 0;
-        this.missingPayments = 0;
-    }
-
     // Constructor method for a member
     public MemberBalance(String email, int balance, int numOfPayments, int missingPayments) {
         this.email = email;
@@ -27,53 +19,57 @@ public class MemberBalance {
 
     // Gets the email of the member
     public String getEmail() {
-        return this.email;
+        return email;
     }
 
     // Sets the email of the member
-    public void setEmail(String email) {
-        this.email = email;
+    public void setEmail(String str) {
+        email = str;
     }
 
     // Gets the balance of the member
     public int getBalance() {
-        return this.balance;
+        return balance;
     }
 
     // Sets the balance of the member
     public void setBalance(int amount) {
-        this.balance = amount;
+        balance = amount;
     }
 
     // Gets the number of payments made by a member
     public int getNumOfPayments() {
-        return this.numOfPayments;
+        return numOfPayments;
     }
 
     // Sets the number of payments made by a member
     public void setNumOfPayments(int num) {
-        this.numOfPayments = num;
+        numOfPayments = num;
     }
 
     // Gets the number of payments a member missed
     public int getMissingPayments() {
-        return this.missingPayments;
+        return missingPayments;
     }
 
     // Sets the number of payments a member missed
     public void setMissingPayments(int num) {
-        this.missingPayments = num;
+        missingPayments = num;
     }
 
-    public int updateBalance(int amount) {
-        return this.balance + amount;
+    public void  updateBalance(int amount) {
+        balance += amount;
     }
 
-    public int updateNumOfPayments() {
-        return this.numOfPayments + 1;
+    public void updateNumOfPayments() {
+        numOfPayments += 1;
     }
 
-    public int updateMissingPayments() {
-        return this.missingPayments + 1;
+    public void updateMissingPayments() {
+        missingPayments += 1;
+    }
+
+    public String toString(){
+        return email + " " + String.valueOf(balance) + " " + String.valueOf(numOfPayments) + " " + String.valueOf(missingPayments);
     }
 }
