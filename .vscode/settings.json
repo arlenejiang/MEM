@@ -6,6 +6,8 @@
         "c:\\Users\\natas\\JavaMailFiles\\javax.mail.jar",
         "c:\\Users\\natas\\JavaMailFiles\\activation-1.1.1.jar",
         "/Users/arlene/Documents/Courses/CPS406/git/jaf-1.1.1/activation.jar",
-        "/Users/arlene/Documents/Courses/CPS406/git/javax.mail.jar"
+        "/Users/arlene/Documents/Courses/CPS406/git/javax.mail.jar",
+        "c:\\Program Files\\javax.mail.jar",
+        "c:\\Program Files\\activation-1.1.1.jar"
     ]
 }
