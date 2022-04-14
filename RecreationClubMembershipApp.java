@@ -280,7 +280,7 @@ public class RecreationClubMembershipApp {
         // final String username = treasurerEmail;
         // final String password = treasurerPassword;
 
-        String treasurerEmail = "group66club@gmail.com";
+        String receiver = "";
         String paypalEmail = "group66paypal@gmail.com";
         String paypalPassword = "april2022";
 
@@ -288,8 +288,13 @@ public class RecreationClubMembershipApp {
         String body = "";
 
         if (option.equalsIgnoreCase("C")) {
+            receiver = "group66club@gmail.com";
             subj = "Money Sent from " + memberEmail;
             body = memberEmail + " sent you $" + amount + "(CAD).";
+        } else if (option.equalsIgnoreCase("D")) {
+            receiver = memberEmail;
+            subj = "Cancelled Transaction";
+            body = "Transaction cancelled. Please try again!";
         }
 
         // String subj = "";
@@ -322,10 +327,10 @@ public class RecreationClubMembershipApp {
             message.setRecipients(
                     Message.RecipientType.TO,
                     //
-                    InternetAddress.parse(treasurerEmail) // For 1 person, just enter the email string ex:
-                                                          // "kffjk322@gmail.com"
+                    InternetAddress.parse(receiver) // For 1 person, just enter the email string ex:
+                                                    // "kffjk322@gmail.com"
             );
-            message.setSubject("** ANNOUNCEMENT **: " + subj);
+            message.setSubject(subj);
             message.setText("Hello! \n\n"
                     + body);
 
