@@ -6,6 +6,7 @@ public class AMember {
     String email;
     String password;
     String role;
+    String address;
 
     // Default constructor method
     public AMember()
@@ -16,10 +17,11 @@ public class AMember {
         this.email = "";
         this.password = "";
         this.role = "Member";
+        this.address = "";
     }
 
     // Constructor method for a member
-    public AMember(String first, String last, String phoneNumber, String email, String password, String role)
+    public AMember(String first, String last, String phoneNumber, String email, String password, String role, String address)
     {
         this.firstName = first;
         this.lastName = last;
@@ -27,6 +29,7 @@ public class AMember {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.address = address;
     }
 
     // Gets the first name of the member
@@ -101,8 +104,20 @@ public class AMember {
         this.role = role;
     }
 
+    // Gets the first name of the member
+    public String getAddress()
+    {
+        return address;
+    }
+
+    // Sets the first name of the member
+    public void setAddress(String add)
+    {
+        address = add;
+    }
+
     public String toString(){
-        return firstName + " " + lastName + " " + phoneNumber + " " + email + " " + password + " " + role;
+        return firstName + " " + lastName + " " + phoneNumber + " " + email + " " + password + " " + role + " " + address;
     }
 
 
