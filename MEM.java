@@ -286,7 +286,7 @@ public class MEM {
         // Asks for phone number of the user
         String address = "";
         while (address == "" || address == null) {
-            System.out.print("Enter your address: ");
+            System.out.print("Format: Unit#-Building#-Street or House#-Street\nEnter your address: ");
             address = in.nextLine();
             if (address == "" || address == null) {
                 clearConsole();
