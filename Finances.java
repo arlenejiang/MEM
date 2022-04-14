@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.FileWriter;  
+import java.io.File; 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -16,7 +15,6 @@ public class Finances {
     static LinkedList<String> rentMonths = new LinkedList<String>();
     static LinkedList<String> coachFees = new LinkedList<String>();
     static File file1 = new File("finances.txt");
-    static FileWriter file2 = null;
     
     public static void getData() {
         ClubManager.fromFile(file1);
@@ -24,8 +22,7 @@ public class Finances {
 
     public static void displayDebt() throws IOException{
         //Output Fees
-        MEM.clearConsole();
-        
+
         System.out.println("\n\nUNPAID DEBTS\n");
         System.out.println("Due Date\tFees\tPayee\n");
 
@@ -116,5 +113,20 @@ public class Finances {
             }
             rentMonths.add(String.format("%s %d %d", mos[month-1], year, RENT));
         }
+    }
+    public static void displayPayables() {
+        // Read from Balances.txt file into "Map<String, MemberBalance> balance"
+        ClubManager.fromFile(new File("Balances.txt"));
+
+        System.out.println("\n\nACCOUNT PAYABLES\n");
+        // Loop through Map and output members with numOfPayments > 0
+        for (MemberBalance mb : ATreasurer.balance.values()) {
+            if (mb.getBalance() > 0) {
+                AMember a = ClubManager.members.get(mb.getEmail());
+                System.out.println(a.getFirstName() + " " + a.getLastName());
+                // System.out.println(mb.getBalance());
+            }
+        }
+        System.out.println("\n");
     }
 }

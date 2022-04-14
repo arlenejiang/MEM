@@ -1,7 +1,6 @@
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
@@ -17,8 +16,11 @@ public class MEM {
     static Scanner in = new Scanner(System.in);
     static File file1 = new File("PendingPayments.txt");
     static File file2 = new File("Balances.txt");
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static SecureRandom rnd = new SecureRandom();
+    static String resetCNum;
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException {
         // Creates a manager object and catched IOException
         clearConsole();
 
@@ -41,10 +43,11 @@ public class MEM {
         // Enter 1 to register, enter 2 to log in
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         System.out.print("Register(1)\t");
-        System.out.print("Login(2)\n");
+        System.out.print("Login(2)\t");
+        System.out.print("Forgot Password?(3)\n");
         System.out.print("\n> ");
 
-        int input = convertInputToInteger(2, 1);
+        int input = convertInputToInteger(3, 1);
 
         // If the input is a 1, allow the user to register
         if (input == 1) {
@@ -82,6 +85,64 @@ public class MEM {
         if (input == 2) {
             log_in();
         }
+
+        if (input == 3) {
+            reset_password();
+        }
+    }
+
+    public static void reset_password() throws IOException {
+        Boolean flag = true;//true means that email is incorrect
+        String email;
+        AMember n = null;
+        do{
+            System.out.print("Please enter your email: ");
+            email = in.nextLine();
+            for(Entry<String, AMember> entry: ClubManager.members.entrySet()){
+                if (entry.getKey().equals(email)){
+                    flag = false;
+                    n = entry.getValue();
+                }
+            }
+            if(n == null){
+                System.out.println("Your email is incorrect.");
+                flag = true;
+            }
+        }while(flag);
+        
+        ConfirmNumEmail(email, "Ehansa Kuruku");
+
+        System.out.print("\nPlease enter the confirmation number: ");
+        String cNum = in.nextLine();
+        String newP;
+        String newP2;
+
+        if(cNum.equals(resetCNum)){
+            System.out.print("Enter new password: ");
+            newP = in.nextLine();
+            System.out.print("Enter new password again to confirm: ");
+            newP2 = in.nextLine();
+            while(!(newP.equals(newP2))){
+                System.out.println("Passwords do not match.");
+                System.out.print("Enter new password: ");
+                newP = in.nextLine();
+                System.out.print("Enter new password again to confirm: ");
+                newP2 = in.nextLine();
+            }
+            n.setPassword(newP);
+            ClubManager.toFile("User_Info.txt");
+            clearConsole();
+            System.out.println("Password Successfully Changed.");
+        } else{
+            System.out.println("The confirmation number does not match.");
+            System.out.print("Restart resetting password process (R)");
+            String o = in.nextLine();
+
+            if(o.equalsIgnoreCase("R")){
+                reset_password();
+            }
+        }
+        
     }
 
     public static void registerLogin() {
@@ -96,18 +157,20 @@ public class MEM {
         System.out.print("\n> ");
     }
 
-    public static void chooseAppFeature(int num) {
+    public static void chooseAppFeature(int num) throws IOException {
         if (num == 1) {
             registerLogin();
         } else if (num == 2) {
             loginExit();
+        } else if (num == 3) {
+            reset_password();
         }
 
     }
 
     // Converts user input fot choosing what to do in the app to an integer
     // Max input is the maximum number the user can enter
-    public static int convertInputToInteger(int maxInput, int featureNum) {
+    public static int convertInputToInteger(int maxInput, int featureNum) throws IOException {
         Boolean checkValidInput = false;
         int input = 0;
         while (checkValidInput == false || (input < 1 || input > maxInput)) {
@@ -234,11 +297,25 @@ public class MEM {
                 password = "-1";
             }
         }
-        manager.registerMember(firstName, lastName, phoneNumber, email, password);
+        clearConsole();
+        System.out.println("*** Registration ***\n");
+
+        // Asks for phone number of the user
+        String address = "";
+        while (address == "" || address == null) {
+            System.out.print("Enter your address: ");
+            address = in.nextLine();
+            if (address == "" || address == null) {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
+                System.out.println("Can't leave address empty.\n");
+            }
+        }
+        manager.registerMember(firstName, lastName, phoneNumber, email, password, address);
     }
 
     // Log in Feature
-    public static void log_in() {
+    public static void log_in() throws IOException {
         System.out.print("Email: ");
         String email = in.nextLine();
         System.out.print("Password: ");
@@ -263,7 +340,7 @@ public class MEM {
 
     }
 
-    public static void ErrorPrintMessage() {
+    public static void ErrorPrintMessage() throws IOException {
         System.out.println(
                 "You have entered one or more of the following pieces of information incorrectly: username and/or password.");
         System.out.println("Please try again");
@@ -271,21 +348,24 @@ public class MEM {
     }
 
     /*
-     * NOTE: Can only send through Gmail. Can send to any address.
-     * 
-     * 1. Go onto the sender's Gmail.
-     * 2. Go to settings icon > See All Settings > Forwarding and POP/IMAP
-     * 3. Enable IMAP access
-     * 
-     * 1. Go onto myaccount.google.com
-     * 2. Scroll down to less secure app access
-     * 3. Enable less secure app access
+     * Alpha-Numeric_String as a randomly generated confirmation code
+     */
+    public static String AN_String(int len) {
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        return sb.toString();
+    }
+
+    /*
+     * Confirmation email with confirmation number
      */
 
-    public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullname)
-            throws IOException {
-        final String username = treasurerEmail;
-        final String password = treasurerPassword;
+    public static void ConfirmNumEmail(String personEmail, String fullname) throws IOException{
+        String username = "group66club@gmail.com";
+        String password = "april2022";
+        resetCNum = AN_String(8);// confirmation number
+        String recipient = personEmail;
 
         // For a single person, get rid of from here
         // ClubManager manager = null;
@@ -294,22 +374,16 @@ public class MEM {
         // } catch (IOException e) {
         // System.out.println(e.getMessage());
 
-        System.out.println("Enter the subject line: ");
-
-        String subj = in.nextLine();
-        System.out.println("Enter the body of the email (with \\n for new lines): ");
-        String body = "";
-        String next;
-
-        while (in.hasNextLine() && !(next = in.nextLine()).equals("")) {
-            body += next;
-            body += "\n";
-        }
+        String subj = "Confirmation Number";
+        String body = "Hello,\n\n"
+                + "Confirmation Number: " + resetCNum + "\n\n"
+                + "If in the app, you were asked to enter a confirmation number, please enter the above confirmation number.";
 
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "imap.gmail.com");
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
 
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
@@ -319,43 +393,19 @@ public class MEM {
                 });
 
         try {
-
-            Message message = new MimeMessage(session);
+            MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    //
-                    InternetAddress.parse("group66club@gmail.com") // For 1 person, just enter the email string ex:
-                                                                   // "kffjk322@gmail.com"
-            );
-            message.setSubject("** ANNOUNCEMENT **: " + subj);
-            message.setText("Hello! \n\n"
-                    + body + "\n\n" + fullname);
-
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+            message.setSubject(subj);
+            message.setText(body + "\n\n" + fullname);
             Transport.send(message);
-
-            System.out.println("Done");
-
+            System.out.println("Confirmation Number Sent");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
 
-    public static void PendingPayments(String email, String amount) throws IOException {
-        ATreasurer.addToMap(email, amount);
-        ClubManager.toFile(new FileWriter("PendingPayments.txt"));
-
-    }
-
-    public static void ApprovedPayments(String email, MemberBalance person) throws IOException {
-
-        ATreasurer.addToBalance(email, person);
-
-        ClubManager.toFile(new FileWriter("Balances.txt"));
-
-    }
-
-    public static void returnOrExit(AMember member) {
+    public static void returnOrExit(AMember member) throws IOException {
         System.out.print("Return to Main Screen(1)\t");
         System.out.print("Exit(2)\n");
         System.out.print("\n> ");
@@ -377,7 +427,7 @@ public class MEM {
     }
 
     // After log in options for staff and players
-    public static void AfterLogIn(AMember member) {
+    public static void AfterLogIn(AMember member) throws IOException {
         clearConsole();
 
         // Gives the user the option of entering S to send announcement, F for finance
@@ -393,6 +443,7 @@ public class MEM {
         }
         System.out.print("Finances (F)\t");
         System.out.print("Practice Schedule (P)\t");
+        System.out.print("Change Password (C))\t");
         System.out.print("Exit (E)\n");
         System.out.print("\n> ");
 
@@ -416,26 +467,37 @@ public class MEM {
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("L")) {
             clearConsole();
+            ClubManager.fromFile(new File("PendingPayments.txt"));
+            ClubManager.fromFile(new File("Balances.txt"));
+
             System.out.println("Showing list of pending payments\n");
+
             try {
                 ATreasurer.Choose();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            System.out.println();
             returnOrExit(member);
 
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
             if (member.getRole().equals("Treasurer")) {
-                System.out.print("Display Debts (D)\t");
+                System.out.print("\nDisplay Debts (D)\t");
+                System.out.print("Display Payables (P)\n\n");
+                System.out.print(">");
                 option = in.nextLine();
                 if (option.equalsIgnoreCase("D")) {
                     try {
+                        clearConsole();
                         Finances.displayDebt();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }
+                if (option.equalsIgnoreCase("P")) {
+                    clearConsole();
+                    Finances.displayPayables();
                 }
                 returnOrExit(member);
             } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
@@ -454,8 +516,9 @@ public class MEM {
                             .println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
                     System.out.println("2. Click on the SEND option in PayPal.");
                     System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
-                    System.out.println("4. Pay the amount you want to.");
-                    System.out.println("4. Enter the amount you have paid through PayPal below.");
+                    System.out.println(
+                            "4. Pay the amount you want to ($10/practice class, and you can only pay for 12 classes in a row).");
+                    System.out.println("5. Enter the amount you have paid through PayPal below.");
 
                     String amount = "";
 
@@ -483,15 +546,12 @@ public class MEM {
                     // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
                     // "0");
 
-                    try {
-                        // System.out.println("*** Registration ***\n");
-                        PendingPayments(member.getEmail(), amount);
-                        // ApprovedPayments(member.getEmail(), balance);
-                    } catch (IOException e) {
-                        System.out.println(e.getMessage());
-                    }
+                    ATreasurer.payments.put(member.getEmail(), Integer.parseInt(amount));
+                    ClubManager.toFile("PendingPayments.txt");
 
-                    System.out.println("The amount is: " + amount);
+                    // for debugging reasons, the line below should show the amount after it has
+                    // been updated to the map
+                    System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));
 
                     System.out.print("Check your balance(1)\t");
                     System.out.print("Return to Main Screen(2)\t");
@@ -502,6 +562,15 @@ public class MEM {
 
                     if (anotherInput == 1) {
                         clearConsole();
+
+                        MemberBalance bal = null;
+                        for (Entry<String, MemberBalance> en : ATreasurer.balance.entrySet()) {
+                            if (en.getKey().equals(member.getEmail())) {
+                                bal = en.getValue();
+                            }
+                        }
+
+                        System.out.println("Current Balance: $" + bal.getBalance());
                         // System.out.println("Account balance: $" + balance);
                     } else if (anotherInput == 2) {
                         clearConsole();
@@ -509,6 +578,7 @@ public class MEM {
                     }
                     // For exiting the annoucement feature.
                     else if (anotherInput == 3) {
+                        clearConsole();
                         System.out.println("\nHave a nice day!\n");
                         System.exit(0);
                     }
@@ -519,6 +589,7 @@ public class MEM {
                 }
                 // For exiting the annoucement feature.
                 else if (input == 3) {
+                    clearConsole();
                     System.out.println("\nHave a nice day!\n");
                     System.exit(0);
                 }
@@ -530,16 +601,13 @@ public class MEM {
         } else if (option.equalsIgnoreCase("A")) {
             // insert make a attendance method here
             returnOrExit(member);
-        } else if (option.equalsIgnoreCase("E")) {
+        } else if (option.equalsIgnoreCase("C")) {
+            reset_password();
+        }else if (option.equalsIgnoreCase("E")) {
+            clearConsole();
             System.out.println("\nHave a nice day\n");
             System.exit(0);
         }
-    }
-
-    // Clears the console
-    public static void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 
     /*
@@ -609,5 +677,11 @@ public class MEM {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    // Clears the console
+    public static void clearConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
