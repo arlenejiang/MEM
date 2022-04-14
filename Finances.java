@@ -22,7 +22,7 @@ public class Finances {
 
     public static void displayDebt() throws IOException{
         //Output Fees
-        
+
         System.out.println("\n\nUNPAID DEBTS\n");
         System.out.println("Due Date\tFees\tPayee\n");
 
@@ -114,6 +114,9 @@ public class Finances {
             rentMonths.add(String.format("%s %d %d", mos[month-1], year, RENT));
         }
     }
+    public static void displayPayables() {
+        // Read from Balances.txt file into "Map<String, MemberBalance> balance"
+        ClubManager.fromFile(new File("Balances.txt"));
 
 
     public static void displayPayables() {
