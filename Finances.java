@@ -114,10 +114,6 @@ public class Finances {
             rentMonths.add(String.format("%s %d %d", mos[month-1], year, RENT));
         }
     }
-    public static void displayPayables() {
-        // Read from Balances.txt file into "Map<String, MemberBalance> balance"
-        ClubManager.fromFile(new File("Balances.txt"));
-
 
     public static void displayPayables() {
         // Read from Balances.txt file into "Map<String, MemberBalance> balance"
