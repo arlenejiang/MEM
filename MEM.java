@@ -59,26 +59,9 @@ public class MEM {
                 System.out.println(e.getMessage());
             }
             clearConsole();
-            System.out.println("Registration Complete\n");
+            System.out.print("Registration Complete\n");
+            System.out.println("Please run the program again to log in.\n");
 
-            // Allows the user to choose if they want to login or exit after registering
-            // Enter 1 to login, enter 2 to exit.
-            System.out.print("Login(1)\t");
-            System.out.print("Exit(2)\n");
-            System.out.print("\n> ");
-
-            input = convertInputToInteger(2, 2);
-
-            // Exit if the user chooses number 2
-            if (input == 2) {
-                System.out.println("\nHave a nice day\n");
-                System.exit(0);
-            }
-            // If the user want to login, change input to 2.
-            // The next if statement will allow logging in when input = 2.
-            if (input == 1) {
-                input = 2;
-            }
         }
 
         // For logging in.
