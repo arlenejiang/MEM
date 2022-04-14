@@ -295,6 +295,9 @@ public class MEM {
             }
         }
         manager.registerMember(firstName, lastName, phoneNumber, email, password, address);
+        MemberBalance person = new MemberBalance(email, 0, 0, 0);
+        ATreasurer.balance.put(email, person);
+        ClubManager.toFile("Balances.txt");
     }
 
     // Log in Feature
