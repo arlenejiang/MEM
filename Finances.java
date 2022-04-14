@@ -23,8 +23,7 @@ public class Finances {
 
     public static void displayDebt() throws IOException{
         //Output Fees
-        clearConsole();
-        
+
         System.out.println("\n\nUNPAID DEBTS\n");
         System.out.println("Due Date\tFees\tPayee\n");
 
@@ -116,10 +115,19 @@ public class Finances {
             rentMonths.add(String.format("%s %d %d", mos[month-1], year, RENT));
         }
     }
+    public static void displayPayables() {
+        // Read from Balances.txt file into "Map<String, MemberBalance> balance"
+        ClubManager.fromFile(new File("Balances.txt"));
 
-    // Clears the console
-    public static void clearConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        System.out.println("\n\nACCOUNT PAYABLES\n");
+        // Loop through Map and output members with numOfPayments > 0
+        for (MemberBalance mb : ATreasurer.balance.values()) {
+            if (mb.getBalance() > 0) {
+                AMember a = ClubManager.members.get(mb.getEmail());
+                System.out.println(a.getFirstName() + " " + a.getLastName());
+                // System.out.println(mb.getBalance());
+            }
+        }
+        System.out.println("\n");
     }
 }
