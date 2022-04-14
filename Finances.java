@@ -78,12 +78,6 @@ public class Finances {
             System.out.printf("\t$%s", rFee);
             System.out.printf("\tHall Rent (%s)\n\n", rMonth);   
         }
-        
-
-        // Update finances.txt file
-        file2 = new FileWriter("finances2.txt");
-        ClubManager.toFile(file2);
-        file2.close();
     }
 
     // TODO modify based on attendance logs
