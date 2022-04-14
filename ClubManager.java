@@ -151,8 +151,7 @@ public class ClubManager {
             if(fileName.equals("User_Info.txt")){
                 for (Entry<String, AMember> entry : members.entrySet()){
                     AMember member = entry.getValue();
-                    pw.println(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
-                     + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole());
+                    pw.println(member.toString());
                 }
                 //System.out.println("Import Doneto1");
             }else if(fileName.equals("PendingPayments.txt")){
