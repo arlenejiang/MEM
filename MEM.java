@@ -400,7 +400,7 @@ public class MEM {
         int maxInput = 2;
         while ((input < 1 || input > maxInput) && in.hasNextInt()) {
 
-            input = in.nextInt();
+            input = Integer.parseInt(in.nextLine());
         }
         if (input == 1) {
             clearConsole();
@@ -584,11 +584,15 @@ public class MEM {
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("P")) {
             // insert make a practice schedule/scheduling method here
+            clearConsole();
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("A")) {
             // insert make a attendance method here
+            clearConsole();
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("C")) {
+            //insert method for resetting password here
+            clearConsole();
             reset_password();
         }else if (option.equalsIgnoreCase("E")) {
             clearConsole();
