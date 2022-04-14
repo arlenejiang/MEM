@@ -395,8 +395,9 @@ public class MEM {
 
         int input = 0;
         int maxInput = 2;
-        while ((input < 1 || input > maxInput) && in.hasNextLine()) {
-            input = Integer.parseInt(in.nextLine());
+        while ((input < 1 || input > maxInput) && in.hasNextInt()) {
+
+            input = in.nextInt();
         }
         if (input == 1) {
             clearConsole();
