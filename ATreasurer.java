@@ -10,7 +10,7 @@ public class ATreasurer extends AMember{
     static Map<String, Integer> payments = new TreeMap<String, Integer>();
     static Map<String, MemberBalance> balance = new TreeMap<String, MemberBalance>();
     
-    String first ;
+    String first;
     String last;
     String phoneNumber;
     String email;

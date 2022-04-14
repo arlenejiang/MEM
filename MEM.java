@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
@@ -15,6 +16,9 @@ public class MEM {
     static Scanner in = new Scanner(System.in);
     static File file1 = new File("PendingPayments.txt");
     static File file2 = new File("Balances.txt");
+    static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static SecureRandom rnd = new SecureRandom();
+    static String resetCNum;
 
     public static void main(String args[]) throws IOException {
         // Creates a manager object and catched IOException
@@ -39,10 +43,11 @@ public class MEM {
         // Enter 1 to register, enter 2 to log in
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         System.out.print("Register(1)\t");
-        System.out.print("Login(2)\n");
+        System.out.print("Login(2)\t");
+        System.out.print("Forgot Password?(3)\n");
         System.out.print("\n> ");
 
-        int input = convertInputToInteger(2, 1);
+        int input = convertInputToInteger(3, 1);
 
         // If the input is a 1, allow the user to register
         if (input == 1) {
@@ -80,6 +85,64 @@ public class MEM {
         if (input == 2) {
             log_in();
         }
+
+        if (input == 3) {
+            reset_password();
+        }
+    }
+
+    public static void reset_password() throws IOException {
+        Boolean flag = true;//true means that email is incorrect
+        String email;
+        AMember n = null;
+        do{
+            System.out.print("Please enter your email: ");
+            email = in.nextLine();
+            for(Entry<String, AMember> entry: ClubManager.members.entrySet()){
+                if (entry.getKey().equals(email)){
+                    flag = false;
+                    n = entry.getValue();
+                }
+            }
+            if(n == null){
+                System.out.println("Your email is incorrect.");
+                flag = true;
+            }
+        }while(flag);
+        
+        ConfirmNumEmail(email, "Ehansa Kuruku");
+
+        System.out.print("\nPlease enter the confirmation number: ");
+        String cNum = in.nextLine();
+        String newP;
+        String newP2;
+
+        if(cNum.equals(resetCNum)){
+            System.out.print("Enter new password: ");
+            newP = in.nextLine();
+            System.out.print("Enter new password again to confirm: ");
+            newP2 = in.nextLine();
+            while(!(newP.equals(newP2))){
+                System.out.println("Passwords do not match.");
+                System.out.print("Enter new password: ");
+                newP = in.nextLine();
+                System.out.print("Enter new password again to confirm: ");
+                newP2 = in.nextLine();
+            }
+            n.setPassword(newP);
+            ClubManager.toFile("User_Info.txt");
+            clearConsole();
+            System.out.println("Password Successfully Changed.");
+        } else{
+            System.out.println("The confirmation number does not match.");
+            System.out.print("Restart resetting password process (R)");
+            String o = in.nextLine();
+
+            if(o.equalsIgnoreCase("R")){
+                reset_password();
+            }
+        }
+        
     }
 
     public static void registerLogin() {
@@ -94,18 +157,20 @@ public class MEM {
         System.out.print("\n> ");
     }
 
-    public static void chooseAppFeature(int num) {
+    public static void chooseAppFeature(int num) throws IOException {
         if (num == 1) {
             registerLogin();
         } else if (num == 2) {
             loginExit();
+        } else if (num == 3) {
+            reset_password();
         }
 
     }
 
     // Converts user input fot choosing what to do in the app to an integer
     // Max input is the maximum number the user can enter
-    public static int convertInputToInteger(int maxInput, int featureNum) {
+    public static int convertInputToInteger(int maxInput, int featureNum) throws IOException {
         Boolean checkValidInput = false;
         int input = 0;
         while (checkValidInput == false || (input < 1 || input > maxInput)) {
@@ -269,21 +334,24 @@ public class MEM {
     }
 
     /*
-     * NOTE: Can only send through Gmail. Can send to any address.
-     * 
-     * 1. Go onto the sender's Gmail.
-     * 2. Go to settings icon > See All Settings > Forwarding and POP/IMAP
-     * 3. Enable IMAP access
-     * 
-     * 1. Go onto myaccount.google.com
-     * 2. Scroll down to less secure app access
-     * 3. Enable less secure app access
+     * Alpha-Numeric_String as a randomly generated confirmation code
+     */
+    public static String AN_String(int len) {
+        StringBuilder sb = new StringBuilder(len);
+        for (int i = 0; i < len; i++)
+            sb.append(AB.charAt(rnd.nextInt(AB.length())));
+        return sb.toString();
+    }
+
+    /*
+     * Confirmation email with confirmation number
      */
 
-    public static void PaypalConfirmationemail(String treasurerEmail, String treasurerPassword, String fullname)
-            throws IOException {
-        final String username = treasurerEmail;
-        final String password = treasurerPassword;
+    public static void ConfirmNumEmail(String personEmail, String fullname) throws IOException{
+        String username = "group66club@gmail.com";
+        String password = "april2022";
+        resetCNum = AN_String(8);// confirmation number
+        String recipient = personEmail;
 
         // For a single person, get rid of from here
         // ClubManager manager = null;
@@ -292,22 +360,16 @@ public class MEM {
         // } catch (IOException e) {
         // System.out.println(e.getMessage());
 
-        System.out.println("Enter the subject line: ");
-
-        String subj = in.nextLine();
-        System.out.println("Enter the body of the email (with \\n for new lines): ");
-        String body = "";
-        String next;
-
-        while (in.hasNextLine() && !(next = in.nextLine()).equals("")) {
-            body += next;
-            body += "\n";
-        }
+        String subj = "Confirmation Number";
+        String body = "Hello,\n\n"
+                + "Confirmation Number: " + resetCNum + "\n\n"
+                + "If in the app, you were asked to enter a confirmation number, please enter the above confirmation number.";
 
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "imap.gmail.com");
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
 
         Session session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
@@ -317,23 +379,13 @@ public class MEM {
                 });
 
         try {
-
-            Message message = new MimeMessage(session);
+            MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    //
-                    InternetAddress.parse("group66club@gmail.com") // For 1 person, just enter the email string ex:
-                                                                   // "kffjk322@gmail.com"
-            );
-            message.setSubject("** ANNOUNCEMENT **: " + subj);
-            message.setText("Hello! \n\n"
-                    + body + "\n\n" + fullname);
-
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+            message.setSubject(subj);
+            message.setText(body + "\n\n" + fullname);
             Transport.send(message);
-
-            System.out.println("Done");
-
+            System.out.println("Confirmation Number Sent");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
@@ -377,6 +429,7 @@ public class MEM {
         }
         System.out.print("Finances (F)\t");
         System.out.print("Practice Schedule (P)\t");
+        System.out.print("Change Password (C))\t");
         System.out.print("Exit (E)\n");
         System.out.print("\n> ");
 
@@ -402,7 +455,7 @@ public class MEM {
             clearConsole();
             ClubManager.fromFile(new File("PendingPayments.txt"));
             ClubManager.fromFile(new File("Balances.txt"));
-            
+
             System.out.println("Showing list of pending payments\n");
 
             try {
@@ -445,25 +498,27 @@ public class MEM {
                 if (input == 1) {
                     clearConsole();
                     System.out.println("Here are some steps to top up your account balance:");
-                    System.out.println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
+                    System.out
+                            .println("\n1. Go to this link: https://paypal.me/memgroup66?country.x=CA&locale.x=en_US");
                     System.out.println("2. Click on the SEND option in PayPal.");
                     System.out.println("3. Log in to PayPal. Sign up if you don't have an account.");
-                    System.out.println("4. Pay the amount you want to ($10/practice class, and you can only pay for 12 classes in a row).");
+                    System.out.println(
+                            "4. Pay the amount you want to ($10/practice class, and you can only pay for 12 classes in a row).");
                     System.out.println("5. Enter the amount you have paid through PayPal below.");
 
                     String amount = "";
 
-                while (amount == "" || amount == null) {
-                    System.out.print("\n\nEnter the amount you paid: $");
-                    amount = in.nextLine();
+                    while (amount == "" || amount == null) {
+                        System.out.print("\n\nEnter the amount you paid: $");
+                        amount = in.nextLine();
 
-                    if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
-                        clearConsole();
-                        System.out.println("*** Payment ***\n");
-                        System.out.println("Invalid amount.\n");
-                        amount = "";
+                        if (amount == "" || amount == null || !amount.matches("[0-9]+")) {
+                            clearConsole();
+                            System.out.println("*** Payment ***\n");
+                            System.out.println("Invalid amount.\n");
+                            amount = "";
+                        }
                     }
-                }
 
                     System.out.print("\n\nThank you for your payment! ");
                     System.out.println("Funds will be ready to use in 4-24 hours.");
@@ -476,11 +531,12 @@ public class MEM {
 
                     // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
                     // "0");
-                    
+
                     ATreasurer.payments.put(member.getEmail(), Integer.parseInt(amount));
                     ClubManager.toFile("PendingPayments.txt");
 
-                    //for debugging reasons, the line below should show the amount after it has been updated to the map
+                    // for debugging reasons, the line below should show the amount after it has
+                    // been updated to the map
                     System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));
 
                     System.out.print("Check your balance(1)\t");
@@ -492,10 +548,10 @@ public class MEM {
 
                     if (anotherInput == 1) {
                         clearConsole();
-                        
+
                         MemberBalance bal = null;
-                        for(Entry<String, MemberBalance> en: ATreasurer.balance.entrySet()){
-                            if(en.getKey().equals(member.getEmail())){
+                        for (Entry<String, MemberBalance> en : ATreasurer.balance.entrySet()) {
+                            if (en.getKey().equals(member.getEmail())) {
                                 bal = en.getValue();
                             }
                         }
@@ -531,7 +587,9 @@ public class MEM {
         } else if (option.equalsIgnoreCase("A")) {
             // insert make a attendance method here
             returnOrExit(member);
-        } else if (option.equalsIgnoreCase("E")) {
+        } else if (option.equalsIgnoreCase("C")) {
+            reset_password();
+        }else if (option.equalsIgnoreCase("E")) {
             clearConsole();
             System.out.println("\nHave a nice day\n");
             System.exit(0);
