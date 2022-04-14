@@ -92,24 +92,24 @@ public class MEM {
     }
 
     public static void reset_password() throws IOException {
-        Boolean flag = true;//true means that email is incorrect
+        Boolean flag = true;// true means that email is incorrect
         String email;
         AMember n = null;
-        do{
+        do {
             System.out.print("Please enter your email: ");
             email = in.nextLine();
-            for(Entry<String, AMember> entry: ClubManager.members.entrySet()){
-                if (entry.getKey().equals(email)){
+            for (Entry<String, AMember> entry : ClubManager.members.entrySet()) {
+                if (entry.getKey().equals(email)) {
                     flag = false;
                     n = entry.getValue();
                 }
             }
-            if(n == null){
+            if (n == null) {
                 System.out.println("Your email is incorrect.");
                 flag = true;
             }
-        }while(flag);
-        
+        } while (flag);
+
         ConfirmNumEmail(email, "Ehansa Kuruku");
 
         System.out.print("\nPlease enter the confirmation number: ");
@@ -117,12 +117,12 @@ public class MEM {
         String newP;
         String newP2;
 
-        if(cNum.equals(resetCNum)){
+        if (cNum.equals(resetCNum)) {
             System.out.print("Enter new password: ");
             newP = in.nextLine();
             System.out.print("Enter new password again to confirm: ");
             newP2 = in.nextLine();
-            while(!(newP.equals(newP2))){
+            while (!(newP.equals(newP2))) {
                 System.out.println("Passwords do not match.");
                 System.out.print("Enter new password: ");
                 newP = in.nextLine();
@@ -133,16 +133,16 @@ public class MEM {
             ClubManager.toFile("User_Info.txt");
             clearConsole();
             System.out.println("Password Successfully Changed.");
-        } else{
+        } else {
             System.out.println("The confirmation number does not match.");
             System.out.print("Restart resetting password process (R)");
             String o = in.nextLine();
 
-            if(o.equalsIgnoreCase("R")){
+            if (o.equalsIgnoreCase("R")) {
                 reset_password();
             }
         }
-        
+
     }
 
     public static void registerLogin() {
@@ -361,7 +361,7 @@ public class MEM {
      * Confirmation email with confirmation number
      */
 
-    public static void ConfirmNumEmail(String personEmail, String fullname) throws IOException{
+    public static void ConfirmNumEmail(String personEmail, String fullname) throws IOException {
         String username = "group66club@gmail.com";
         String password = "april2022";
         resetCNum = AN_String(8);// confirmation number
@@ -443,7 +443,7 @@ public class MEM {
         }
         System.out.print("Finances (F)\t");
         System.out.print("Practice Schedule (P)\t");
-        System.out.print("Change Password (C))\t");
+        System.out.print("Change Password (C)\t");
         System.out.print("Exit (E)\n");
         System.out.print("\n> ");
 
@@ -537,6 +537,8 @@ public class MEM {
                     System.out.print("\n\nThank you for your payment! ");
                     System.out.println("Funds will be ready to use in 4-24 hours.");
 
+                    PaypalEmail(member.email, amount, "C");
+
                     // try {
                     // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
                     // } catch (IOException e) {
@@ -603,10 +605,69 @@ public class MEM {
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("C")) {
             reset_password();
-        }else if (option.equalsIgnoreCase("E")) {
+        } else if (option.equalsIgnoreCase("E")) {
             clearConsole();
             System.out.println("\nHave a nice day\n");
             System.exit(0);
+        }
+    }
+
+    // Option "c" : paypal to treasurer to announce member payment
+    // Option "d" : paypal to member to announce their payment is denied
+    public static void PaypalEmail(String memberEmail, String amount, String option) throws IOException {
+
+        String receiver = "";
+        String paypalEmail = "group66paypal@gmail.com";
+        String paypalPassword = "april2022";
+
+        String subj = "";
+        String body = "";
+
+        if (option.equalsIgnoreCase("C")) {
+            receiver = "group66club@gmail.com";
+            subj = "Money Sent from " + memberEmail;
+            body = memberEmail + " sent you $" + amount + "(CAD).";
+        }
+
+        else if (option.equalsIgnoreCase("D")) {
+            receiver = memberEmail;
+            subj = "Cancelled Transaction";
+            body = "Your transaction was denied. Please try again!";
+        }
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(paypalEmail, paypalPassword);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(paypalEmail));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    //
+                    InternetAddress.parse(receiver) // For 1 person, just enter the email string ex:
+                                                    // "kffjk322@gmail.com"
+            );
+            message.setSubject(subj);
+            message.setText("Hello! \n\n"
+                    + body);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
     }
 

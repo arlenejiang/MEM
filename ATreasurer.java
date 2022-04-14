@@ -76,10 +76,10 @@ public class ATreasurer extends AMember {
 
             // String keyToBeRemoved = "";
 
+            MemberBalance person = null;
+
             if (option.equalsIgnoreCase("A")) {
                 // System.out.println("Key is: " + entry.getKey());//debugging
-
-                MemberBalance person = null;
 
                 for (Entry<String, MemberBalance> e : balance.entrySet()) {
                     if (e.getKey().equals(entry.getKey())) {
@@ -103,7 +103,11 @@ public class ATreasurer extends AMember {
             else if (option.equalsIgnoreCase("D")) {
                 clearConsole();
                 System.out.println("Payment Denied");
+                // ClubManager.toFile("PendingPayments.txt");
+                iterator.remove();
+
             }
+
         }
     }
 
