@@ -118,6 +118,11 @@ public class Finances {
         // Read from Balances.txt file into "Map<String, MemberBalance> balance"
         ClubManager.fromFile(new File("Balances.txt"));
 
+
+    public static void displayPayables() {
+        // Read from Balances.txt file into "Map<String, MemberBalance> balance"
+        ClubManager.fromFile(new File("Balances.txt"));
+
         System.out.println("\n\nACCOUNT PAYABLES\n");
         // Loop through Map and output members with numOfPayments > 0
         for (MemberBalance mb : ATreasurer.balance.values()) {
@@ -128,5 +133,11 @@ public class Finances {
             }
         }
         System.out.println("\n");
+    }
+
+    // Clears the console
+    public static void clearConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
