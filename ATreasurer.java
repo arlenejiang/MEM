@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class ATreasurer extends AMember{
+public class ATreasurer extends AMember {
 
     static Map<String, Integer> payments = new TreeMap<String, Integer>();
     static Map<String, MemberBalance> balance = new TreeMap<String, MemberBalance>();
-    
+
     String first;
     String last;
     String phoneNumber;
@@ -17,10 +17,10 @@ public class ATreasurer extends AMember{
     String password;
     String role;
 
-    public ATreasurer(){
-        for(Entry<String, AMember> entry: ClubManager.members.entrySet()){
+    public ATreasurer() {
+        for (Entry<String, AMember> entry : ClubManager.members.entrySet()) {
             AMember member = entry.getValue();
-            if(member.getRole().equals("Treasurer")){
+            if (member.getRole().equals("Treasurer")) {
                 this.first = member.getFirstName();
                 this.last = member.getLastName();
                 this.phoneNumber = member.getPhoneNumber();
@@ -77,23 +77,23 @@ public class ATreasurer extends AMember{
             // String keyToBeRemoved = "";
 
             if (option.equalsIgnoreCase("A")) {
-                //System.out.println("Key is: " + entry.getKey());//debugging
+                // System.out.println("Key is: " + entry.getKey());//debugging
 
                 MemberBalance person = null;
-                
-                for(Entry<String, MemberBalance> e: balance.entrySet()){
-                    if(e.getKey().equals(entry.getKey())){
+
+                for (Entry<String, MemberBalance> e : balance.entrySet()) {
+                    if (e.getKey().equals(entry.getKey())) {
                         person = e.getValue();
-                        //System.out.println(person.toString());////////debugging
-                        person.updateBalance(entry.getValue());//entry.getValue is the amount pending
-                        for(int i=0; i<(person.getBalance()/10); i+=10) {person.updateNumOfPayments();}
+                        // System.out.println(person.toString());////////debugging
+                        person.updateBalance(entry.getValue());// entry.getValue is the amount pending
+                        // for(int i=0; i<(person.getBalance()/10); i+=10) {
+                        person.updateNumOfPayments();// }
                         iterator.remove();
 
-                        
                     }
                 }
 
-                //System.out.println("person addded: "+person.toString());//debugging
+                // System.out.println("person addded: "+person.toString());//debugging
 
                 ClubManager.toFile("PendingPayments.txt");
                 ClubManager.toFile("Balances.txt");
