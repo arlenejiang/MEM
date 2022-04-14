@@ -483,15 +483,21 @@ public class MEM {
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
             if (member.getRole().equals("Treasurer")) {
-                System.out.print("Display Debts (D)\n");
+                System.out.print("\nDisplay Debts (D)\t");
+                System.out.print("Display Payables (P)\n\n");
                 System.out.print(">");
                 option = in.nextLine();
                 if (option.equalsIgnoreCase("D")) {
                     try {
+                        clearConsole();
                         Finances.displayDebt();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }
+                if (option.equalsIgnoreCase("P")) {
+                    clearConsole();
+                    Finances.displayPayables();
                 }
                 returnOrExit(member);
             } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
