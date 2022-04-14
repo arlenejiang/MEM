@@ -22,16 +22,15 @@ public class ClubManager {
 
     // Add's a new member to the member's treeMap.
     // Writes out all the members to User_Info.txt
-    public void registerMember(String first, String last, String phoneNumber, String email, String password)
+    public void registerMember(String first, String last, String phoneNumber, String email, String password, String address)
             throws FileNotFoundException {
-        AMember person = new AMember(first, last, phoneNumber, email, password, "Member");
+        AMember person = new AMember(first, last, phoneNumber, email, password, "Member", address);
         members.put(email, person);
 
         PrintWriter out = new PrintWriter("User_Info.txt");
 
         for (AMember member : members.values()) {
-            out.println(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber() + " "
-                    + member.getEmail() + " " + member.getPassword() + " " + member.getRole());
+            out.println(member.toString());
         }
 
         out.close();
@@ -75,8 +74,9 @@ public class ClubManager {
                     word = new Scanner(line);
 
                     AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(),
-                        word.next());
+                        word.next(), word.next());
                     members.put(person.getEmail(), person);
+                    //System.out.println(person.toString());//debugging for testing
                 }
                 //System.out.println("Import Donefrom1");
             }else if (file.equals(new File("finances.txt"))) {

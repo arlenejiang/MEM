@@ -297,7 +297,21 @@ public class MEM {
                 password = "-1";
             }
         }
-        manager.registerMember(firstName, lastName, phoneNumber, email, password);
+        clearConsole();
+        System.out.println("*** Registration ***\n");
+
+        // Asks for phone number of the user
+        String address = "";
+        while (address == "" || address == null) {
+            System.out.print("Enter your address: ");
+            address = in.nextLine();
+            if (address == "" || address == null) {
+                clearConsole();
+                System.out.println("*** Registration ***\n");
+                System.out.println("Can't leave address empty.\n");
+            }
+        }
+        manager.registerMember(firstName, lastName, phoneNumber, email, password, address);
     }
 
     // Log in Feature
