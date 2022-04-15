@@ -10,12 +10,15 @@ import java.util.Map.Entry;
 
 public class Draft {
 
-    public static void readAttendanceLog() throws FileNotFoundException {
+    public static LocalDate readAttendanceLog() throws FileNotFoundException {
         File attendanceFile = new File("attendance.txt");
     	Scanner scanner = new Scanner(attendanceFile);
         String line;
         String email;
 
+        
+        LocalDate dt = LocalDate.parse(scanner.next());
+        scanner.nextLine();
         while (scanner.hasNextLine())
     	{
     		line = scanner.nextLine();
@@ -30,16 +33,19 @@ public class Draft {
     				ClubManager.members.get(email).setAttendance(word.next());
     			}
     	    }
+            word.close();
         }
+        scanner.close();
+
+        return dt;
     }
     
     public static void displayAttendanceLog() throws FileNotFoundException {
 
         MEM.clearConsole();
-        readAttendanceLog();
-
+        
         // Calculate previous Fridays 
-        LocalDate dt = LocalDate.now();
+        LocalDate dt = readAttendanceLog();
 		LocalDate friday = dt.with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY)); //previousOrSame
 
         // Output attendance log
