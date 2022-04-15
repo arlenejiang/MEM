@@ -734,6 +734,7 @@ public class MEM {
     public static void changeCoach(AMember member) throws IOException {
         System.out.println("Are you sure you want to change the coach? (Y or N)");
         String c = in.nextLine();
+        System.out.println("Please enter the information on behalf of the new coach.");
         if (c.equalsIgnoreCase("Y")) {
             ClubManager.members.remove(ACoach.email);
             ClubManager.toFile("User_Info.txt");
