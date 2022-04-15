@@ -39,13 +39,7 @@ public class ClubManager {
         AMember person = new AMember(first, last, phoneNumber, email, password, "Member", address);
         members.put(email, person);
 
-        PrintWriter out = new PrintWriter("User_Info.txt");
-
-        for (AMember member : members.values()) {
-            out.println(member.toString());
-        }
-
-        out.close();
+        toFile("User_Info.txt");
     }
 
     // Checks the user's email with the emails of the members already in the club
@@ -183,8 +177,7 @@ public class ClubManager {
             if(fileName.equals("User_Info.txt")){
                 for (Entry<String, AMember> entry : members.entrySet()){
                     AMember member = entry.getValue();
-                    pw.println(member.getFirstName() + " " + member.getLastName() + " " + member.getPhoneNumber()
-                     + " " + member.getEmail() + " " + member.getPassword() + " " + member.getRole());
+                    pw.println(member.toString());
                 }
                 //System.out.println("Import Doneto1");
             }else if(fileName.equals("PendingPayments.txt")){
@@ -316,13 +309,13 @@ public class ClubManager {
     	LocalDate date = null;
     	File file2 = new File("scheduledClasses.txt");
     	Scanner scanner = new Scanner(file2);
-    	
+    	Scanner word = null;
     	member.setNull();
     	
     	while (scanner.hasNextLine())
     	{
     		line = scanner.nextLine();
-    		Scanner word = new Scanner (line);
+    		word = new Scanner (line);
     		word.next();
     		word.next();
     		email = word.next();
@@ -350,6 +343,8 @@ public class ClubManager {
     			}
     		}
     	}
+        word.close();
+        scanner.close();
     }
     
     public static void checkValidDate(LocalDate date, AMember member)
