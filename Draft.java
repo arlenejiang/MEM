@@ -75,6 +75,8 @@ public class Draft {
         // Check time for a classToLog
         String pastAttendance;
         MemberBalance mb;
+
+        System.out.println("\n\nPress X next to present members. Otherwise hit enter.");
         for (Entry<String, AMember> entry : ClubManager.members.entrySet()) {
             AMember member = entry.getValue();
             if (member.getRole().equals("Member")) {
@@ -86,23 +88,30 @@ public class Draft {
                 }
                 
                 if (member.getFirstClass() != null && member.getFirstClass().equals(classToLog)){
-                    mb = ATreasurer.balance.get(member.getEmail());
-                    mb.updateBalance(-10);
-                    if (mb.getBalance() >= 0) {
-                        member.setAttendance(pastAttendance + "1");
-                    }
-                    else {
-                        member.setAttendance(pastAttendance + "2");
-                        mb.updateMissingPayments();
+                    
+                    // Output to coach/treasurer
+                    System.out.print(member.getFirstName() + " " + member.getLastName() + "\t");
+                    if (MEM.in.nextLine().equalsIgnoreCase("X")) {
+                        mb = ATreasurer.balance.get(member.getEmail());
+                        mb.updateBalance(-10);
+                        if (mb.getBalance() >= 0) {
+                            member.setAttendance(pastAttendance + "1");
+                        }
+                        else {
+                            member.setAttendance(pastAttendance + "2");
+                            mb.updateMissingPayments();
+                        }
                     }
                 }
                 else {
                     member.setAttendance(pastAttendance + "0");   
                 }
             }
-            ClubManager.toFile("Balances.txt");
-            writeFile();
+
         }
+        ClubManager.toFile("Balances.txt");
+        writeFile();
+        
 
     }
 
