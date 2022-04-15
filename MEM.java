@@ -735,24 +735,24 @@ public class MEM {
                 System.out.println("Please enter the emails of the participants you would like to remove individually.");
                 System.out.println("Type Q when you are done.");
                 List<String> peopleToBeRemoved = new ArrayList<>();
-                String email = "";
+                String em = in.nextLine();
 
                 
-                while (!(email.equalsIgnoreCase("Q")) && in.hasNextLine()) {
+                while (!(em.equalsIgnoreCase("Q")) && in.hasNextLine()) {
                     Boolean flag = true;// true means that email is incorrect
                     AMember n = null;
                     do {
                         System.out.print("> ");
-                        email = in.nextLine();
-                        if (email.equalsIgnoreCase("Q")) {
+                        em = in.nextLine();
+                        if (em.equalsIgnoreCase("Q")) {
                             clearConsole();
                             removeParticipant(peopleToBeRemoved);
                         }
                         for (Entry<String, AMember> entry : ClubManager.members.entrySet()) {
-                            if (entry.getKey().equals(email)) {
+                            if (entry.getKey().equals(em)) {
                                 flag = false;
                                 n = entry.getValue();
-                                peopleToBeRemoved.add(email);
+                                peopleToBeRemoved.add(n.getEmail());
                             }
                         }
                         if (n == null) {
