@@ -1,7 +1,10 @@
 import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
@@ -54,7 +57,7 @@ public class MEM {
             try {
                 clearConsole();
                 System.out.println("*** Registration ***\n");
-                RegisterationQuestions(manager); // Shows the registration questions
+                RegisterationQuestions(manager, false); // Shows the registration questions
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -75,24 +78,24 @@ public class MEM {
     }
 
     public static void reset_password() throws IOException {
-        Boolean flag = true;//true means that email is incorrect
+        Boolean flag = true;// true means that email is incorrect
         String email;
         AMember n = null;
-        do{
+        do {
             System.out.print("Please enter your email: ");
             email = in.nextLine();
-            for(Entry<String, AMember> entry: ClubManager.members.entrySet()){
-                if (entry.getKey().equals(email)){
+            for (Entry<String, AMember> entry : ClubManager.members.entrySet()) {
+                if (entry.getKey().equals(email)) {
                     flag = false;
                     n = entry.getValue();
                 }
             }
-            if(n == null){
+            if (n == null) {
                 System.out.println("Your email is incorrect.");
                 flag = true;
             }
-        }while(flag);
-        
+        } while (flag);
+
         ConfirmNumEmail(email, "Ehansa Kuruku");
 
         System.out.print("\nPlease enter the confirmation number: ");
@@ -100,12 +103,12 @@ public class MEM {
         String newP;
         String newP2;
 
-        if(cNum.equals(resetCNum)){
+        if (cNum.equals(resetCNum)) {
             System.out.print("Enter new password: ");
             newP = in.nextLine();
             System.out.print("Enter new password again to confirm: ");
             newP2 = in.nextLine();
-            while(!(newP.equals(newP2))){
+            while (!(newP.equals(newP2))) {
                 System.out.println("Passwords do not match.");
                 System.out.print("Enter new password: ");
                 newP = in.nextLine();
@@ -116,16 +119,16 @@ public class MEM {
             ClubManager.toFile("User_Info.txt");
             clearConsole();
             System.out.println("Password Successfully Changed.");
-        } else{
+        } else {
             System.out.println("The confirmation number does not match.");
             System.out.print("Restart resetting password process (R)");
             String o = in.nextLine();
 
-            if(o.equalsIgnoreCase("R")){
+            if (o.equalsIgnoreCase("R")) {
                 reset_password();
             }
         }
-        
+
     }
 
     public static void registerLogin() {
@@ -179,7 +182,7 @@ public class MEM {
 
     }
 
-    public static void RegisterationQuestions(ClubManager manager) throws IOException {
+    public static void RegisterationQuestions(ClubManager manager, Boolean t) throws IOException {
 
         // Asks for the first name of the user
         String firstName = "";
@@ -295,6 +298,11 @@ public class MEM {
             }
         }
         manager.registerMember(firstName, lastName, phoneNumber, email, password, address);
+        if (t) {
+            AMember n = ClubManager.members.get(email);
+            n.setRole("Coach");
+            ClubManager.toFile("User_Info.txt");
+        }
         MemberBalance person = new MemberBalance(email, 0, 0, 0);
         ATreasurer.balance.put(email, person);
         ClubManager.toFile("Balances.txt");
@@ -347,7 +355,7 @@ public class MEM {
      * Confirmation email with confirmation number
      */
 
-    public static void ConfirmNumEmail(String personEmail, String fullname) throws IOException{
+    public static void ConfirmNumEmail(String personEmail, String fullname) throws IOException {
         String username = "group66club@gmail.com";
         String password = "april2022";
         resetCNum = AN_String(8);// confirmation number
@@ -424,9 +432,12 @@ public class MEM {
         if (member.getRole().equals("Coach")) {
             System.out.print("Send Annoucement (S)\t");
             System.out.print("Attendance (A)\t");
+            System.out.print("Edit List of Members (M)\t");
         } else if (member.getRole().equals("Treasurer")) {
             System.out.print("Pending Payments List (L)\t");
             System.out.print("Attendance (A)\t");
+            System.out.print("Change Coach (CC)");
+            System.out.print("Check Coach for Current Month (CM)");
         }
         System.out.print("Finances (F)\t");
         System.out.print("Practice Schedule (P)\t");
@@ -589,16 +600,106 @@ public class MEM {
         } else if (option.equalsIgnoreCase("A")) {
             // insert make a attendance method here
             clearConsole();
+
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("C")) {
-            //insert method for resetting password here
+            // method for resetting password here
             clearConsole();
             reset_password();
-        }else if (option.equalsIgnoreCase("E")) {
+        } else if (option.equalsIgnoreCase("M")) {
+            // methods for coach to add or remove members
+            clearConsole();
+            System.out.print("Add New Member (A)\t");
+            System.out.print("Remove Members (R)\n");
+
+            String input = in.nextLine();
+
+            if (input.equalsIgnoreCase("A")) {///// coach can add new participant and create temporary password for them
+                System.out.println("Please enter the participant's information on behalf of them.");
+                System.out.println(
+                        "Please enter a temporary password for them \nand inform the participant to change their password.");
+                RegisterationQuestions(new ClubManager(), false);
+                System.out.println("Participant Successfully Registrated.");
+                returnOrExit(member);
+
+            } else if (input.equalsIgnoreCase("R")) {///// coach can remove participants from the app
+                System.out
+                        .println("Please enter the emails of the participants you would like to remove individually.");
+                System.out.println("Type Q when you are done.");
+                List<String> peopleToBeRemoved = new ArrayList<>();
+                String email = "";
+
+                while (!(email.equalsIgnoreCase("Q")) && in.hasNextLine()) {
+                    Boolean flag = true;// true means that email is incorrect
+                    AMember n = null;
+                    do {
+                        System.out.print("> ");
+                        email = in.nextLine();
+                        for (Entry<String, AMember> entry : ClubManager.members.entrySet()) {
+                            if (entry.getKey().equals(email)) {
+                                flag = false;
+                                n = entry.getValue();
+                                peopleToBeRemoved.add(email);
+                            }
+                        }
+                        if (n == null) {
+                            System.out.println("The email is not in the database. Please enter another email.");
+                            flag = true;
+                        }
+                    } while (flag);
+
+                }
+                if (email.equalsIgnoreCase("Q")) {
+                    clearConsole();
+                    removeParticipant(peopleToBeRemoved);
+                }
+                returnOrExit(member);
+            }
+        } else if (option.equalsIgnoreCase("CC")) {
+            // method for changing coach
+            clearConsole();
+            changeCoach(member);
+            clearConsole();
+            System.out.println("Coach Successfully Changed.\n");
+            returnOrExit(member);
+        } else if (option.equalsIgnoreCase("CM")) {
+            // code for checking who the coach for the month is
+            clearConsole();
+
+            ACoach coach = new ACoach();
+            String month = new DateFormatSymbols().getMonths()[Calendar.getInstance().get(Calendar.MONTH)];
+            System.out.println("Coach " + coach.getFirstName() + " will be coaching on Fridays for the current month, "
+                    + month + ".");
+
+            returnOrExit(member);
+        } else if (option.equalsIgnoreCase("E")) {
             clearConsole();
             System.out.println("\nHave a nice day\n");
             System.exit(0);
         }
+    }
+
+    public static void removeParticipant(List<String> peopleToBeRemoved) throws IOException {
+        System.out.println("The following people were removed from the app: ");
+        for (String email : peopleToBeRemoved) {
+            ClubManager.members.remove(email);
+            System.out.println(email);
+        }
+        ClubManager.toFile("User_Info.txt");
+    }
+
+    public static void changeCoach(AMember member) throws IOException {
+        System.out.println("Are you sure you want to change the coach? (Y or N)");
+        String c = in.nextLine();
+        if (c.equalsIgnoreCase("Y")) {
+            ClubManager.members.remove(ACoach.email);
+            ClubManager.toFile("User_Info.txt");
+            RegisterationQuestions(new ClubManager(), true);
+
+        } else if (c.equalsIgnoreCase("N")) {
+            returnOrExit(member);
+        }
+
     }
 
     /*

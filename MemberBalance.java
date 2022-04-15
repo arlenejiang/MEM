@@ -53,7 +53,7 @@ public class MemberBalance {
         missingPayments = num;
     }
 
-    public void  updateBalance(int amount) {
+    public void updateBalance(int amount) {
         balance += amount;
     }
 
@@ -65,7 +65,8 @@ public class MemberBalance {
         missingPayments += 1;
     }
 
-    public String toString(){
-        return email + " " + String.valueOf(balance) + " " + String.valueOf(numOfPayments) + " " + String.valueOf(missingPayments);
+    public String toString() {
+        return email + " " + String.valueOf(balance) + " " + String.valueOf(numOfPayments) + " "
+                + String.valueOf(missingPayments);
     }
 }
