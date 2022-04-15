@@ -747,7 +747,8 @@ public class MEM {
                         if (em.equalsIgnoreCase("Q")) {
                             clearConsole();
                             removeParticipant(peopleToBeRemoved);
-                        }
+                            flag = false;
+                        }else{
                         for (Entry<String, AMember> entry : ClubManager.members.entrySet()) {
                             if (entry.getKey().equals(em)) {
                                 flag = false;
@@ -759,6 +760,7 @@ public class MEM {
                             System.out.println("The email is not in the database. Please enter another email.");
                             flag = true;
                         }
+                    }
                         
                     } while (flag);
 
