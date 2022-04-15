@@ -435,13 +435,15 @@ public class MEM {
             System.out.print("Edit List of Members (M)\t");
         } else if (member.getRole().equals("Treasurer")) {
             System.out.print("Pending Payments List (L)\t");
+            System.out.print("Payment Records (R)\t");
+            System.out.print("Unpaid Records(U)\t");
             System.out.print("Attendance (A)\t");
             System.out.print("Change Coach (CC)");
             System.out.print("Check Coach for Current Month (CM)");
         }
         System.out.print("Finances (F)\t");
         System.out.print("Practice Schedule (P)\t");
-        System.out.print("Change Password (C))\t");
+        System.out.print("Change Password (C)\t");
         System.out.print("Exit (E)\n");
         System.out.print("\n> ");
 
@@ -476,6 +478,23 @@ public class MEM {
                 e.printStackTrace();
             }
             System.out.println();
+
+        } else if (option.equalsIgnoreCase("R")) {
+
+            clearConsole();
+
+            System.out.println("List of members based the amount of times they paid (Ascending order)\n");
+            ClubManager.printSortedList("P");
+            System.out.println();
+            returnOrExit(member);
+
+        } else if (option.equalsIgnoreCase("U")) {
+
+            clearConsole();
+
+            System.out.println("List of members based the amount of times they missed payments (Ascending order)\n");
+            ClubManager.printSortedList("U");
+            System.out.println();
             returnOrExit(member);
 
         } else if (option.equalsIgnoreCase("F")) {
@@ -500,8 +519,9 @@ public class MEM {
                 returnOrExit(member);
             } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
                 System.out.print("Top up account balance(1)\t");
-                System.out.print("Return to Main Screen(2)\t");
-                System.out.print("Exit(3)\n");
+                System.out.print("Check your balance(2)\t");
+                System.out.print("Return to Main Screen(3)\t");
+                System.out.print("Exit(4)\n");
                 System.out.print("\n> ");
 
                 int input = convertInputToInteger(3, 1);
@@ -534,6 +554,10 @@ public class MEM {
 
                     System.out.print("\n\nThank you for your payment! ");
                     System.out.println("Funds will be ready to use in 4-24 hours.");
+
+                    ATreasurer.PaymentEmail(member.email, amount, "C");
+
+                    // PaypalEmail(member.email, amount, "C");
 
                     // try {
                     // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
@@ -580,13 +604,25 @@ public class MEM {
                         System.out.println("\nHave a nice day!\n");
                         System.exit(0);
                     }
-
                 } else if (input == 2) {
+                    clearConsole();
+
+                    MemberBalance bal = null;
+                    for (Entry<String, MemberBalance> en : ATreasurer.balance.entrySet()) {
+                        if (en.getKey().equals(member.getEmail())) {
+                            bal = en.getValue();
+                        }
+                    }
+
+                    System.out.println("Current Balance: $" + bal.getBalance());
+                    // System.out.println("Account balance: $" + balance);
+
+                } else if (input == 3) {
                     clearConsole();
                     AfterLogIn(member);
                 }
                 // For exiting the annoucement feature.
-                else if (input == 3) {
+                else if (input == 4) {
                     clearConsole();
                     System.out.println("\nHave a nice day!\n");
                     System.exit(0);
@@ -678,7 +714,7 @@ public class MEM {
             System.exit(0);
         }
     }
-
+  
     public static void removeParticipant(List<String> peopleToBeRemoved) throws IOException {
         System.out.println("The following people were removed from the app: ");
         for (String email : peopleToBeRemoved) {
