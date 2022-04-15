@@ -560,10 +560,10 @@ public class MEM {
                 System.out.print("Exit(Q)\n");
                 System.out.print("\n> ");
 
-                int input = convertInputToInteger(3, 1);
+                String op = in.nextLine();
 
                 // If the input is a 1, return to the main screen
-                if (option.equalsIgnoreCase("T")) {
+                if (op.equalsIgnoreCase("T")) {
                     clearConsole();
                     System.out.println("Here are some steps to top up your account balance:");
                     System.out
@@ -602,7 +602,7 @@ public class MEM {
                     System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));
 
                     returnOrExit(member);
-                } else if (option.equalsIgnoreCase("B")) {
+                } else if (op.equalsIgnoreCase("B")) {
                     clearConsole();
 
                     MemberBalance bal = null;
@@ -615,12 +615,12 @@ public class MEM {
                     System.out.println("Current Balance: $" + bal.getBalance());
                     // System.out.println("Account balance: $" + balance);
 
-                } else if (option.equalsIgnoreCase("MC")) {
+                } else if (op.equalsIgnoreCase("MC")) {
                     clearConsole();
                     AfterLogIn(member);
                 }
                 // For exiting the annoucement feature.
-                else if (option.equalsIgnoreCase("Q")) {
+                else if (op.equalsIgnoreCase("Q")) {
                     clearConsole();
                     System.out.println("\nHave a nice day!\n");
                     System.exit(0);
