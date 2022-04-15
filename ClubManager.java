@@ -195,11 +195,10 @@ public class ClubManager {
 
     // for debugging
     public static void print(ArrayList<String> arr) {
-        //System.out.println("\nprint from print()\n");
+        // System.out.println("\nprint from print()\n");
         for (int i = 0; i < arr.size(); i++)
             System.out.println(arr.get(i));
     }
-
 
     public static void sortPaid() {
         Collections.sort(balancesSort);
@@ -217,12 +216,6 @@ public class ClubManager {
     }
 
     public static void printSortedList(String option) {
-
-        // System.out.println("Unsorted List");
-        // System.out.println();
-
-        // for (int i = 0; i < balancesSort.size(); i++)
-        // System.out.println(balancesSort.get(i));
 
         if (option.equalsIgnoreCase("P")) {
             sortPaid();
@@ -245,29 +238,47 @@ public class ClubManager {
 
     }
 
-    public static void countNumOfMissingPayments(){
+    public static void countNumOfMissingPayments(String option) {
         File balfile = new File("Balances.txt");
 
         fromFile(balfile);
-        for(String email : ATreasurer.balance.keySet()){
-            if (ATreasurer.balance.get(email).getMissingPayments() >= 1){
-                try{
-                    ATreasurer.PaymentEmail(email, String.valueOf(ATreasurer.balance.get(email).getNumOfPayments()), "M");
-                    System.out.println("Email to " + email + " sent successfully"); // for debugging
-                    penalty.add(email);
-                } catch(IOException e){
-                    System.out.println("IO Exception");
-                }
-            }
-            else{
+        for (String email : ATreasurer.balance.keySet()) {
+            if (ATreasurer.balance.get(email).getMissingPayments() >= 1) {
+                penalty.add(email);
+            } else {
                 discount.add(email);
             }
         }
-        System.out.println("\nDiscount:");
-        print(discount);
-        System.out.println("\nPenalty:");
-        print(penalty);
+
+        if (option.equalsIgnoreCase("DC")) {
+            System.out.println("\nDiscount List:");
+            print(discount);
+        }
+
+        else if (option.equalsIgnoreCase("PF")) {
+            System.out.println("\nPenalty Fee List:");
+            print(penalty);
+        }
+
     }
 
-    
+    public static void SendRemainder(String option) {
+        File balfile = new File("Balances.txt");
+        fromFile(balfile);
+
+        if (option.equalsIgnoreCase("Y")) {
+            for (String email : ATreasurer.balance.keySet()) {
+                if (ATreasurer.balance.get(email).getMissingPayments() >= 1) {
+                    try {
+                        ATreasurer.PaymentEmail(email,
+                                String.valueOf(ATreasurer.balance.get(email).getMissingPayments()),
+                                "M");
+                        System.out.println("Email to " + email + " sent successfully"); // for debugging
+                    } catch (IOException e) {
+                        System.out.println("IO Exception");
+                    }
+                }
+            }
+        }
+    }
 }

@@ -439,11 +439,14 @@ public class MEM {
             System.out.print("Unpaid Records(U)\t");
             System.out.print("Attendance (A)\t");
             System.out.print("Change Coach (CC)");
-            System.out.print("Check Coach for Current Month (CM)");
+            System.out.print("\nCheck Coach for Current Month (CM)");
+            System.out.print("\tDiscount List (DC)");
+            System.out.print("\tPenalty Fee List (PF)\t");
+
         }
         System.out.print("Finances (F)\t");
         System.out.print("Practice Schedule (P)\t");
-        System.out.print("Change Password (C)\t");
+        System.out.print("\nChange Password (C)\t");
         System.out.print("Exit (E)\n");
         System.out.print("\n> ");
 
@@ -494,9 +497,35 @@ public class MEM {
 
             System.out.println("List of members based the amount of times they missed payments (Ascending order)\n");
             ClubManager.printSortedList("U");
-            ClubManager.countNumOfMissingPayments();
             System.out.println();
             returnOrExit(member);
+
+        } else if (option.equalsIgnoreCase("DC")) {
+
+            clearConsole();
+            ClubManager.countNumOfMissingPayments("DC");
+            System.out.println();
+            returnOrExit(member);
+
+        } else if (option.equalsIgnoreCase("PF")) {
+
+            clearConsole();
+            ClubManager.countNumOfMissingPayments("PF");
+            System.out.println();
+            System.out.println("Send Reminder Email(1)\tReturn to Main Screen(2)");
+            System.out.print("\n> ");
+
+            int anotherInput = convertInputToInteger(2, 1);
+
+            if (anotherInput == 1) {
+                clearConsole();
+                ClubManager.SendRemainder("Y");
+                returnOrExit(member);
+
+            } else if (anotherInput == 2) {
+                clearConsole();
+                AfterLogIn(member);
+            }
 
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
@@ -715,7 +744,7 @@ public class MEM {
             System.exit(0);
         }
     }
-  
+
     public static void removeParticipant(List<String> peopleToBeRemoved) throws IOException {
         System.out.println("The following people were removed from the app: ");
         for (String email : peopleToBeRemoved) {
