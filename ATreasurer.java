@@ -109,12 +109,11 @@ public class ATreasurer extends AMember {
 
             else if (option.equalsIgnoreCase("D")) {
                 clearConsole();
-                System.out.println("Payment Denied");
+                // System.out.println("Payment Denied");
                 PaymentEmail(entry.getKey(), String.valueOf(entry.getValue()), "d");
                 // ClubManager.toFile("PendingPayments.txt");
                 iterator.remove();
                 ClubManager.toFile("PendingPayments.txt");
-
             }
 
         }
@@ -126,6 +125,10 @@ public class ATreasurer extends AMember {
         System.out.flush();
     }
 
+    // Option "c" : paypal to treasurer to announce member payment
+    // Option "a" : paypal to member to announce their payment is denied
+    // Option "d" : paypal to member to announce their payment is denied
+
     public static void PaymentEmail(String memberEmail, String amount, String option) throws IOException {
 
         String receiver = memberEmail;
@@ -135,7 +138,13 @@ public class ATreasurer extends AMember {
         String subj = "";
         String body = "";
 
-        if (option.equalsIgnoreCase("A")) {
+        if (option.equalsIgnoreCase("C")) {
+            receiver = "group66club@gmail.com";
+            subj = "Money Sent from " + memberEmail;
+            body = memberEmail + " sent you $" + amount + "(CAD).";
+        }
+
+        else if (option.equalsIgnoreCase("A")) {
             subj = "Payment Successful!";
             body = "Payment approved. The amount $" + amount
                     + "(CAD) has been successfully deposited into your account.";
@@ -175,7 +184,7 @@ public class ATreasurer extends AMember {
 
             Transport.send(message);
 
-            System.out.println("Done");
+            // System.out.println("Done");
 
         } catch (MessagingException e) {
             e.printStackTrace();

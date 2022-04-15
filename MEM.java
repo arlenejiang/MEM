@@ -557,7 +557,9 @@ public class MEM {
                     System.out.print("\n\nThank you for your payment! ");
                     System.out.println("Funds will be ready to use in 4-24 hours.");
 
-                    PaypalEmail(member.email, amount, "C");
+                    ATreasurer.PaymentEmail(member.email, amount, "C");
+
+                    // PaypalEmail(member.email, amount, "C");
 
                     // try {
                     // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
@@ -646,62 +648,64 @@ public class MEM {
 
     // Option "c" : paypal to treasurer to announce member payment
     // Option "d" : paypal to member to announce their payment is denied
-    public static void PaypalEmail(String memberEmail, String amount, String option) throws IOException {
+    // public static void PaypalEmail(String memberEmail, String amount, String
+    // option) throws IOException {
 
-        String receiver = "";
-        String paypalEmail = "group66paypal@gmail.com";
-        String paypalPassword = "april2022";
+    // String receiver = "";
+    // String paypalEmail = "group66paypal@gmail.com";
+    // String paypalPassword = "april2022";
 
-        String subj = "";
-        String body = "";
+    // String subj = "";
+    // String body = "";
 
-        if (option.equalsIgnoreCase("C")) {
-            receiver = "group66club@gmail.com";
-            subj = "Money Sent from " + memberEmail;
-            body = memberEmail + " sent you $" + amount + "(CAD).";
-        }
+    // if (option.equalsIgnoreCase("C")) {
+    // receiver = "group66club@gmail.com";
+    // subj = "Money Sent from " + memberEmail;
+    // body = memberEmail + " sent you $" + amount + "(CAD).";
+    // }
 
-        else if (option.equalsIgnoreCase("D")) {
-            receiver = memberEmail;
-            subj = "Cancelled Transaction";
-            body = "Your transaction was denied. Please try again!";
-        }
+    // else if (option.equalsIgnoreCase("D")) {
+    // receiver = memberEmail;
+    // subj = "Cancelled Transaction";
+    // body = "Your transaction was denied. Please try again!";
+    // }
 
-        Properties prop = new Properties();
-        prop.put("mail.smtp.host", "imap.gmail.com");
-        prop.put("mail.smtp.port", "587");
-        prop.put("mail.smtp.auth", "true");
-        prop.put("mail.smtp.starttls.enable", "true");
+    // Properties prop = new Properties();
+    // prop.put("mail.smtp.host", "imap.gmail.com");
+    // prop.put("mail.smtp.port", "587");
+    // prop.put("mail.smtp.auth", "true");
+    // prop.put("mail.smtp.starttls.enable", "true");
 
-        Session session = Session.getInstance(prop,
-                new javax.mail.Authenticator() {
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(paypalEmail, paypalPassword);
-                    }
-                });
+    // Session session = Session.getInstance(prop,
+    // new javax.mail.Authenticator() {
+    // protected PasswordAuthentication getPasswordAuthentication() {
+    // return new PasswordAuthentication(paypalEmail, paypalPassword);
+    // }
+    // });
 
-        try {
+    // try {
 
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(paypalEmail));
-            message.setRecipients(
-                    Message.RecipientType.TO,
-                    //
-                    InternetAddress.parse(receiver) // For 1 person, just enter the email string ex:
-                                                    // "kffjk322@gmail.com"
-            );
-            message.setSubject(subj);
-            message.setText("Hello! \n\n"
-                    + body);
+    // Message message = new MimeMessage(session);
+    // message.setFrom(new InternetAddress(paypalEmail));
+    // message.setRecipients(
+    // Message.RecipientType.TO,
+    // //
+    // InternetAddress.parse(receiver) // For 1 person, just enter the email string
+    // ex:
+    // // "kffjk322@gmail.com"
+    // );
+    // message.setSubject(subj);
+    // message.setText("Hello! \n\n"
+    // + body);
 
-            Transport.send(message);
+    // Transport.send(message);
 
-            System.out.println("Done");
+    // System.out.println("Done");
 
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-    }
+    // } catch (MessagingException e) {
+    // e.printStackTrace();
+    // }
+    // }
 
     /*
      * NOTE: Can only send through Gmail. Can send to any address.
