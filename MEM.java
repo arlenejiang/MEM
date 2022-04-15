@@ -447,7 +447,7 @@ public class MEM {
         }
         System.out.print("Practice Schedule (P)\t");
         System.out.print("Change Password (C)\t");
-        System.out.print("Exit (E)\n");
+        System.out.print("Exit (Q)\n");
         System.out.print("\n> ");
 
         String option = in.nextLine();
@@ -739,7 +739,7 @@ public class MEM {
                     + month + ".");
 
             returnOrExit(member);
-        } else if (option.equalsIgnoreCase("E")) {
+        } else if (option.equalsIgnoreCase("Q")) {
             clearConsole();
             System.out.println("\nHave a nice day\n");
             System.exit(0);
