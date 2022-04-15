@@ -57,7 +57,7 @@ public class MEM {
             try {
                 clearConsole();
                 System.out.println("*** Registration ***\n");
-                RegisterationQuestions(manager); // Shows the registration questions
+                RegisterationQuestions(manager, false); // Shows the registration questions
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -182,7 +182,7 @@ public class MEM {
 
     }
 
-    public static void RegisterationQuestions(ClubManager manager) throws IOException {
+    public static void RegisterationQuestions(ClubManager manager, Boolean t) throws IOException {
 
         // Asks for the first name of the user
         String firstName = "";
@@ -298,6 +298,11 @@ public class MEM {
             }
         }
         manager.registerMember(firstName, lastName, phoneNumber, email, password, address);
+        if (t) {
+            AMember n = ClubManager.members.get(email);
+            n.setRole("Coach");
+            ClubManager.toFile("User_Info.txt");
+        }
         MemberBalance person = new MemberBalance(email, 0, 0, 0);
         ATreasurer.balance.put(email, person);
         ClubManager.toFile("Balances.txt");
@@ -609,14 +614,15 @@ public class MEM {
 
             String input = in.nextLine();
 
-            if (input.equalsIgnoreCase("A")) {/////coach can add new participant and create temporary password for them
+            if (input.equalsIgnoreCase("A")) {///// coach can add new participant and create temporary password for them
                 System.out.println("Please enter the participant's information on behalf of them.");
-                System.out.println("Please enter a temporary password for them \nand inform the participant to change their password.");
-                RegisterationQuestions(new ClubManager());
+                System.out.println(
+                        "Please enter a temporary password for them \nand inform the participant to change their password.");
+                RegisterationQuestions(new ClubManager(), false);
                 System.out.println("Participant Successfully Registrated.");
                 returnOrExit(member);
 
-            } else if (input.equalsIgnoreCase("R")) {/////coach can remove participants from the app
+            } else if (input.equalsIgnoreCase("R")) {///// coach can remove participants from the app
                 System.out
                         .println("Please enter the emails of the participants you would like to remove individually.");
                 System.out.println("Type Q when you are done.");
@@ -643,7 +649,7 @@ public class MEM {
                     } while (flag);
 
                 }
-                if(email.equalsIgnoreCase("Q")){
+                if (email.equalsIgnoreCase("Q")) {
                     clearConsole();
                     removeParticipant(peopleToBeRemoved);
                 }
@@ -657,10 +663,11 @@ public class MEM {
         } else if (option.equalsIgnoreCase("CM")) {
             // code for checking who the coach for the month is
             clearConsole();
-            
+
             ACoach coach = new ACoach();
             String month = new DateFormatSymbols().getMonths()[Calendar.getInstance().get(Calendar.MONTH)];
-            System.out.println("Coach " + coach.getFirstName() + " will be coaching on Fridays for the current month, " + month + ".");
+            System.out.println("Coach " + coach.getFirstName() + " will be coaching on Fridays for the current month, "
+                    + month + ".");
 
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("E")) {
@@ -672,7 +679,7 @@ public class MEM {
 
     public static void removeParticipant(List<String> peopleToBeRemoved) throws IOException {
         System.out.println("The following people were removed from the app: ");
-        for(String email: peopleToBeRemoved){
+        for (String email : peopleToBeRemoved) {
             ClubManager.members.remove(email);
             System.out.println(email);
         }
@@ -682,15 +689,14 @@ public class MEM {
     public static void changeCoach(AMember member) throws IOException {
         System.out.println("Are you sure you want to change the coach? (Y or N)");
         String c = in.nextLine();
-        if(c.equalsIgnoreCase("Y")){
+        if (c.equalsIgnoreCase("Y")) {
             ClubManager.members.remove(ACoach.email);
             ClubManager.toFile("User_Info.txt");
-            RegisterationQuestions(new ClubManager());
+            RegisterationQuestions(new ClubManager(), true);
 
-        } else if(c.equalsIgnoreCase("N")){
+        } else if (c.equalsIgnoreCase("N")) {
             returnOrExit(member);
         }
-
 
     }
 

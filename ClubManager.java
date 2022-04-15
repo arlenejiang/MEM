@@ -22,7 +22,8 @@ public class ClubManager {
 
     // Add's a new member to the member's treeMap.
     // Writes out all the members to User_Info.txt
-    public void registerMember(String first, String last, String phoneNumber, String email, String password, String address)
+    public void registerMember(String first, String last, String phoneNumber, String email, String password,
+            String address)
             throws IOException {
         AMember person = new AMember(first, last, phoneNumber, email, password, "Member", address);
         members.put(email, person);
@@ -68,15 +69,16 @@ public class ClubManager {
                     word = new Scanner(line);
 
                     AMember person = new AMember(word.next(), word.next(), word.next(), word.next(), word.next(),
-                        word.next(), word.next());
+                            word.next(), word.next());
                     members.put(person.getEmail(), person);
-                    //System.out.println(person.toString());//debugging for testing
+                    // System.out.println(person.toString());//debugging for testing
                 }
-                //System.out.println("Import Donefrom1");
-            }else if (file.equals(new File("finances.txt"))) {
+                // System.out.println("Import Donefrom1");
+            } else if (file.equals(new File("finances.txt"))) {
                 String lastUpdate = sc.nextLine().substring(0, 10);
 
-                while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {}
+                while ((sc.nextLine()).equals("Unpaid Monthly Rent")) {
+                }
                 sc.nextLine();
                 // Add previous unpaid months from file to list rentMonths
                 line = sc.nextLine();
@@ -92,34 +94,35 @@ public class ClubManager {
                 while (sc.hasNextLine()) {
                     Finances.coachFees.add(sc.nextLine());
                 }
-                //System.out.println("Import Donefrom2");
+                // System.out.println("Import Donefrom2");
             } else if (file.equals(new File("PendingPayments.txt"))) {
                 String email;
                 int amount;
 
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
-                    //System.out.println(line);////////debugging
+                    // System.out.println(line);////////debugging
                     word = new Scanner(line);
 
                     email = word.next();
                     amount = Integer.parseInt(word.next());
-                    
+
                     ATreasurer.payments.put(email, amount);
                 }
-                //System.out.println("Import Donefrom3");
+                // System.out.println("Import Donefrom3");
             } else if (file.equals(new File("Balances.txt"))) {
                 while (sc.hasNextLine()) {
 
                     line = sc.nextLine();
-                    //System.out.println(line);////////debugging
+                    // System.out.println(line);////////debugging
                     word = new Scanner(line);
-                    MemberBalance person = new MemberBalance(word.next(), word.nextInt(), word.nextInt(), word.nextInt());
+                    MemberBalance person = new MemberBalance(word.next(), word.nextInt(), word.nextInt(),
+                            word.nextInt());
 
                     ATreasurer.balance.put(person.getEmail(), person);
                     word.close();
                 }
-                //System.out.println("Import Donefrom4");
+                // System.out.println("Import Donefrom4");
             }
 
         } catch (FileNotFoundException e) {
@@ -129,40 +132,39 @@ public class ClubManager {
 
     }
 
-    public static void toFile(String fileName) throws IOException{
+    public static void toFile(String fileName) throws IOException {
 
-        FileWriter fw = null; 
+        FileWriter fw = null;
         BufferedWriter bw = null;
         PrintWriter pw = null;
 
         FileWriter writer = new FileWriter(fileName);
-        writer.close(); 
+        writer.close();
 
         try {
             fw = new FileWriter(fileName, true);
             bw = new BufferedWriter(fw);
             pw = new PrintWriter(bw);
-            if(fileName.equals("User_Info.txt")){
-                for (Entry<String, AMember> entry : members.entrySet()){
+            if (fileName.equals("User_Info.txt")) {
+                for (Entry<String, AMember> entry : members.entrySet()) {
                     AMember member = entry.getValue();
                     pw.println(member.toString());
                 }
-                //System.out.println("Import Doneto1");
-            }else if(fileName.equals("PendingPayments.txt")){
-                for (Entry<String, Integer> email : ATreasurer.payments.entrySet()){
+                // System.out.println("Import Doneto1");
+            } else if (fileName.equals("PendingPayments.txt")) {
+                for (Entry<String, Integer> email : ATreasurer.payments.entrySet()) {
                     int amount = email.getValue();
                     pw.println(email.getKey() + " " + String.valueOf(amount));
                 }
-                //System.out.println("Import Doneto2");
-            }
-            else if(fileName.equals("Balances.txt")){
-                for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()){
+                // System.out.println("Import Doneto2");
+            } else if (fileName.equals("Balances.txt")) {
+                for (Entry<String, MemberBalance> entry : ATreasurer.balance.entrySet()) {
                     MemberBalance str = entry.getValue();
                     pw.println(str.toString());
                 }
-                //System.out.println("Import Doneto3");
+                // System.out.println("Import Doneto3");
             }
-            //System.out.println("Data Successfully appended into file");
+            // System.out.println("Data Successfully appended into file");
             pw.flush();
         } finally {
             try {

@@ -1,6 +1,5 @@
-public class ACoach extends AMember{
+public class ACoach extends AMember {
 
-    
     static String first;
     static String last;
     static String phoneNumber;
@@ -23,91 +22,78 @@ public class ACoach extends AMember{
     }
 
     // Gets the first name of the member
-    public String getFirstName()
-    {
+    public String getFirstName() {
         return first;
     }
 
     // Sets the first name of the member
-    public void setFirstName(String firstName)
-    {
+    public void setFirstName(String firstName) {
         first = firstName;
     }
 
     // Gets the last name of the member
-    public String getLastName()
-    {
+    public String getLastName() {
         return last;
     }
 
     // Sets the last name of the member
-    public void setLastName(String lastName)
-    {
+    public void setLastName(String lastName) {
         last = lastName;
     }
 
     // Gets the phone number of the member
-    public String getPhoneNumber()
-    {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
     // Sets the phone number of the member
-    public void setPhoneNumber(String phoneNum)
-    {
+    public void setPhoneNumber(String phoneNum) {
         phoneNumber = phoneNum;
     }
 
     // Gets the email of the member
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
     // Sets the email of the member
-    public void setEmail(String e)
-    {
+    public void setEmail(String e) {
         email = e;
     }
 
     // Gets the password of the member
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
     // Sets the password of the member
-    public void setPassword(String pass)
-    {
+    public void setPassword(String pass) {
         password = pass;
     }
 
     // Gets the role of the member
-    public String getRole()
-    {
+    public String getRole() {
         return role;
     }
 
     // Sets the role of the member
-    public void setRole(String r)
-    {
+    public void setRole(String r) {
         role = r;
     }
 
     // Gets the first name of the member
-    public String getAddress()
-    {
+    public String getAddress() {
         return address;
     }
 
     // Sets the first name of the member
-    public void setAddress(String add)
-    {
+    public void setAddress(String add) {
         address = add;
     }
 
-    public String toString(){
-        return firstName + " " + lastName + " " + phoneNumber + " " + email + " " + password + " " + role + " " + address;
+    public String toString() {
+        return firstName + " " + lastName + " " + phoneNumber + " " + email + " " + password + " " + role + " "
+                + address;
     }
 
 }
