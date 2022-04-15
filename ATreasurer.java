@@ -104,6 +104,7 @@ public class ATreasurer extends AMember {
 
                 ClubManager.toFile("PendingPayments.txt");
                 ClubManager.toFile("Balances.txt");
+                System.out.println("Payment approved.");
 
             }
 
@@ -114,6 +115,7 @@ public class ATreasurer extends AMember {
                 // ClubManager.toFile("PendingPayments.txt");
                 iterator.remove();
                 ClubManager.toFile("PendingPayments.txt");
+                System.out.println("Payment denied.");
             }
 
         }

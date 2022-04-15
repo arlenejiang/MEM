@@ -446,7 +446,9 @@ public class MEM {
         if(!(member.getRole().equals("Coach"))){
             System.out.print("Finances (F)\t");
         }
-        System.out.print("Practice Schedule (P)\t");
+        if(!(member.getRole().equals("Coach") || member.getRole().equals("Treasurer"))){
+            System.out.print("Practice Schedule (P)\t");
+        }
         System.out.print("Change Password (C)\t");
         System.out.print("Exit (Q)\n");
         System.out.print("\n> ");
@@ -608,35 +610,7 @@ public class MEM {
                     // been updated to the map
                     System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));
 
-                    System.out.print("Check your balance(1)\t");
-                    System.out.print("Return to Main Screen(2)\t");
-                    System.out.print("Exit(3)\n");
-                    System.out.print("\n> ");
-
-                    int anotherInput = convertInputToInteger(3, 1);
-
-                    if (anotherInput == 1) {
-                        clearConsole();
-
-                        MemberBalance bal = null;
-                        for (Entry<String, MemberBalance> en : ATreasurer.balance.entrySet()) {
-                            if (en.getKey().equals(member.getEmail())) {
-                                bal = en.getValue();
-                            }
-                        }
-
-                        System.out.println("Current Balance: $" + bal.getBalance());
-                        // System.out.println("Account balance: $" + balance);
-                    } else if (anotherInput == 2) {
-                        clearConsole();
-                        AfterLogIn(member);
-                    }
-                    // For exiting the annoucement feature.
-                    else if (anotherInput == 3) {
-                        clearConsole();
-                        System.out.println("\nHave a nice day!\n");
-                        System.exit(0);
-                    }
+                    returnOrExit(member);
                 } else if (input == 2) {
                     clearConsole();
 
