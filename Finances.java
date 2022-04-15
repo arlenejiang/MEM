@@ -153,14 +153,14 @@ public class Finances {
             if (Integer.valueOf(rYear) < Integer.valueOf(cYear) ||
                 (cYear.equals(rYear) &&
                     Arrays.asList(mos).indexOf(rMonth) <= Arrays.asList(mos).indexOf(cMonth))) {
-                System.out.printf("Hall-Rent (%s/1/%s)", rMonth.substring(0, 3), rYear);
-                System.out.printf("\t$%s\n", rFee);
+                System.out.printf("Hall Rent - (%s/1/%s) ............................. ", rMonth.substring(0, 3), rYear);
+                System.out.printf("$%s\n", rFee);
                 totalRFee += Integer.parseInt(rFee);
                 r++;
     
             } else {
-                System.out.printf("Coach Fees (%s/1/%s)", cMonth.substring(0, 3), cYear);
-                System.out.printf("\t$%s\n", cFee);
+                System.out.printf("Coach Fees - (%s/1/%s) ............................. ", cMonth.substring(0, 3), cYear);
+                System.out.printf("$%s\n", cFee);
                 totalCFee += Integer.parseInt(cFee);
                 c++;
             }
@@ -170,22 +170,22 @@ public class Finances {
             cFee = cDate.split(" ")[2];
             cYear = cDate.split(" ")[1];
             cMonth = cDate.split(" ")[0];
-            System.out.printf("Coach Fees (%s/1/%s)", cMonth.substring(0, 3), cYear);
-            System.out.printf("\t$%s\n", cFee);
+            System.out.printf("Coach Fees - (%s/1/%s)............................. ", cMonth.substring(0, 3), cYear);
+            System.out.printf("$%s\n", cFee);
             totalCFee += Integer.parseInt(cFee);
         } else {
             rDate = rentMonths.get(r);
             rFee = rDate.split(" ")[2];
             rYear = rDate.split(" ")[1];
             rMonth = rDate.split(" ")[0];
-            System.out.printf("Hall-Rent (%s/1/%s)", rMonth.substring(0, 3), rYear);
-            System.out.printf("\t$%s\n", rFee);
+            System.out.printf("Hall Rent - (%s/1/%s)............................. ", rMonth.substring(0, 3), rYear);
+            System.out.printf("$%s\n", rFee);
             totalRFee += Integer.parseInt(rFee);
         }
         int totalExp = totalRFee + totalCFee;
-        System.out.println("Total Hall Rent: " + totalRFee);
-        System.out.println("Total Coach Fees: " + totalCFee);
-        System.out.println("Total Expenses: " + totalExp);
+        System.out.println("\nTotal Hall Rent: " + totalRFee);
+        System.out.println("\nTotal Coach Fees: " + totalCFee);
+        System.out.println("\nTotal Expenses: " + totalExp);
 
         return totalExp;
     }
