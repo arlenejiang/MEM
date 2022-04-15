@@ -802,16 +802,9 @@ public class MEM {
     public static void changeCoach(AMember member) throws IOException {
         System.out.println("Are you sure you want to change the coach? (Y or N)");
         String c = in.nextLine();
-        String email="";
-        for (java.util.Map.Entry<String, AMember> entry : ClubManager.members.entrySet()) {
-            AMember m = entry.getValue();
-            if (member.getRole().equals("Coach")) {
-                email = m.getEmail();
-            }
-        }
 
         if (c.equalsIgnoreCase("Y")) {
-            ClubManager.members.remove(email);
+            ClubManager.members.remove(ACoach.email);
             ClubManager.toFile("User_Info.txt");
             System.out.println("Please enter the information on behalf of the new coach.");
             RegisterationQuestions(new ClubManager(), true);
