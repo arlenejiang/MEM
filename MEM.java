@@ -874,7 +874,7 @@ public class MEM {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse(manager.emailsToString()) 
+                    InternetAddress.parse(em) 
             );
             message.setSubject(subj);
             message.setText("Hi there! \n\n"
