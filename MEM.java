@@ -482,7 +482,8 @@ public class MEM {
             // insert finance code method here
             if (member.getRole().equals("Treasurer")) {
                 System.out.print("\nDisplay Debts (D)\t");
-                System.out.print("Display Payables (P)\n\n");
+                System.out.print("Display Payables (P)\t");
+                System.out.print("Display Income Statement (I)\n\n");
                 System.out.print(">");
                 option = in.nextLine();
                 if (option.equalsIgnoreCase("D")) {
@@ -496,6 +497,10 @@ public class MEM {
                 if (option.equalsIgnoreCase("P")) {
                     clearConsole();
                     Finances.displayPayables();
+                }
+                if (option.equalsIgnoreCase("I")){
+                    clearConsole();
+                    Finances.incomeStatement();
                 }
                 returnOrExit(member);
             } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
