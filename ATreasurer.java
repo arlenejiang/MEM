@@ -5,6 +5,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.mail.Session;
+import javax.mail.Transport;
+import java.util.Properties;
+
 public class ATreasurer extends AMember {
 
     static Map<String, Integer> payments = new TreeMap<String, Integer>();
@@ -89,6 +95,7 @@ public class ATreasurer extends AMember {
                         // for(int i=0; i<(person.getBalance()/10); i+=10) {
                         person.updateNumOfPayments();// }
                         iterator.remove();
+                        PaymentEmail(entry.getKey(), String.valueOf(entry.getValue()), "a");
 
                     }
                 }
@@ -103,8 +110,10 @@ public class ATreasurer extends AMember {
             else if (option.equalsIgnoreCase("D")) {
                 clearConsole();
                 System.out.println("Payment Denied");
+                PaymentEmail(entry.getKey(), String.valueOf(entry.getValue()), "d");
                 // ClubManager.toFile("PendingPayments.txt");
                 iterator.remove();
+                ClubManager.toFile("PendingPayments.txt");
 
             }
 
@@ -115,5 +124,60 @@ public class ATreasurer extends AMember {
     public static void clearConsole() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+    }
+
+    public static void PaymentEmail(String memberEmail, String amount, String option) throws IOException {
+
+        String receiver = memberEmail;
+        String paypalEmail = "group66paypal@gmail.com";
+        String paypalPassword = "april2022";
+
+        String subj = "";
+        String body = "";
+
+        if (option.equalsIgnoreCase("A")) {
+            subj = "Payment Successful!";
+            body = "The amount $" + amount + "(CAD) has been successfully deposited to your account.";
+        }
+
+        else if (option.equalsIgnoreCase("D")) {
+            subj = "Cancelled Transaction";
+            body = "Your transaction was denied. Please try again!";
+        }
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(paypalEmail, paypalPassword);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(paypalEmail));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    //
+                    InternetAddress.parse(receiver) // For 1 person, just enter the email string ex:
+                                                    // "kffjk322@gmail.com"
+            );
+            message.setSubject(subj);
+            message.setText("Hello! \n\n"
+                    + body);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 }
