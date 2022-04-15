@@ -443,6 +443,9 @@ public class MEM {
             System.out.print("Attendance (A)\t");
             System.out.print("Change Coach (CC)\t");
             System.out.print("\nCheck Coach for Current Month (CM)\t");
+            System.out.print("Dicount List (DC)\t");
+            System.out.print("Penalty Fee List (PF)\t");
+
         }
         if (!(member.getRole().equals("Coach"))) {
             System.out.print("Finances (F)\t");
