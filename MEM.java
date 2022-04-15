@@ -438,8 +438,8 @@ public class MEM {
             System.out.print("Payment Records (R)\t");
             System.out.print("Unpaid Records(U)\t");
             System.out.print("Attendance (A)\t");
-            System.out.print("Change Coach (CC)");
-            System.out.print("Check Coach for Current Month (CM)");
+            System.out.print("Change Coach (CC)\t");
+            System.out.print("Check Coach for Current Month (CM)\t");
         }
         System.out.print("Finances (F)\t");
         System.out.print("Practice Schedule (P)\t");
