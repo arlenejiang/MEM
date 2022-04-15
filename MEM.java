@@ -500,7 +500,7 @@ public class MEM {
                 }
                 if (option.equalsIgnoreCase("I")){
                     clearConsole();
-                    Finances.incomeStatement();
+                    Finances.displayIncomeStatement();
                 }
                 returnOrExit(member);
             } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {

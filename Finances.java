@@ -129,6 +129,18 @@ public class Finances {
         System.out.println("\n");
     }
 
+    public static void displayIncomeStatement(){
+        //Move below somewhere else
+        System.out.print("** INCOME STATEMENT **");
+        System.out.println("----------------------------------------------\nRevenue");
+        System.out.println(rev);
+        System.out.println("----------------------------------------------\nExpenses");
+        System.out.println(exps);
+        System.out.println("----------------------------------------------\nProfit");
+        System.out.println("Total: ");
+        //Move above somewhere else
+    }
+
     // Clears the console
     public static void clearConsole() {
         System.out.print("\033[H\033[2J");
