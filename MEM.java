@@ -494,6 +494,7 @@ public class MEM {
 
             System.out.println("List of members based the amount of times they missed payments (Ascending order)\n");
             ClubManager.printSortedList("U");
+            ClubManager.countNumOfMissingPayments();
             System.out.println();
             returnOrExit(member);
 

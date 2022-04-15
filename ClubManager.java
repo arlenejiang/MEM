@@ -17,6 +17,8 @@ public class ClubManager {
 
     static Map<String, AMember> members = new TreeMap<String, AMember>();
     static ArrayList<MemberBalance> balancesSort = new ArrayList<MemberBalance>();
+    static ArrayList<String> discount = new ArrayList<String>();
+    static ArrayList<String> penalty = new ArrayList<String>();
 
     Scanner in = new Scanner(System.in);
     File file = new File("User_Info.txt");
@@ -192,11 +194,12 @@ public class ClubManager {
     }
 
     // for debugging
-    public static void print() {
-        System.out.println("\nprint from print()\n");
-        for (int i = 0; i < balancesSort.size(); i++)
-            System.out.println(balancesSort.get(i));
+    public static void print(ArrayList<String> arr) {
+        //System.out.println("\nprint from print()\n");
+        for (int i = 0; i < arr.size(); i++)
+            System.out.println(arr.get(i));
     }
+
 
     public static void sortPaid() {
         Collections.sort(balancesSort);
@@ -242,4 +245,29 @@ public class ClubManager {
 
     }
 
+    public static void countNumOfMissingPayments(){
+        File balfile = new File("Balances.txt");
+
+        fromFile(balfile);
+        for(String email : ATreasurer.balance.keySet()){
+            if (ATreasurer.balance.get(email).getMissingPayments() >= 1){
+                try{
+                    ATreasurer.PaymentEmail(email, String.valueOf(ATreasurer.balance.get(email).getNumOfPayments()), "M");
+                    System.out.println("Email to " + email + " sent successfully"); // for debugging
+                    penalty.add(email);
+                } catch(IOException e){
+                    System.out.println("IO Exception");
+                }
+            }
+            else{
+                discount.add(email);
+            }
+        }
+        System.out.println("\nDiscount:");
+        print(discount);
+        System.out.println("\nPenalty:");
+        print(penalty);
+    }
+
+    
 }

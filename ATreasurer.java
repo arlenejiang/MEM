@@ -131,45 +131,60 @@ public class ATreasurer extends AMember {
 
     public static void PaymentEmail(String memberEmail, String amount, String option) throws IOException {
 
-        String receiver = memberEmail;
-        String paypalEmail = "group66paypal@gmail.com";
-        String paypalPassword = "april2022";
-
-        String subj = "";
-        String body = "";
-
-        if (option.equalsIgnoreCase("C")) {
-            receiver = "group66club@gmail.com";
-            subj = "Money Sent from " + memberEmail;
-            body = memberEmail + " sent you $" + amount + "(CAD).";
-        }
-
-        else if (option.equalsIgnoreCase("A")) {
-            subj = "Payment Successful!";
-            body = "Payment approved. The amount $" + amount
-                    + "(CAD) has been successfully deposited into your account.";
-        }
-
-        else if (option.equalsIgnoreCase("D")) {
-            subj = "Cancelled Transaction";
-            body = "Your transaction was denied. Please try again!";
-        }
-
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "imap.gmail.com");
         prop.put("mail.smtp.port", "587");
         prop.put("mail.smtp.auth", "true");
         prop.put("mail.smtp.starttls.enable", "true");
 
-        Session session = Session.getInstance(prop,
+        String receiver = memberEmail;
+        String paypalEmail = "group66paypal@gmail.com";
+        String paypalPassword = "april2022";
+
+        String subj = "";
+        String body = "";
+        Session session;
+
+        
+
+        if (option.equalsIgnoreCase("M")) {
+            session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication("group66club@gmail.com", paypalPassword);
+                    }
+                });
+            subj = "Missing Payments";
+            body = "You have missed " + amount + " months of payment.";
+        }
+        else{
+            if (option.equalsIgnoreCase("C")) {
+            receiver = "group66club@gmail.com";
+            subj = "Money Sent from " + memberEmail;
+            body = memberEmail + " sent you $" + amount + "(CAD).";
+            }
+
+            else if (option.equalsIgnoreCase("A")) {
+                subj = "Payment Successful!";
+                body = "Payment approved. The amount $" + amount
+                        + "(CAD) has been successfully deposited into your account.";
+            }
+
+            else if (option.equalsIgnoreCase("D")) {
+                subj = "Cancelled Transaction";
+                body = "Your transaction was denied. Please try again!";
+            }
+
+            session = Session.getInstance(prop,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(paypalEmail, paypalPassword);
                     }
                 });
 
-        try {
+        }
 
+        try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(paypalEmail));
             message.setRecipients(
