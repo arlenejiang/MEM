@@ -431,6 +431,7 @@ public class MEM {
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         if (member.getRole().equals("Coach")) {
             System.out.print("Send Annoucement (S)\t");
+            System.out.print("Email a ClubMember (E)\t");
             System.out.print("Attendance (A)\t");
             System.out.print("Edit List of Members (M)\t");
         } else if (member.getRole().equals("Treasurer")) {
@@ -454,6 +455,21 @@ public class MEM {
                 System.out.println("*** Send Announcement ***\n");
                 // method for sending email through java code
                 sendAnnouncements(member.email, member.password, member.firstName + member.lastName);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            clearConsole();
+            System.out.println("Announcement Successfully Sent\n");
+
+            // Allows the user to choose if they want to return to the main screen or exit
+            // after senting a annoucement
+            returnOrExit(member);
+         } else if (option.equalsIgnoreCase("E")) {
+            try {
+                clearConsole();
+                System.out.println("*** Send Email ***\n");
+                // method for sending email through java code
+                sendEmail(member, member.email, member.password, member.firstName + member.lastName);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -804,6 +820,74 @@ public class MEM {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void sendEmail(AMember member, String coachEmail, String coachPassword, String fullname) throws IOException{
+        final String username = coachEmail;
+        final String password = coachPassword;
+
+        ClubManager manager = null;
+        try {
+            manager = new ClubManager();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        manager.printAllNamesEmails();
+
+        System.out.println("Enter the recipient's email: ");
+        String em = in.nextLine();
+        while(manager.checkEmail(em) != true || em.equalsIgnoreCase("Q")){
+            System.out.println("Enter a valid email or (Q) for Main: ");
+            em = in.nextLine();
+            if(em.equalsIgnoreCase("Q")){
+                clearConsole();
+                AfterLogIn(member);
+            }
+        }
+        System.out.println("Enter the subject line: ");
+        String subj = in.nextLine();
+        System.out.println("Enter the body of the email (Press S to Send): ");
+        String body = "";
+        String next;
+        while (in.hasNextLine() && !(next = in.nextLine()).equals("S")) {
+            body += next;
+            body += "\n";
+        }
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); // TLS
+
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                        return new javax.mail.PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(manager.emailsToString()) 
+            );
+            message.setSubject(subj);
+            message.setText("Hi there! \n\n"
+                    + body + "\n\n" + fullname);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // Clears the console

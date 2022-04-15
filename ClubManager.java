@@ -55,6 +55,14 @@ public class ClubManager {
         return removeSplice;
     }
 
+    public void printAllNamesEmails(){
+        String full = "";
+        for (String email : members.keySet()){
+            full += members.get(email).getFirstName() + " " + members.get(email).getLastName() + " " + email + "\n";
+        }
+        System.out.println("Type one of the following emails: \n" + full);
+    }
+
     public static void fromFile(File file) {
 
         Scanner sc = null;
