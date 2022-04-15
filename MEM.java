@@ -315,9 +315,10 @@ public class MEM {
         if(!(t)){
             MemberBalance person = new MemberBalance(email, 0, 0, 0);
             ATreasurer.balance.put(email, person);
+            ClubManager.toFile("Balances.txt");
         }
         
-        ClubManager.toFile("Balances.txt");
+        
     }
 
     // Log in Feature
