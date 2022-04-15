@@ -501,7 +501,13 @@ public class MEM {
                 if (option.equalsIgnoreCase("I")){
                     clearConsole();
                     int rev = displayRevenue();
-                    int exp = Finances.displayExpenses();
+                    int exp;
+                    try{
+                        exp = Finances.displayExpenses();
+                    } catch(IOException e){
+                        exp = 0;
+
+                    }
                     Finances.displayProfit(rev - exp);
                 }
                 returnOrExit(member);
