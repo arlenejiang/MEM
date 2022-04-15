@@ -65,9 +65,13 @@ public class Draft {
                 }
             }
         }
+        System.out.println("\n\n");
     }
     public static void writeAttendanceLog(LocalDate classToLog) throws IOException{
-        readAttendanceLog();
+        if ((readAttendanceLog()).equals(classToLog)) {
+            System.out.println("Already took today's attendance");
+            return;
+        }
         // Check time for a classToLog
         String pastAttendance;
         MemberBalance mb;
@@ -106,28 +110,13 @@ public class Draft {
         new File("atttendance.txt");
     
         PrintWriter out = new PrintWriter("attendance.txt");
+        out.println(LocalDate.now());
         
         for (AMember person: ClubManager.members.values())
         {
             if (person.getRole().equals("Member")) {
             out.print(person.getFirstName() + " " + person.getLastName() + " " + person.getEmail() + " ");
-            //System.out.print(person.getFirstName() + "," + person.getFirstClass() + " ");
-            if (person.getFirstClass() != null)
-            {
-            	out.print(person.getFirstClass() + " ");
-            }
-            if (person.getSecondClass() != null)
-            {
-            	out.print(person.getSecondClass() + " ");
-            }
-            if (person.getThirdClass() != null)
-            {
-            	out.print(person.getThirdClass() + " ");
-            }
-            if (person.getFourthClass() != null)
-            {
-            	out.print(person.getFourthClass());
-            }
+            out.print(person.getAttendance());
             out.println();
         }
         }
