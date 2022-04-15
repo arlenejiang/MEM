@@ -431,6 +431,7 @@ public class MEM {
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         if (member.getRole().equals("Coach")) {
             System.out.print("Send Annoucement (S)\t");
+            System.out.print("Email a ClubMember (E)\t");
             System.out.print("Attendance (A)\t");
             System.out.print("Edit List of Members (M)\t");
         } else if (member.getRole().equals("Treasurer")) {
@@ -458,6 +459,21 @@ public class MEM {
                 System.out.println("*** Send Announcement ***\n");
                 // method for sending email through java code
                 sendAnnouncements(member.email, member.password, member.firstName + member.lastName);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            clearConsole();
+            System.out.println("Announcement Successfully Sent\n");
+
+            // Allows the user to choose if they want to return to the main screen or exit
+            // after senting a annoucement
+            returnOrExit(member);
+         } else if (option.equalsIgnoreCase("E")) {
+            try {
+                clearConsole();
+                System.out.println("*** Send Email ***\n");
+                // method for sending email through java code
+                sendEmail(member, member.email, member.password, member.firstName + member.lastName);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -503,7 +519,8 @@ public class MEM {
             // insert finance code method here
             if (member.getRole().equals("Treasurer")) {
                 System.out.print("\nDisplay Debts (D)\t");
-                System.out.print("Display Payables (P)\n\n");
+                System.out.print("Display Payables (P)\t");
+                System.out.print("Display Income Statement (I)\n\n");
                 System.out.print(">");
                 option = in.nextLine();
                 if (option.equalsIgnoreCase("D")) {
@@ -517,6 +534,18 @@ public class MEM {
                 if (option.equalsIgnoreCase("P")) {
                     clearConsole();
                     Finances.displayPayables();
+                }
+                if (option.equalsIgnoreCase("I")){
+                    clearConsole();
+                    int rev = displayRevenue();
+                    int exp;
+                    try{
+                        exp = Finances.displayExpenses();
+                    } catch(IOException e){
+                        exp = 0;
+
+                    }
+                    Finances.displayProfit(rev - exp);
                 }
                 returnOrExit(member);
             } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
@@ -740,6 +769,28 @@ public class MEM {
 
     }
 
+    public static int displayRevenue(){
+        MemberBalance membal = null;
+        String rev = "";
+        int revsum = 0; //the sum of the revenue
+                    
+        for(Entry<String, MemberBalance> en : ATreasurer.balance.entrySet()){
+            membal = en.getValue();
+            rev += "Member- " + membal.getEmail() + "............................. $";
+            int memb = membal.getBalance();
+            rev += String.valueOf(memb);
+            rev += "\n";
+            revsum += memb;
+        }
+
+        Finances.getData();
+        System.out.println("** INCOME STATEMENT **");
+        System.out.println("----------------------------------------------\nRevenue:");
+        System.out.println(rev);
+        System.out.println("Total Revenue: $" + revsum);
+        return revsum; 
+    }
+
     /*
      * NOTE: Can only send through Gmail. Can send to any address.
      * 
@@ -807,6 +858,74 @@ public class MEM {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void sendEmail(AMember member, String coachEmail, String coachPassword, String fullname) throws IOException{
+        final String username = coachEmail;
+        final String password = coachPassword;
+
+        ClubManager manager = null;
+        try {
+            manager = new ClubManager();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        manager.printAllNamesEmails();
+
+        System.out.println("Enter the recipient's email: ");
+        String em = in.nextLine();
+        while(manager.checkEmail(em) != true || em.equalsIgnoreCase("Q")){
+            System.out.println("Enter a valid email or (Q) for Main: ");
+            em = in.nextLine();
+            if(em.equalsIgnoreCase("Q")){
+                clearConsole();
+                AfterLogIn(member);
+            }
+        }
+        System.out.println("Enter the subject line: ");
+        String subj = in.nextLine();
+        System.out.println("Enter the body of the email (Press S to Send): ");
+        String body = "";
+        String next;
+        while (in.hasNextLine() && !(next = in.nextLine()).equals("S")) {
+            body += next;
+            body += "\n";
+        }
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); // TLS
+
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                        return new javax.mail.PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(em) 
+            );
+            message.setSubject(subj);
+            message.setText("Hi there! \n\n"
+                    + body + "\n\n" + fullname);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // Clears the console
