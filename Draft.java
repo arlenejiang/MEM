@@ -6,7 +6,9 @@ import java.time.*;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Scanner;
+import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.Map;
 
 public class Draft {
 
@@ -67,6 +69,72 @@ public class Draft {
         }
         System.out.println("\n\n");
     }
+
+    public static void displayScheduleLog() throws FileNotFoundException {
+
+        Map<String, Integer[]> tempLog = new TreeMap<String, Integer[]>();
+        Map<String, Integer> tempMoneyLog = new TreeMap<String, Integer>();
+
+        // Get scheduled classes
+        for (Entry<String, AMember> entry : ClubManager.members.entrySet()) {
+            AMember member = entry.getValue();
+            if (member.getRole().equals("Member")) {
+                Integer [] cl = new Integer[] {0, 0, 0, 0};
+                if (member.getFirstClass()!=null){
+                    cl[0] = 1;
+                }
+                if (member.getSecondClass()!=null){
+                    cl[1] = 1;
+                }if (member.getThirdClass()!=null){
+                    cl[2] = 1;
+                }if (member.getFourthClass()!=null){
+                    cl[3] = 1;
+                }
+                tempLog.put(member.getEmail(), cl);
+            }
+        }
+
+        // Get each member's funds
+        for (String emailAdd : ATreasurer.balance.keySet()) {
+            tempMoneyLog.put(emailAdd, ATreasurer.balance.get(emailAdd).getBalance());
+        }
+        
+        // Output
+        System.out.println("\n\nSCHEDULED PARTICIPANTS");
+
+        LocalDate dt;
+        LocalDate friday = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY));
+
+        for (int i = 0; i < 4; i++) {
+            dt = friday.plusDays(i*7);
+            System.out.println("\n"+dt);
+
+            for (String emailAdd : tempLog.keySet()) {
+                if (tempLog.get(emailAdd)[i] == 1) {
+                    AMember m = ClubManager.members.get(emailAdd);
+                    System.out.print(m.getFirstName() + " "+ m.getLastName() + " " + 
+                    m.getPhoneNumber() + " " + m.getAddress());
+                    
+                    Integer money = tempMoneyLog.get(emailAdd) - 10;
+                    tempMoneyLog.put(emailAdd, money);
+
+                    if (tempMoneyLog.get(emailAdd) > 0 ){
+                        System.out.print("\t PAID\n");
+                    }
+                    else {
+                        System.out.print("\t UNPAID\n");
+                    }
+
+                }
+            }
+            System.out.println("\n");
+        }
+    }
+            
+
+        
+
+
     public static void writeAttendanceLog(LocalDate classToLog) throws IOException{
         if ((readAttendanceLog()).equals(classToLog)) {
             System.out.println("Already took today's attendance");

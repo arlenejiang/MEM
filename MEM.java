@@ -627,8 +627,9 @@ public class MEM {
 				if (LocalDate.now().getDayOfWeek() == DayOfWeek.FRIDAY) {
                     System.out.print("\nTake Attendance (T)\t");;
                 }
+				System.out.print("Display Scheduled Attendees (S)\t");;
 				System.out.print("Display Attendance (D)\n\n");
-				System.out.print(">");
+				System.out.print("> ");
 				option = in.nextLine();
 				if (LocalDate.now().getDayOfWeek() == DayOfWeek.FRIDAY && option.equalsIgnoreCase("T")) {
 					try {
@@ -637,6 +638,10 @@ public class MEM {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+				}
+				if (option.equalsIgnoreCase("S")) {
+					clearConsole();
+					Draft.displayScheduleLog();
 				}
 				if (option.equalsIgnoreCase("D")) {
 					clearConsole();
