@@ -623,15 +623,29 @@ public class MEM {
 			returnOrExit(member);
 		} else if (option.equalsIgnoreCase("A")) {
 			// insert make a attendance method here
-            Draft.displayAttendanceLog();
-			returnOrExit(member);
-		} else if (option.equalsIgnoreCase("C")) {
-			reset_password();
-		}else if (option.equalsIgnoreCase("E")) {
-			clearConsole();
-			System.out.println("\nHave a nice day\n");
-			System.exit(0);
-		}
+            if (member.getRole().equals("Treasurer") || member.getRole().equals("Coach")) {
+				if (LocalDate.now().getDayOfWeek() == DayOfWeek.FRIDAY) {
+                    System.out.print("\nTake Attendance (T)\t");;
+                }
+				System.out.print("Display Attendance (D)\n\n");
+				System.out.print(">");
+				option = in.nextLine();
+				if (LocalDate.now().getDayOfWeek() == DayOfWeek.FRIDAY && option.equalsIgnoreCase("T")) {
+					try {
+						clearConsole();
+						Draft.writeAttendanceLog(LocalDate.now());
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (option.equalsIgnoreCase("D")) {
+					clearConsole();
+					Draft.displayAttendanceLog();
+				}
+                //
+            }
+            returnOrExit(member);
+        }
 	}
 	public static void schedule()
 	{
