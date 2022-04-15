@@ -520,6 +520,33 @@ public class MEM {
             System.out.println();
             returnOrExit(member);
 
+        } else if (option.equalsIgnoreCase("DC")) {
+
+            clearConsole();
+            ClubManager.countNumOfMissingPayments("DC");
+            System.out.println();
+            returnOrExit(member);
+
+        } else if (option.equalsIgnoreCase("PF")) {
+
+            clearConsole();
+            ClubManager.countNumOfMissingPayments("PF");
+            System.out.println();
+            System.out.println("Send Reminder Email(1)\tReturn to Main Screen(2)");
+            System.out.print("\n> ");
+
+            int anotherInput = convertInputToInteger(2, 1);
+
+            if (anotherInput == 1) {
+                clearConsole();
+                ClubManager.SendRemainder("Y");
+                returnOrExit(member);
+
+            } else if (anotherInput == 2) {
+                clearConsole();
+                AfterLogIn(member);
+            }
+
         } else if (option.equalsIgnoreCase("F")) {
             // insert finance code method here
             if (member.getRole().equals("Treasurer")) {

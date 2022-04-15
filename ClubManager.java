@@ -19,6 +19,8 @@ public class ClubManager {
 
     static Map<String, AMember> members = new TreeMap<String, AMember>();
     static ArrayList<MemberBalance> balancesSort = new ArrayList<MemberBalance>();
+    static ArrayList<String> discount = new ArrayList<String>();
+    static ArrayList<String> penalty = new ArrayList<String>();
 
     Scanner in = new Scanner(System.in);
     File file = new File("User_Info.txt");
@@ -34,7 +36,6 @@ public class ClubManager {
 
     // Add's a new member to the member's treeMap.
     // Writes out all the members to User_Info.txt
-  
     public void registerMember(String first, String last, String phoneNumber, String email, String password, String address) throws IOException {
         AMember person = new AMember(first, last, phoneNumber, email, password, "Member", address);
         members.put(email, person);
@@ -136,7 +137,7 @@ public class ClubManager {
                     //System.out.println(line);////////debugging
                     word = new Scanner(line);
                     MemberBalance person = new MemberBalance(word.next(), word.nextInt(), word.nextInt(), word.nextInt());
-
+                  
                     ATreasurer.balance.put(person.getEmail(), person);
 
                     balancesSort.add(person); // adds member balances to the array list
@@ -372,10 +373,10 @@ public class ClubManager {
 	}
 
     // for debugging
-    public static void print() {
-        System.out.println("\nprint from print()\n");
-        for (int i = 0; i < balancesSort.size(); i++)
-            System.out.println(balancesSort.get(i));
+    public static void print(ArrayList<String> arr) {
+        // System.out.println("\nprint from print()\n");
+        for (int i = 0; i < arr.size(); i++)
+            System.out.println(arr.get(i));
     }
 
     public static void sortPaid() {
@@ -394,12 +395,6 @@ public class ClubManager {
     }
 
     public static void printSortedList(String option) {
-
-        // System.out.println("Unsorted List");
-        // System.out.println();
-
-        // for (int i = 0; i < balancesSort.size(); i++)
-        // System.out.println(balancesSort.get(i));
 
         if (option.equalsIgnoreCase("P")) {
             sortPaid();
@@ -421,4 +416,49 @@ public class ClubManager {
         System.out.println();
 
     }
+
+    public static void countNumOfMissingPayments(String option) {
+        File balfile = new File("Balances.txt");
+
+        fromFile(balfile);
+        for (String email : ATreasurer.balance.keySet()) {
+            if (ATreasurer.balance.get(email).getMissingPayments() >= 1) {
+                penalty.add(email);
+            } else {
+                discount.add(email);
+            }
+        }
+
+        if (option.equalsIgnoreCase("DC")) {
+            System.out.println("\nDiscount List:");
+            print(discount);
+        }
+
+        else if (option.equalsIgnoreCase("PF")) {
+            System.out.println("\nPenalty Fee List:");
+            print(penalty);
+        }
+
+    }
+
+    public static void SendRemainder(String option) {
+        File balfile = new File("Balances.txt");
+        fromFile(balfile);
+
+        if (option.equalsIgnoreCase("Y")) {
+            for (String email : ATreasurer.balance.keySet()) {
+                if (ATreasurer.balance.get(email).getMissingPayments() >= 1) {
+                    try {
+                        ATreasurer.PaymentEmail(email,
+                                String.valueOf(ATreasurer.balance.get(email).getMissingPayments()),
+                                "M");
+                        System.out.println("Email to " + email + " sent successfully"); // for debugging
+                    } catch (IOException e) {
+                        System.out.println("IO Exception");
+                    }
+                }
+            }
+        }
+    }
 }
+
