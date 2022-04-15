@@ -129,16 +129,70 @@ public class Finances {
         System.out.println("\n");
     }
 
-    public static void displayIncomeStatement(){
-        //Move below somewhere else
-        System.out.print("** INCOME STATEMENT **");
-        System.out.println("----------------------------------------------\nRevenue");
-        System.out.println(rev);
-        System.out.println("----------------------------------------------\nExpenses");
-        System.out.println(exps);
-        System.out.println("----------------------------------------------\nProfit");
-        System.out.println("Total: ");
-        //Move above somewhere else
+    public static int displayExpenses() {
+        System.out.println("----------------------------------------------\nExpenses:");
+        //List out all expenses.
+
+        int c = 0, r = 0;
+    
+        String cDate, rDate, cFee, rFee, cYear, rYear, cMonth, rMonth;
+        
+        int totalRFee = 0, totalCFee = 0;
+
+        while (c < (coachFees.size() - 1) || r < (rentMonths.size()) - 1) {
+            cDate = coachFees.get(c);
+            cFee = cDate.split(" ")[2];
+            cYear = cDate.split(" ")[1];
+            cMonth = cDate.split(" ")[0];
+            rDate = rentMonths.get(r);
+            rFee = rDate.split(" ")[2];
+            rYear = rDate.split(" ")[1];
+            rMonth = rDate.split(" ")[0];
+    
+                // Print unpaid charges by due date
+            if (Integer.valueOf(rYear) < Integer.valueOf(cYear) ||
+                (cYear.equals(rYear) &&
+                    Arrays.asList(mos).indexOf(rMonth) <= Arrays.asList(mos).indexOf(cMonth))) {
+                System.out.printf("Hall-Rent (%s/1/%s)", rMonth.substring(0, 3), rYear);
+                System.out.printf("\t$%s\n", rFee);
+                totalRFee += Integer.parseInt(rFee);
+                r++;
+    
+            } else {
+                System.out.printf("Coach Fees (%s/1/%s)", cMonth.substring(0, 3), cYear);
+                System.out.printf("\t$%s\n", cFee);
+                totalCFee += Integer.parseInt(cFee);
+                c++;
+            }
+        }
+        if (c < coachFees.size() - 1) {
+            cDate = coachFees.get(c);
+            cFee = cDate.split(" ")[2];
+            cYear = cDate.split(" ")[1];
+            cMonth = cDate.split(" ")[0];
+            System.out.printf("Coach Fees (%s/1/%s)", cMonth.substring(0, 3), cYear);
+            System.out.printf("\t$%s\n", cFee);
+            totalCFee += Integer.parseInt(cFee);
+        } else {
+            rDate = rentMonths.get(r);
+            rFee = rDate.split(" ")[2];
+            rYear = rDate.split(" ")[1];
+            rMonth = rDate.split(" ")[0];
+            System.out.printf("Hall-Rent (%s/1/%s)", rMonth.substring(0, 3), rYear);
+            System.out.printf("\t$%s\n", rFee);
+            totalRFee += Integer.parseInt(rFee);
+        }
+        int totalExp = totalRFee + totalCFee;
+        System.out.println("Total Hall Rent: " + totalRFee);
+        System.out.println("Total Coach Fees: " + totalCFee);
+        System.out.println("Total Expenses: " + totalExp);
+
+        return totalExp;
+    }
+
+    public static void displayProfit(int total){
+        System.out.println("----------------------------------------------\nProfit:");
+        System.out.println("Total Profit for: $" + total);
     }
 
     // Clears the console

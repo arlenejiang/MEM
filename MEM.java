@@ -500,7 +500,9 @@ public class MEM {
                 }
                 if (option.equalsIgnoreCase("I")){
                     clearConsole();
-                    Finances.displayIncomeStatement();
+                    int rev = displayRevenue();
+                    int exp = Finances.displayExpenses();
+                    Finances.displayProfit(rev - exp);
                 }
                 returnOrExit(member);
             } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
@@ -705,6 +707,28 @@ public class MEM {
             returnOrExit(member);
         }
 
+    }
+
+    public static int displayRevenue(){
+        MemberBalance membal = null;
+        String rev = "";
+        int revsum = 0; //the sum of the revenue
+                    
+        for(Entry<String, MemberBalance> en : ATreasurer.balance.entrySet()){
+            membal = en.getValue();
+            rev += "Member- " + membal.getEmail() + "............................. $";
+            int memb = membal.getBalance();
+            rev += String.valueOf(memb);
+            rev += "\n";
+            revsum += memb;
+        }
+
+        Finances.getData();
+        System.out.println("** INCOME STATEMENT **");
+        System.out.println("----------------------------------------------\nRevenue:");
+        System.out.println(rev);
+        System.out.println("Total Revenue: $" + revsum);
+        return revsum; 
     }
 
     /*
