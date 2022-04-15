@@ -802,9 +802,9 @@ public class MEM {
     public static void changeCoach(AMember member) throws IOException {
         System.out.println("Are you sure you want to change the coach? (Y or N)");
         String c = in.nextLine();
-
+        ACoach n = new ACoach();
         if (c.equalsIgnoreCase("Y")) {
-            ClubManager.members.remove(ACoach.email);
+            ClubManager.members.remove(n.getEmail());
             ClubManager.toFile("User_Info.txt");
             System.out.println("Please enter the information on behalf of the new coach.");
             RegisterationQuestions(new ClubManager(), true);
