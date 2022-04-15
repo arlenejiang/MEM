@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -15,6 +18,8 @@ import java.time.temporal.TemporalAdjusters;
 public class ClubManager {
 
     static Map<String, AMember> members = new TreeMap<String, AMember>();
+    static ArrayList<MemberBalance> balancesSort = new ArrayList<MemberBalance>();
+
     Scanner in = new Scanner(System.in);
     File file = new File("User_Info.txt");
     
@@ -29,8 +34,8 @@ public class ClubManager {
 
     // Add's a new member to the member's treeMap.
     // Writes out all the members to User_Info.txt
-    public void registerMember(String first, String last, String phoneNumber, String email, String password, String address)
-            throws FileNotFoundException {
+  
+    public void registerMember(String first, String last, String phoneNumber, String email, String password, String address) throws IOException {
         AMember person = new AMember(first, last, phoneNumber, email, password, "Member", address);
         members.put(email, person);
 
@@ -65,6 +70,14 @@ public class ClubManager {
         }
 
         return removeSplice;
+    }
+
+    public void printAllNamesEmails(){
+        String full = "";
+        for (String email : members.keySet()){
+            full += members.get(email).getFirstName() + " " + members.get(email).getLastName() + " " + email + "\n";
+        }
+        System.out.println("Type one of the following emails: \n" + full);
     }
 
     public static void fromFile(File file) {
@@ -131,9 +144,19 @@ public class ClubManager {
                     MemberBalance person = new MemberBalance(word.next(), word.nextInt(), word.nextInt(), word.nextInt());
 
                     ATreasurer.balance.put(person.getEmail(), person);
+
+                    balancesSort.add(person); // adds member balances to the array list
+                    // for (int i = 0; i < balancesSort.size(); i++)
+                    // System.out.println(balancesSort.get(i));
+                    // // System.out.println(person);
+                    // System.out.println("\nAfter\n");
+
                     word.close();
                 }
-                //System.out.println("Import Donefrom4");
+                // System.out.println("Import Donefrom4");
+                // System.out.println("Outside\n"); For Debugging
+                // for (int i = 0; i < balancesSort.size(); i++)
+                // System.out.println(balancesSort.get(i));
             }
 
         } catch (FileNotFoundException e) {
@@ -142,7 +165,6 @@ public class ClubManager {
 			e.printStackTrace();
 		}
         sc.close();
-
     }
 
     public static void toFile(String fileName) throws IOException{
@@ -191,6 +213,7 @@ public class ClubManager {
             }
         }
     }
+  
     public void scheduleClass(AMember member, int input, LocalDate date) throws FileNotFoundException
     {
     	for (String email: members.keySet())
@@ -352,4 +375,55 @@ public class ClubManager {
 		System.out.print("\033[H\033[2J");
 		System.out.flush();
 	}
+
+    // for debugging
+    public static void print() {
+        System.out.println("\nprint from print()\n");
+        for (int i = 0; i < balancesSort.size(); i++)
+            System.out.println(balancesSort.get(i));
+    }
+
+    public static void sortPaid() {
+        Collections.sort(balancesSort);
+    }
+
+    private static class UnpaidComparator implements Comparator<MemberBalance> {
+        public int compare(MemberBalance missingPayment1, MemberBalance missingPayment2) {
+            return Integer.compare(missingPayment1.getMissingPayments(), missingPayment2.getMissingPayments());
+        }
+    }
+
+    public static void sortUnpaid() {
+        Collections.sort(balancesSort, new UnpaidComparator());
+
+    }
+
+    public static void printSortedList(String option) {
+
+        // System.out.println("Unsorted List");
+        // System.out.println();
+
+        // for (int i = 0; i < balancesSort.size(); i++)
+        // System.out.println(balancesSort.get(i));
+
+        if (option.equalsIgnoreCase("P")) {
+            sortPaid();
+            System.out.println("\tMember\t\t\t\tNumber Of Payments\n");
+
+            for (int i = 0; i < balancesSort.size(); i++)
+                System.out.printf("%-50s%-50d\n", balancesSort.get(i).email, balancesSort.get(i).numOfPayments);
+
+        }
+
+        else if (option.equalsIgnoreCase("U")) {
+            sortUnpaid();
+            System.out.println("\tMember\t\t\t\tNumber Of Missed Payments\n");
+
+            for (int i = 0; i < balancesSort.size(); i++)
+                System.out.printf("%-50s%-50d\n", balancesSort.get(i).email, balancesSort.get(i).missingPayments);
+        }
+
+        System.out.println();
+
+    }
 }
