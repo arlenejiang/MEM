@@ -440,7 +440,7 @@ public class MEM {
             System.out.print("Unpaid Records(U)\t");
             System.out.print("Attendance (A)\t");
             System.out.print("Change Coach (CC)\t");
-            System.out.print("Check Coach for Current Month (CM)\t");
+            System.out.print("\nCheck Coach for Current Month (CM)\t");
         }
         if(!(member.getRole().equals("Coach"))){
             System.out.print("Finances (F)\t");
@@ -745,7 +745,7 @@ public class MEM {
             System.exit(0);
         }
     }
-  
+
     public static void removeParticipant(List<String> peopleToBeRemoved) throws IOException {
         System.out.println("The following people were removed from the app: ");
         for (String email : peopleToBeRemoved) {
