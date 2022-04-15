@@ -252,7 +252,7 @@ public class ClubManager {
         for(String email : ATreasurer.balance.keySet()){
             if (ATreasurer.balance.get(email).getMissingPayments() >= 1){
                 try{
-                    ATreasurer.PaymentEmail(email, String.valueOf(ATreasurer.balance.get(email).getNumOfPayments()), "M");
+                    ATreasurer.PaymentEmail(email, String.valueOf(ATreasurer.balance.get(email).getMissingPayments()), "M");
                     System.out.println("Email to " + email + " sent successfully"); // for debugging
                     penalty.add(email);
                 } catch(IOException e){
