@@ -137,7 +137,8 @@ public class ATreasurer extends AMember {
 
         if (option.equalsIgnoreCase("A")) {
             subj = "Payment Successful!";
-            body = "The amount $" + amount + "(CAD) has been successfully deposited to your account.";
+            body = "Payment approved. The amount $" + amount
+                    + "(CAD) has been successfully deposited into your account.";
         }
 
         else if (option.equalsIgnoreCase("D")) {

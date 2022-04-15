@@ -439,6 +439,8 @@ public class MEM {
             System.out.print("Attendance (A)\t");
         } else if (member.getRole().equals("Treasurer")) {
             System.out.print("Pending Payments List (L)\t");
+            System.out.print("Payment Records (R)\t");
+            System.out.print("Unpaid Records(U)\t");
             System.out.print("Attendance (A)\t");
         }
         System.out.print("Finances (F)\t");
@@ -479,11 +481,22 @@ public class MEM {
             }
             System.out.println();
 
-            // ClubManager.sortPaid();
-            // System.out.println("\nafter sortPaid()");
-            ClubManager.print();
+        } else if (option.equalsIgnoreCase("R")) {
 
-            ClubManager.printSortedList();
+            clearConsole();
+
+            System.out.println("List of members based the amount of times they paid (Ascending order)\n");
+            ClubManager.printSortedList("P");
+            System.out.println();
+            returnOrExit(member);
+
+        } else if (option.equalsIgnoreCase("U")) {
+
+            clearConsole();
+
+            System.out.println("List of members based the amount of times they missed payments (Ascending order)\n");
+            ClubManager.printSortedList("U");
+            System.out.println();
             returnOrExit(member);
 
         } else if (option.equalsIgnoreCase("F")) {

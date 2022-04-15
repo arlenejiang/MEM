@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -206,29 +207,45 @@ public class ClubManager {
 
     public static void sortPaid() {
         Collections.sort(balancesSort);
-
-        // for debugging
-        // System.out.println("print from sortPaid()\n");
-        // for (int i = 0; i < balancesSort.size(); i++)
-        // System.out.println(balancesSort.get(i));
     }
 
-    public static void printSortedList() {
+    private static class UnpaidComparator implements Comparator<MemberBalance> {
+        public int compare(MemberBalance missingPayment1, MemberBalance missingPayment2) {
+            return Integer.compare(missingPayment1.getMissingPayments(), missingPayment2.getMissingPayments());
+        }
+    }
 
-        System.out.println("Unsorted List");
+    public static void sortUnpaid() {
+        Collections.sort(balancesSort, new UnpaidComparator());
+
+    }
+
+    public static void printSortedList(String option) {
+
+        // System.out.println("Unsorted List");
+        // System.out.println();
+
+        // for (int i = 0; i < balancesSort.size(); i++)
+        // System.out.println(balancesSort.get(i));
+
+        if (option.equalsIgnoreCase("P")) {
+            sortPaid();
+            System.out.println("\tMember\t\t\t\tNumber Of Payments\n");
+
+            for (int i = 0; i < balancesSort.size(); i++)
+                System.out.printf("%-50s%-50d\n", balancesSort.get(i).email, balancesSort.get(i).numOfPayments);
+
+        }
+
+        else if (option.equalsIgnoreCase("U")) {
+            sortUnpaid();
+            System.out.println("\tMember\t\t\t\tNumber Of Missed Payments\n");
+
+            for (int i = 0; i < balancesSort.size(); i++)
+                System.out.printf("%-50s%-50d\n", balancesSort.get(i).email, balancesSort.get(i).missingPayments);
+        }
+
         System.out.println();
-
-        for (int i = 0; i < balancesSort.size(); i++)
-            System.out.println(balancesSort.get(i));
-
-        sortPaid();
-        System.out.println();
-
-        System.out.println("Sorted list");
-        System.out.println();
-
-        for (int i = 0; i < balancesSort.size(); i++)
-            System.out.println(balancesSort.get(i));
 
     }
 
