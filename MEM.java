@@ -569,6 +569,7 @@ public class MEM {
                     System.out.println(
                             "4. Pay the amount you want to ($10/practice class, and you can only pay for 12 classes in a row).");
                     System.out.println("5. Enter the amount you have paid through PayPal below.");
+                    System.out.println("6. NOTICE: This will overwrite any pending payments still there.");
 
                     String amount = "";
 
