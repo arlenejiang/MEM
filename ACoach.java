@@ -12,12 +12,12 @@ public class ACoach extends AMember{
         for (java.util.Map.Entry<String, AMember> entry : ClubManager.members.entrySet()) {
             AMember member = entry.getValue();
             if (member.getRole().equals("Coach")) {
-                this.first = member.getFirstName();
-                this.last = member.getLastName();
-                this.phoneNumber = member.getPhoneNumber();
-                this.email = member.getEmail();
-                this.password = member.getPassword();
-                this.role = member.getRole();
+                ACoach.first = member.getFirstName();
+                ACoach.last = member.getLastName();
+                ACoach.phoneNumber = member.getPhoneNumber();
+                ACoach.email = member.getEmail();
+                ACoach.password = member.getPassword();
+                ACoach.role = member.getRole();
             }
         }
     }
@@ -25,61 +25,61 @@ public class ACoach extends AMember{
     // Gets the first name of the member
     public String getFirstName()
     {
-        return this.firstName;
+        return first;
     }
 
     // Sets the first name of the member
-    public void setFirstName(String first)
+    public void setFirstName(String firstName)
     {
-        this.firstName = first;
+        first = firstName;
     }
 
     // Gets the last name of the member
     public String getLastName()
     {
-        return this.lastName;
+        return last;
     }
 
     // Sets the last name of the member
-    public void setLastName(String last)
+    public void setLastName(String lastName)
     {
-        this.lastName = last;
+        last = lastName;
     }
 
     // Gets the phone number of the member
     public String getPhoneNumber()
     {
-        return this.phoneNumber;
+        return phoneNumber;
     }
 
     // Sets the phone number of the member
-    public void setPhoneNumber(String phoneNumber)
+    public void setPhoneNumber(String phoneNum)
     {
-        this.phoneNumber = phoneNumber;
+        phoneNumber = phoneNum;
     }
 
     // Gets the email of the member
     public String getEmail()
     {
-        return this.email;
+        return email;
     }
 
     // Sets the email of the member
-    public void setEmail(String email)
+    public void setEmail(String e)
     {
-        this.email = email;
+        email = e;
     }
 
     // Gets the password of the member
     public String getPassword()
     {
-        return this.password;
+        return password;
     }
 
     // Sets the password of the member
-    public void setPassword(String password)
+    public void setPassword(String pass)
     {
-        this.password = password;
+        password = pass;
     }
 
     // Gets the role of the member
@@ -89,9 +89,9 @@ public class ACoach extends AMember{
     }
 
     // Sets the role of the member
-    public void setRole(String role)
+    public void setRole(String r)
     {
-        this.role = role;
+        role = r;
     }
 
     // Gets the first name of the member

@@ -684,6 +684,7 @@ public class MEM {
         String c = in.nextLine();
         if(c.equalsIgnoreCase("Y")){
             ClubManager.members.remove(ACoach.email);
+            ClubManager.toFile("User_Info.txt");
             RegisterationQuestions(new ClubManager());
 
         } else if(c.equalsIgnoreCase("N")){
