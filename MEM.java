@@ -732,23 +732,22 @@ public class MEM {
                 returnOrExit(member);
 
             } else if (input.equalsIgnoreCase("R")) {///// coach can remove participants from the app
-                System.out
-                        .println(
-                                "Please enter the emails of the participants you would like to remove individually.");
+                System.out.println("Please enter the emails of the participants you would like to remove individually.");
                 System.out.println("Type Q when you are done.");
                 List<String> peopleToBeRemoved = new ArrayList<>();
                 String email = "";
 
-                if (email.equalsIgnoreCase("Q")) {
-                    clearConsole();
-                    removeParticipant(peopleToBeRemoved);
-                }
+                
                 while (!(email.equalsIgnoreCase("Q")) && in.hasNextLine()) {
                     Boolean flag = true;// true means that email is incorrect
                     AMember n = null;
                     do {
                         System.out.print("> ");
                         email = in.nextLine();
+                        if (email.equalsIgnoreCase("Q")) {
+                            clearConsole();
+                            removeParticipant(peopleToBeRemoved);
+                        }
                         for (Entry<String, AMember> entry : ClubManager.members.entrySet()) {
                             if (entry.getKey().equals(email)) {
                                 flag = false;
@@ -760,6 +759,7 @@ public class MEM {
                             System.out.println("The email is not in the database. Please enter another email.");
                             flag = true;
                         }
+                        
                     } while (flag);
 
                 }
