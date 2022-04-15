@@ -659,6 +659,8 @@ public class MEM {
             // method for changing coach
             clearConsole();
             changeCoach(member);
+            clearConsole();
+            System.out.println("Coach Successfully Changed.\n");
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("CM")) {
             // code for checking who the coach for the month is
