@@ -1,4 +1,4 @@
-public class ACoach extends AMember {
+public class ACoach {
 
     static String first;
     static String last;
@@ -6,6 +6,7 @@ public class ACoach extends AMember {
     static String email;
     static String password;
     static String role;
+    static String address;
 
     public ACoach() {
         for (java.util.Map.Entry<String, AMember> entry : ClubManager.members.entrySet()) {
@@ -92,7 +93,7 @@ public class ACoach extends AMember {
     }
 
     public String toString() {
-        return firstName + " " + lastName + " " + phoneNumber + " " + email + " " + password + " " + role + " "
+        return first + " " + last + " " + phoneNumber + " " + email + " " + password + " " + role + " "
                 + address;
     }
 
