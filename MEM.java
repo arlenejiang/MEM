@@ -312,8 +312,11 @@ public class MEM {
             n.setRole("Coach");
             ClubManager.toFile("User_Info.txt");
         }
-        MemberBalance person = new MemberBalance(email, 0, 0, 0);
-        ATreasurer.balance.put(email, person);
+        if(!(t)){
+            MemberBalance person = new MemberBalance(email, 0, 0, 0);
+            ATreasurer.balance.put(email, person);
+        }
+        
         ClubManager.toFile("Balances.txt");
     }
 
