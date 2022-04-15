@@ -27,7 +27,7 @@ public class ClubManager {
 
     // Add's a new member to the member's treeMap.
     // Writes out all the members to User_Info.txt
-    public void registerMember(String first, String last, String phoneNumber, String email, String password, String address) throws FileNotFoundException {
+    public void registerMember(String first, String last, String phoneNumber, String email, String password, String address) throws IOException {
         AMember person = new AMember(first, last, phoneNumber, email, password, "Member", address);
         members.put(email, person);
 
