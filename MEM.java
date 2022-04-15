@@ -554,16 +554,16 @@ public class MEM {
                 }
                 returnOrExit(member);
             } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
-                System.out.print("Top up account balance(1)\t");
-                System.out.print("Check your balance(2)\t");
-                System.out.print("Return to Main Screen(3)\t");
-                System.out.print("Exit(4)\n");
+                System.out.print("Top up account balance(T)\t");
+                System.out.print("Check your balance(B)\t");
+                System.out.print("Return to Main Screen(MC)\t");
+                System.out.print("Exit(Q)\n");
                 System.out.print("\n> ");
 
                 int input = convertInputToInteger(3, 1);
 
                 // If the input is a 1, return to the main screen
-                if (input == 1) {
+                if (option.equalsIgnoreCase("T")) {
                     clearConsole();
                     System.out.println("Here are some steps to top up your account balance:");
                     System.out
@@ -602,7 +602,7 @@ public class MEM {
                     System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));
 
                     returnOrExit(member);
-                } else if (input == 2) {
+                } else if (option.equalsIgnoreCase("B")) {
                     clearConsole();
 
                     MemberBalance bal = null;
@@ -615,12 +615,12 @@ public class MEM {
                     System.out.println("Current Balance: $" + bal.getBalance());
                     // System.out.println("Account balance: $" + balance);
 
-                } else if (input == 3) {
+                } else if (option.equalsIgnoreCase("MC")) {
                     clearConsole();
                     AfterLogIn(member);
                 }
                 // For exiting the annoucement feature.
-                else if (input == 4) {
+                else if (option.equalsIgnoreCase("Q")) {
                     clearConsole();
                     System.out.println("\nHave a nice day!\n");
                     System.exit(0);
