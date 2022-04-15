@@ -134,7 +134,8 @@ public class MEM {
     public static void registerLogin() {
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         System.out.print("Register(1)\t");
-        System.out.print("Login(2)\n");
+        System.out.print("Login(2)\t");
+        System.out.print("Forgot Password?(3)\n");
     }
 
     public static void loginExit() {
