@@ -310,14 +310,15 @@ public class MEM {
         if (t) {
             AMember n = ClubManager.members.get(email);
             n.setRole("Coach");
-            ClubManager.toFile("User_Info.txt");
+            
         }
         if(!(t)){
             MemberBalance person = new MemberBalance(email, 0, 0, 0);
             ATreasurer.balance.put(email, person);
-            ClubManager.toFile("Balances.txt");
+            
         }
-        
+        ClubManager.toFile("Balances.txt");
+        ClubManager.toFile("User_Info.txt");
         
     }
 
