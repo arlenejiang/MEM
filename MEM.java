@@ -441,7 +441,9 @@ public class MEM {
             System.out.print("Change Coach (CC)\t");
             System.out.print("Check Coach for Current Month (CM)\t");
         }
-        System.out.print("Finances (F)\t");
+        if(!(member.getRole().equals("Coach"))){
+            System.out.print("Finances (F)\t");
+        }
         System.out.print("Practice Schedule (P)\t");
         System.out.print("Change Password (C)\t");
         System.out.print("Exit (E)\n");
