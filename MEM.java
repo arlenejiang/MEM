@@ -810,7 +810,7 @@ public class MEM {
             RegisterationQuestions(new ClubManager(), true);
 
         } else if (c.equalsIgnoreCase("N")) {
-            System.out.print("You have chosen not to change the coach.");
+            System.out.println("You have chosen not to change the coach.");
             returnOrExit(member);
         }
     }
