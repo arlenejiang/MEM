@@ -2,6 +2,9 @@ import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.text.DateFormatSymbols;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -62,9 +65,9 @@ public class MEM {
                 System.out.println(e.getMessage());
             }
             clearConsole();
-            System.out.print("Registration Complete\n");
-            System.out.println("Please run the program again to log in.\n");
+            System.out.println("Registration Complete\n");
 
+            System.out.println("Please run the program again to log in.\n");
         }
 
         // For logging in.
@@ -96,7 +99,7 @@ public class MEM {
             }
         } while (flag);
 
-        ConfirmNumEmail(email, "Ehansa Kuruku");
+        ConfirmNumEmail(email);
 
         System.out.print("\nPlease enter the confirmation number: ");
         String cNum = in.nextLine();
@@ -134,7 +137,8 @@ public class MEM {
     public static void registerLogin() {
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         System.out.print("Register(1)\t");
-        System.out.print("Login(2)\n");
+        System.out.print("Login(2)\t");
+        System.out.print("Forgot Password?(3)\n");
     }
 
     public static void loginExit() {
@@ -143,14 +147,19 @@ public class MEM {
         System.out.print("\n> ");
     }
 
+    public static void scheduleDates() {
+        schedule();
+    }
+
     public static void chooseAppFeature(int num) throws IOException {
-        if (num == 1) {
+        if (num == 1)
             registerLogin();
-        } else if (num == 2) {
+        else if (num == 2)
             loginExit();
-        } else if (num == 3) {
+        else if (num == 3)
             reset_password();
-        }
+        else if (num == 4)
+            scheduleDates();
 
     }
 
@@ -355,18 +364,11 @@ public class MEM {
      * Confirmation email with confirmation number
      */
 
-    public static void ConfirmNumEmail(String personEmail, String fullname) throws IOException {
+    public static void ConfirmNumEmail(String personEmail) throws IOException {
         String username = "group66club@gmail.com";
         String password = "april2022";
         resetCNum = AN_String(8);// confirmation number
         String recipient = personEmail;
-
-        // For a single person, get rid of from here
-        // ClubManager manager = null;
-        // try {
-        // manager = new ClubManager();
-        // } catch (IOException e) {
-        // System.out.println(e.getMessage());
 
         String subj = "Confirmation Number";
         String body = "Hello,\n\n"
@@ -391,7 +393,7 @@ public class MEM {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject(subj);
-            message.setText(body + "\n\n" + fullname);
+            message.setText(body + "\n\n" + "Track Cllub Application");
             Transport.send(message);
             System.out.println("Confirmation Number Sent");
         } catch (MessagingException e) {
@@ -430,7 +432,8 @@ public class MEM {
         // P for practice schedule/scheduling, and E to exit
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         if (member.getRole().equals("Coach")) {
-            System.out.print("Send Annoucement (S)\t");
+            System.out.print("Send Announcement (S)\t");
+            System.out.print("Email a ClubMember (E)\t");
             System.out.print("Attendance (A)\t");
             System.out.print("Edit List of Members (M)\t");
         } else if (member.getRole().equals("Treasurer")) {
@@ -438,16 +441,17 @@ public class MEM {
             System.out.print("Payment Records (R)\t");
             System.out.print("Unpaid Records(U)\t");
             System.out.print("Attendance (A)\t");
-            System.out.print("Change Coach (CC)");
-            System.out.print("\nCheck Coach for Current Month (CM)");
-            System.out.print("\tDiscount List (DC)");
-            System.out.print("\tPenalty Fee List (PF)\t");
-
+            System.out.print("Change Coach (CC)\t");
+            System.out.print("\nCheck Coach for Current Month (CM)\t");
         }
-        System.out.print("Finances (F)\t");
-        System.out.print("Practice Schedule (P)\t");
-        System.out.print("\nChange Password (C)\t");
-        System.out.print("Exit (E)\n");
+        if (!(member.getRole().equals("Coach"))) {
+            System.out.print("Finances (F)\t");
+        }
+        if (!(member.getRole().equals("Coach") || member.getRole().equals("Treasurer"))) {
+            System.out.print("Practice Schedule (P)\t");
+        }
+        System.out.print("Change Password (C)\t");
+        System.out.print("Exit (Q)\n");
         System.out.print("\n> ");
 
         String option = in.nextLine();
@@ -459,6 +463,21 @@ public class MEM {
                 System.out.println("*** Send Announcement ***\n");
                 // method for sending email through java code
                 sendAnnouncements(member.email, member.password, member.firstName + member.lastName);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            clearConsole();
+            System.out.println("Announcement Successfully Sent\n");
+
+            // Allows the user to choose if they want to return to the main screen or exit
+            // after senting a annoucement
+            returnOrExit(member);
+        } else if (option.equalsIgnoreCase("E")) {
+            try {
+                clearConsole();
+                System.out.println("*** Send Email ***\n");
+                // method for sending email through java code
+                sendEmail(member, member.email, member.password, member.firstName + member.lastName);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
@@ -481,6 +500,7 @@ public class MEM {
                 e.printStackTrace();
             }
             System.out.println();
+            returnOrExit(member);
 
         } else if (option.equalsIgnoreCase("R")) {
 
@@ -531,7 +551,8 @@ public class MEM {
             // insert finance code method here
             if (member.getRole().equals("Treasurer")) {
                 System.out.print("\nDisplay Debts (D)\t");
-                System.out.print("Display Payables (P)\n\n");
+                System.out.print("Display Payables (P)\t");
+                System.out.print("Display Income Statement (I)\n\n");
                 System.out.print(">");
                 option = in.nextLine();
                 if (option.equalsIgnoreCase("D")) {
@@ -546,18 +567,30 @@ public class MEM {
                     clearConsole();
                     Finances.displayPayables();
                 }
+                if (option.equalsIgnoreCase("I")) {
+                    clearConsole();
+                    int rev = displayRevenue();
+                    int exp;
+                    try {
+                        exp = Finances.displayExpenses();
+                    } catch (IOException e) {
+                        exp = 0;
+
+                    }
+                    Finances.displayProfit(rev - exp);
+                }
                 returnOrExit(member);
             } else if (!(member.getRole().equals("Treasurer") || member.getRole().equals("Coach"))) {
-                System.out.print("Top up account balance(1)\t");
-                System.out.print("Check your balance(2)\t");
-                System.out.print("Return to Main Screen(3)\t");
-                System.out.print("Exit(4)\n");
+                System.out.print("Top up account balance(T)\t");
+                System.out.print("Check your balance(B)\t");
+                System.out.print("Return to Main Screen(MC)\t");
+                System.out.print("Exit(Q)\n");
                 System.out.print("\n> ");
 
-                int input = convertInputToInteger(3, 1);
+                String op = in.nextLine();
 
                 // If the input is a 1, return to the main screen
-                if (input == 1) {
+                if (op.equalsIgnoreCase("T")) {
                     clearConsole();
                     System.out.println("Here are some steps to top up your account balance:");
                     System.out
@@ -567,6 +600,7 @@ public class MEM {
                     System.out.println(
                             "4. Pay the amount you want to ($10/practice class, and you can only pay for 12 classes in a row).");
                     System.out.println("5. Enter the amount you have paid through PayPal below.");
+                    System.out.println("6. NOTICE: This will overwrite any pending payments still there.");
 
                     String amount = "";
 
@@ -587,17 +621,6 @@ public class MEM {
 
                     ATreasurer.PaymentEmail(member.email, amount, "C");
 
-                    // PaypalEmail(member.email, amount, "C");
-
-                    // try {
-                    // PaypalConfirmationemail("group66club@gmail.com", "AppleBee", "AmandaScott");
-                    // } catch (IOException e) {
-                    // System.out.println(e.getMessage());
-                    // }
-
-                    // MemberBalance balance = new MemberBalance(member.getEmail(), amount, "0",
-                    // "0");
-
                     ATreasurer.payments.put(member.getEmail(), Integer.parseInt(amount));
                     ClubManager.toFile("PendingPayments.txt");
 
@@ -605,36 +628,8 @@ public class MEM {
                     // been updated to the map
                     System.out.println("The amount is: " + ATreasurer.payments.get(member.getEmail()));
 
-                    System.out.print("Check your balance(1)\t");
-                    System.out.print("Return to Main Screen(2)\t");
-                    System.out.print("Exit(3)\n");
-                    System.out.print("\n> ");
-
-                    int anotherInput = convertInputToInteger(3, 1);
-
-                    if (anotherInput == 1) {
-                        clearConsole();
-
-                        MemberBalance bal = null;
-                        for (Entry<String, MemberBalance> en : ATreasurer.balance.entrySet()) {
-                            if (en.getKey().equals(member.getEmail())) {
-                                bal = en.getValue();
-                            }
-                        }
-
-                        System.out.println("Current Balance: $" + bal.getBalance());
-                        // System.out.println("Account balance: $" + balance);
-                    } else if (anotherInput == 2) {
-                        clearConsole();
-                        AfterLogIn(member);
-                    }
-                    // For exiting the annoucement feature.
-                    else if (anotherInput == 3) {
-                        clearConsole();
-                        System.out.println("\nHave a nice day!\n");
-                        System.exit(0);
-                    }
-                } else if (input == 2) {
+                    returnOrExit(member);
+                } else if (op.equalsIgnoreCase("B")) {
                     clearConsole();
 
                     MemberBalance bal = null;
@@ -647,12 +642,12 @@ public class MEM {
                     System.out.println("Current Balance: $" + bal.getBalance());
                     // System.out.println("Account balance: $" + balance);
 
-                } else if (input == 3) {
+                } else if (op.equalsIgnoreCase("MC")) {
                     clearConsole();
                     AfterLogIn(member);
                 }
                 // For exiting the annoucement feature.
-                else if (input == 4) {
+                else if (op.equalsIgnoreCase("Q")) {
                     clearConsole();
                     System.out.println("\nHave a nice day!\n");
                     System.exit(0);
@@ -660,13 +655,52 @@ public class MEM {
             }
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("P")) {
-            // insert make a practice schedule/scheduling method here
+            // make a practice schedule/scheduling method here
             clearConsole();
+            ClubManager manager = null;
+            try {
+                manager = new ClubManager();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            int input = 0;
+            System.out.println("\nSelect the date that you would like to schedule your class.");
+            schedule();
+            System.out.print("\n> ");
+            input = convertInputToInteger(4, 4);
+            LocalDate scheduleDate = practiceDates(input);
+            manager.scheduleClass(member, input, scheduleDate);
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("A")) {
             // insert make a attendance method here
             clearConsole();
-
+            if (member.getRole().equals("Treasurer") || member.getRole().equals("Coach")) {
+                if (LocalDate.now().getDayOfWeek() == DayOfWeek.FRIDAY) {
+                    System.out.print("\nTake Attendance (T)\t");
+                    ;
+                }
+                System.out.print("Display Scheduled Attendees (S)\t");
+                ;
+                System.out.print("Display Attendance (D)\n\n");
+                System.out.print("> ");
+                option = in.nextLine();
+                if (LocalDate.now().getDayOfWeek() == DayOfWeek.FRIDAY && option.equalsIgnoreCase("T")) {
+                    try {
+                        clearConsole();
+                        Draft.writeAttendanceLog(LocalDate.now());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if (option.equalsIgnoreCase("S")) {
+                clearConsole();
+                Draft.displayScheduleLog();
+            }
+            if (option.equalsIgnoreCase("D")) {
+                clearConsole();
+                Draft.displayAttendanceLog();
+            }
             returnOrExit(member);
         } else if (option.equalsIgnoreCase("C")) {
             // method for resetting password here
@@ -680,7 +714,8 @@ public class MEM {
 
             String input = in.nextLine();
 
-            if (input.equalsIgnoreCase("A")) {///// coach can add new participant and create temporary password for them
+            if (input.equalsIgnoreCase("A")) {///// coach can add new participant and create temporary password for
+                                              ///// them
                 System.out.println("Please enter the participant's information on behalf of them.");
                 System.out.println(
                         "Please enter a temporary password for them \nand inform the participant to change their password.");
@@ -690,11 +725,16 @@ public class MEM {
 
             } else if (input.equalsIgnoreCase("R")) {///// coach can remove participants from the app
                 System.out
-                        .println("Please enter the emails of the participants you would like to remove individually.");
+                        .println(
+                                "Please enter the emails of the participants you would like to remove individually.");
                 System.out.println("Type Q when you are done.");
                 List<String> peopleToBeRemoved = new ArrayList<>();
                 String email = "";
 
+                if (email.equalsIgnoreCase("Q")) {
+                    clearConsole();
+                    removeParticipant(peopleToBeRemoved);
+                }
                 while (!(email.equalsIgnoreCase("Q")) && in.hasNextLine()) {
                     Boolean flag = true;// true means that email is incorrect
                     AMember n = null;
@@ -715,10 +755,6 @@ public class MEM {
                     } while (flag);
 
                 }
-                if (email.equalsIgnoreCase("Q")) {
-                    clearConsole();
-                    removeParticipant(peopleToBeRemoved);
-                }
                 returnOrExit(member);
             }
         } else if (option.equalsIgnoreCase("CC")) {
@@ -734,11 +770,12 @@ public class MEM {
 
             ACoach coach = new ACoach();
             String month = new DateFormatSymbols().getMonths()[Calendar.getInstance().get(Calendar.MONTH)];
-            System.out.println("Coach " + coach.getFirstName() + " will be coaching on Fridays for the current month, "
-                    + month + ".");
+            System.out.println(
+                    "Coach " + coach.getFirstName() + " will be coaching on Fridays for the current month, "
+                            + month + ".");
 
             returnOrExit(member);
-        } else if (option.equalsIgnoreCase("E")) {
+        } else if (option.equalsIgnoreCase("Q")) {
             clearConsole();
             System.out.println("\nHave a nice day\n");
             System.exit(0);
@@ -757,6 +794,7 @@ public class MEM {
     public static void changeCoach(AMember member) throws IOException {
         System.out.println("Are you sure you want to change the coach? (Y or N)");
         String c = in.nextLine();
+        System.out.println("Please enter the information on behalf of the new coach.");
         if (c.equalsIgnoreCase("Y")) {
             ClubManager.members.remove(ACoach.email);
             ClubManager.toFile("User_Info.txt");
@@ -765,7 +803,74 @@ public class MEM {
         } else if (c.equalsIgnoreCase("N")) {
             returnOrExit(member);
         }
+    }
 
+    public static void schedule() {
+        LocalDate dt = LocalDate.now();
+        // LocalDate dt = LocalDate.parse("2022-04-23");
+        LocalDate firstFriday = dt.with(TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY));
+        LocalDate secondFriday = firstFriday.plusDays(7);
+        LocalDate thirdFriday = secondFriday.plusDays(7);
+        LocalDate fourthFriday = thirdFriday.plusDays(7);
+        System.out.println("\n" + firstFriday.getDayOfMonth() + " " + firstFriday.getMonth() + ", "
+                + firstFriday.getYear() + " (1)");
+        System.out.println(
+                secondFriday.getDayOfMonth() + " " + secondFriday.getMonth() + ", " + secondFriday.getYear() + " (2)");
+        System.out.println(
+                thirdFriday.getDayOfMonth() + " " + thirdFriday.getMonth() + ", " + thirdFriday.getYear() + " (3)");
+        System.out.println(
+                fourthFriday.getDayOfMonth() + " " + fourthFriday.getMonth() + ", " + fourthFriday.getYear() + " (4)");
+    }
+
+    public static LocalDate practiceDates(int input) {
+        LocalDate dt = LocalDate.now();
+        // LocalDate dt = LocalDate.parse("2022-04-23");
+        LocalDate firstFriday = dt.with(TemporalAdjusters.nextOrSame(DayOfWeek.FRIDAY));
+        LocalDate secondFriday = firstFriday.plusDays(7);
+        LocalDate thirdFriday = secondFriday.plusDays(7);
+        LocalDate fourthFriday = thirdFriday.plusDays(7);
+        if (input == 1)
+            return firstFriday;
+        else if (input == 2)
+            return secondFriday;
+        else if (input == 3)
+            return thirdFriday;
+        else
+            return fourthFriday;
+    }
+
+    /*
+     * NOTE: Can only send through Gmail. Can send to any address.
+     * 
+     * 1. Go onto the sender's Gmail.
+     * 2. Go to settings icon > See All Settings > Forwarding and POP/IMAP
+     * 3. Enable IMAP access
+     * 
+     * 1. Go onto myaccount.google.com
+     * 2. Scroll down to less secure app access
+     * 3. Enable less secure app access
+     */
+
+    public static int displayRevenue() {
+        MemberBalance membal = null;
+        String rev = "";
+        int revsum = 0; // the sum of the revenue
+
+        for (Entry<String, MemberBalance> en : ATreasurer.balance.entrySet()) {
+            membal = en.getValue();
+            rev += "Member- " + membal.getEmail() + "............................. $";
+            int memb = membal.getBalance();
+            rev += String.valueOf(memb);
+            rev += "\n";
+            revsum += memb;
+        }
+
+        Finances.getData();
+        System.out.println("** INCOME STATEMENT **");
+        System.out.println("----------------------------------------------\nRevenue:");
+        System.out.println(rev);
+        System.out.println("Total Revenue: $" + revsum);
+        return revsum;
     }
 
     /*
@@ -835,6 +940,74 @@ public class MEM {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void sendEmail(AMember member, String coachEmail, String coachPassword, String fullname)
+            throws IOException {
+        final String username = coachEmail;
+        final String password = coachPassword;
+
+        ClubManager manager = null;
+        try {
+            manager = new ClubManager();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        manager.printAllNamesEmails();
+
+        System.out.println("Enter the recipient's email: ");
+        String em = in.nextLine();
+        while (manager.checkEmail(em) != true || em.equalsIgnoreCase("Q")) {
+            System.out.println("Enter a valid email or (Q) for Main: ");
+            em = in.nextLine();
+            if (em.equalsIgnoreCase("Q")) {
+                clearConsole();
+                AfterLogIn(member);
+            }
+        }
+        System.out.println("Enter the subject line: ");
+        String subj = in.nextLine();
+        System.out.println("Enter the body of the email (Press S to Send): ");
+        String body = "";
+        String next;
+        while (in.hasNextLine() && !(next = in.nextLine()).equals("S")) {
+            body += next;
+            body += "\n";
+        }
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "imap.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); // TLS
+
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                        return new javax.mail.PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(em));
+            message.setSubject(subj);
+            message.setText("Hi there! \n\n"
+                    + body + "\n\n" + fullname);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // Clears the console
