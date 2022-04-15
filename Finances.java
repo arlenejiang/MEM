@@ -195,9 +195,9 @@ public class Finances {
 
         }
         int totalExp = totalRFee + totalCFee;
-        System.out.println("\nTotal Hall Rent: " + totalRFee);
-        System.out.println("\nTotal Coach Fees: " + totalCFee);
-        System.out.println("\nTotal Expenses: " + totalExp);
+        System.out.println("\nTotal Hall Rent: $" + totalRFee);
+        System.out.println("\nTotal Coach Fees: $" + totalCFee);
+        System.out.println("\nTotal Expenses: $" + totalExp);
 
         return totalExp;
     }
