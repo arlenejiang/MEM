@@ -431,7 +431,7 @@ public class MEM {
         // P for practice schedule/scheduling, and E to exit
         System.out.println("\n*** Welcome to the Recreation Club Membership App ***\n");
         if (member.getRole().equals("Coach")) {
-            System.out.print("Send Annoucement (S)\t");
+            System.out.print("Send Announcement (S)\t");
             System.out.print("Email a ClubMember (E)\t");
             System.out.print("Attendance (A)\t");
             System.out.print("Edit List of Members (M)\t");
